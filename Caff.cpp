@@ -233,6 +233,7 @@ void Caff::parseCiffHeader(int block_number) {
 		throw std::invalid_argument("Invalid CIFF file. Content_size must be w*h*3.");
 	}
 	unsigned long i = 8 + 4 + 8 + 8 + 8 + 8;
+	caff_animation.ciff_data.ciff_header.caption.clear();
 	//i is smaller than header_size + 8 because we start the j counter before the header so we have to add the 8 long animation duration to it
 	while (i < caff_animation.ciff_data.ciff_header.header_size + 8)
 	{
