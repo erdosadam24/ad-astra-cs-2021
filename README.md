@@ -1,11 +1,43 @@
 # ad-astra-cs-2021
+Futtatás:
+A makefile futtatása után: 
+main.exe "CAFF fájl elérési útja" "Hova szeretnénk menteni a képet"
 
-Caff Parser használata példa: 
+Ellenőrzések:
+-CAFF:
+		-id: 1,2 3 vagy 3
+		-length:
+		-data:
 
-1.) Létrehozunk egy Caff objektumot egy adott elérési úttal
-	Caff CaffObj("caff fájl elérési útja");
-2.) Meghívjuk a parseCaff függvényt, itt kapjuk meg a hibaüzenetet ha rossz formátumú a Caff fájl
-	CaffObj.parseCaff();
-3.) A Caff fájlban lévő egyik Ciff fájlból létrehozunk egy képet
-	Az első paraméter azt adja meg, hogy hova mentsük el a képet (.bmp-re kell végződnie), a második paraméter megadja hogy a Caff fájlban tárolt hányadik Ciff fájlt alakítsuk képpé, alapértelmezetten ez 0
-	CaffObj.saveAsImage("kép elérési útja", 0);
+-CAFF header:
+	-ennek kell lennie az első blokknak
+		-magic: azt írja-e hogy CAFF
+		-header_size: egyenlő e a block size-zal
+		-num_anim: 
+
+-CAFF credits:
+		-year: 1936-2021 között
+		-month: 1-12 között
+		-day: 1-31 hónaptól függ
+		-óra: 1-23 között
+		-perc: 0-60 között
+		-creator_len
+		-creator
+		
+-CAFF animation:
+		-duration
+		-ciff ->
+		
+CIFF:
+
+-CIFF header:
+		-magic: azt írja-e hogy CIFF
+		-header size:
+		-content size: egyenlő e 3xwxh-val
+		-with: 0-nál nagyobb vagy egyenlő
+		-height: 0-nál nagyobb vagy egyenlő
+		-tags:
+
+-CIFF content:
+		-pixels: ha a with vagy a height 0 akkor a mérete 0
+
