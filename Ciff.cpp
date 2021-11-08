@@ -1,11 +1,20 @@
 #include "Ciff.h"
 #include <fstream>
+#include <iostream>
 
 //bmp -> https://web.archive.org/web/20080912171714/http://www.fortunecity.com/skyscraper/windows/364/bmpffrmt.html
 
 void Ciff::saveAsImage(const char* path) {
     std::ofstream ofs;
-    ofs.open(path);
+    try
+    {
+        ofs.open(path);
+    }
+    catch (int e) {
+        std::cerr << "Exception during saving the image.\n";
+    }
+    
+    
 
     int filesize = 54 + static_cast<int>(ciff_header.content_size);
 
@@ -21,7 +30,7 @@ void Ciff::saveAsImage(const char* path) {
     bmpinfoheader[5] = (unsigned char)(ciff_header.width >> 8);
     bmpinfoheader[6] = (unsigned char)(ciff_header.width >> 16);
     bmpinfoheader[7] = (unsigned char)(ciff_header.width >> 24);
-    bmpinfoheader[8] = (unsigned char)(ciff_header.height * (-1));  ////*1 because befault is upside down
+    bmpinfoheader[8] = (unsigned char)(ciff_header.height * (-1));  //*1 because befault is upside down
     bmpinfoheader[9] = (unsigned char)(ciff_header.height * (-1) >> 8);         
     bmpinfoheader[10] = (unsigned char)(ciff_header.height * (-1) >> 16);
     bmpinfoheader[11] = (unsigned char)(ciff_header.height * (-1) >> 24);
@@ -50,6 +59,8 @@ void Ciff::saveAsImage(const char* path) {
     }
     
     ofs.close();
+
+    std::cout << "Image successfully saved\n";
     
 }
 

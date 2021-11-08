@@ -25,7 +25,7 @@ struct CaffCredit {
     unsigned short hour;
     unsigned short minute;
     uint64_t creator_len;
-    char* creator;
+    std::string creator;
 };
 
 struct CaffAnimation {
@@ -37,6 +37,7 @@ class Caff
 {
 public:
     Caff(std::string caff_path);
+    ~Caff() {};
     void parseCaff();
     void saveAsImage(const char* path, int ciff_number = 0);
 private:    
@@ -47,7 +48,7 @@ private:
     CaffHeader caff_header;
     CaffCredit caff_credit;
     CaffAnimation caff_animation;
-    void parseHeader();
+    void parseHeader(int block_number);
     void parseCredits(int block_number);
     void parseAnimation(int block_number);
     void parseCiffHeader(int block_number);
