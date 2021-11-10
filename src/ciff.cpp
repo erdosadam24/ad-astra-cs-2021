@@ -1,6 +1,8 @@
 // Copyright 2021 <Ad Astra>
 
 #include "headers/ciff.h"
+#include <string.h>
+#include <stdexcept>
 #include <fstream>
 #include <iostream>
 
@@ -14,13 +16,22 @@ void Ciff::saveAsImage(const char* path) {
     catch (int e) {
         std::cerr << "Exception during saving the image.\n";
     }
-
+    const char* file_end = ".bmp";
+    size_t path_len = strlen(path);
+    size_t file_end_len = strlen(file_end);
+    if (file_end_len > path_len) {
+        throw std::invalid_argument("Image path too short.");
+    }
+    int bmp = strncmp(path + path_len - file_end_len, file_end, file_end_len);
+    if (bmp != 0) {
+        throw std::invalid_argument("Image path must end with .bmp.");
+    }
     int filesize = 54 + static_cast<int>(ciff_header.content_size);
 
     unsigned char bmpfileheader[14] =
-    { 'B', 'M', 0, 0, 0, 0, 0, 0, 0, 0, 54, 0, 0, 0 };
+        { 'B', 'M', 0, 0, 0, 0, 0, 0, 0, 0, 54, 0, 0, 0 };
     unsigned char bmpinfoheader[40] =
-    {40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 24, 0 };
+        {40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 24, 0 };
 
     bmpfileheader[2] = (unsigned char)(filesize);
     bmpfileheader[3] = (unsigned char)(filesize >> 8);

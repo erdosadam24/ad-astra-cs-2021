@@ -1,7 +1,7 @@
 // Copyright 2021 <Ad Astra>
 
-#ifndef HEADERS_CAFF_H_
-#define HEADERS_CAFF_H_
+#ifndef SRC_HEADERS_CAFF_H_
+#define SRC_HEADERS_CAFF_H_
 
 #include <stdint.h>
 #include <fstream>
@@ -60,4 +60,4 @@ class Caff {
 };
 
 
-#endif  // HEADERS_CAFF_H_
+#endif  // SRC_HEADERS_CAFF_H_

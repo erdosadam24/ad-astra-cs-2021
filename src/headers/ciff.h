@@ -1,7 +1,7 @@
 // Copyright 2021 <Ad Astra>
 
-#ifndef HEADERS_CIFF_H_
-#define HEADERS_CIFF_H_
+#ifndef SRC_HEADERS_CIFF_H_
+#define SRC_HEADERS_CIFF_H_
 
 #include <vector>
 #include <string>
@@ -31,4 +31,4 @@ class Ciff {
      CiffContent ciff_content;
 };
 
-#endif  // HEADERS_CIFF_H_
+#endif  // SRC_HEADERS_CIFF_H_
