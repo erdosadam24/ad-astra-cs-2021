@@ -1,10 +1,13 @@
-#include "DataBase.h"
-#include <iostream>
+// Copyright 2021 <Ad Astra>
+#include "database.h"
+
 #include <fstream>
+#include <iostream>
 #include <string>
 
-#if defined(_WIN32) || defined(_WIN64) || defined(__CYGWIN__) && !defined(_WIN32)
-#define PLATFORM_NAME "windows" 
+#if defined(_WIN32) || defined(_WIN64) || \
+    defined(__CYGWIN__) && !defined(_WIN32)
+#define PLATFORM_NAME "windows"
 #define USERDATA_PATH ".\\data\\users"
 #define FILESYSTEM_PATH ".\\filesystem"
 #elif defined(__linux__)
@@ -17,8 +20,7 @@ std::string Database::create_path(std::string filename) {
     std::string ret = FILESYSTEM_PATH;
     if (PLATFORM_NAME == "linux") {
         ret += "/" + filename;
-    }
-    else {
+    } else {
         ret += "\\" + filename;
     }
     return ret;
@@ -29,8 +31,7 @@ std::string Database::create_path(std::vector<std::string> filenames) {
     for (std::string filename : filenames) {
         if (PLATFORM_NAME == "linux") {
             ret += "/" + filename;
-        }
-        else {
+        } else {
             ret += "\\" + filename;
         }
     }
@@ -41,8 +42,7 @@ std::string Database::create_path(std::vector<std::string> filenames) {
 std::string Database::add_to_path(std::string path, std::string filename) {
     if (PLATFORM_NAME == "linux") {
         path += "/" + filename;
-    }
-    else {
+    } else {
         path += "\\" + filename;
     }
     return path;
@@ -59,16 +59,17 @@ void Database::create_filesystem() {
     create_folder(FILESYSTEM_PATH);
     read_users();
     for (auto user : users) {
-        filename = create_path(user.second.username);
+        filename = create_path(user.second.userid);
         create_folder(filename);
     }
 }
 
-void Database::read_comments(CFile& file, std::string username) {
+void Database::read_comments(CFile& file, std::string userid) {
     std::string junk;
     std::ifstream db;
-    std::string filename = file.filename.substr(0, file.filename.size() - 4) + "_file_data";
-    std::vector<std::string> filenames = { username, filename };
+    std::string filename =
+        file.filename.substr(0, file.filename.size() - 4) + "_file_data";
+    std::vector<std::string> filenames = {userid, filename};
     std::string user_path = create_path(filenames);
     db.open(user_path);
     int comment_count;
@@ -78,14 +79,14 @@ void Database::read_comments(CFile& file, std::string username) {
         Comment comment;
         std::getline(db, comment.user);
         std::getline(db, comment.data);
-       file.comments.push_back(comment);
+        file.comments.push_back(comment);
     }
 }
 
 void Database::read_files(User& user) {
     std::string junk;
     std::ifstream db;
-    std::vector<std::string> filenames = { user.username, "user_data" };
+    std::vector<std::string> filenames = {user.userid, "user_data"};
     std::string user_path = create_path(filenames);
     db.open(user_path);
     int file_count;
@@ -95,7 +96,7 @@ void Database::read_files(User& user) {
         CFile file;
         std::getline(db, file.filename);
         std::getline(db, file.path);
-        read_comments(file, user.username);
+        read_comments(file, user.userid);
         user.files[file.filename] = file;
     }
     db.close();
@@ -110,14 +111,16 @@ void Database::read_users() {
     std::getline(db, junk);
     for (int i = 0; i < user_count; i++) {
         User user;
+        std::getline(db, user.userid);
         std::getline(db, user.username);
         std::getline(db, user.password_hash);
+        std::getline(db, user.email);
         int access_level;
         db >> access_level;
         std::getline(db, junk);
         user.access_level = (UserType)access_level;
         read_files(user);
-        users[user.username] = user;
+        users[user.userid] = user;
     }
     db.close();
 }
@@ -126,7 +129,7 @@ Database::Database() {
     this->path = USERDATA_PATH;
     create_filesystem();
     for (auto user : users) {
-        std::cout << user.second.username << std::endl;
+        std::cout << user.second.userid << std::endl;
         std::cout << user.second.password_hash << std::endl;
         std::cout << (int)user.second.access_level << std::endl;
         std::cout << user.second.files.size() << std::endl;
@@ -142,10 +145,11 @@ Database::Database() {
     }
 }
 
-void Database::write_comments(CFile& file, std::string username) {
+void Database::write_comments(CFile& file, std::string userid) {
     std::ofstream db;
-    std::string filename = file.filename.substr(0, file.filename.size() - 4) + "_file_data";
-    std::vector<std::string> filenames = { username, filename};
+    std::string filename =
+        file.filename.substr(0, file.filename.size() - 4) + "_file_data";
+    std::vector<std::string> filenames = {userid, filename};
     std::string file_path = create_path(filenames);
     db.open(file_path);
     db << file.comments.size() << std::endl;
@@ -153,18 +157,19 @@ void Database::write_comments(CFile& file, std::string username) {
         db << comment.user << std::endl;
         db << comment.data << std::endl;
     }
+    db.close();
 }
 
 void Database::write_files(User& user) {
     std::ofstream db;
-    std::vector<std::string> filenames = { user.username, "user_data" };
+    std::vector<std::string> filenames = {user.userid, "user_data"};
     std::string user_path = create_path(filenames);
     db.open(user_path);
     db << user.files.size() << std::endl;
     for (auto file : user.files) {
         db << file.second.filename << std::endl;
         db << file.second.path << std::endl;
-        write_comments(file.second, user.username);
+        write_comments(file.second, user.userid);
     }
     db.close();
 }
@@ -174,20 +179,21 @@ void Database::write_users() {
     db.open(path);
     db << users.size() << std::endl;
     for (auto user : users) {
+        db << user.second.userid << std::endl;
         db << user.second.username << std::endl;
         db << user.second.password_hash << std::endl;
+        db << user.second.email << std::endl;
         db << (int)user.second.access_level << std::endl;
         write_files(user.second);
     }
     db.close();
 }
 
-void DataBase::delete_file(std::string filename) {
+void Database::delete_file(std::string filename) {
     std::string path;
     if (PLATFORM_NAME == "linux") {
         path = "rm  " + filename;
-    }
-    else {
+    } else {
         path = "del " + filename;
     }
     const char* str = path.c_str();
@@ -195,12 +201,11 @@ void DataBase::delete_file(std::string filename) {
     std::cout << "I'm delete this file " << filename << std::endl;
 }
 
-void delete_folder(std::string foldername) {
+void Database::delete_folder(std::string foldername) {
     std::string path;
     if (PLATFORM_NAME == "linux") {
         path = "rm -rf " + foldername;
-    }
-    else {
+    } else {
         path = "rmdir " + foldername;
     }
     const char* str = path.c_str();
@@ -208,52 +213,63 @@ void delete_folder(std::string foldername) {
     std::cout << "I'm delete this folder " << foldername << std::endl;
 }
 
-Database::~Database() {
-    write_users();
-}
+Database::~Database() { write_users(); }
 
-void Database::add_user(User& user) {
-    users[user.username] = user;
-}
+void Database::add_user(User& user) { users[user.userid] = user; }
 
-void Database::delete_user(std::string username) {
-    users.erase(username);
+void Database::delete_user(std::string userid) {
+    users.erase(userid);
 
-    std::string path = create_path(username);
+    std::string path = create_path(userid);
     delete_folder(path);
 }
 
-User* Database::get_user(std::string username) {
-    if (users.find(username) != users.end()) {
-        return &users[username];
+User* Database::get_user(std::string userid) {
+    if (users.find(userid) != users.end()) {
+        return &users[userid];
     }
     return nullptr;
 }
 
-void Database::add_file(std::string username, CFile& file) {
-    users[username].files[file.filename] = file;
+void Database::add_file(std::string userid, CFile& file, std::string data) {
+    users[userid].files[file.filename] = file;
+   
+    std::ofstream db;
+    std::string filename = file.filename.substr(0, file.filename.size() - 4) + "_file_data";
+    std::vector<std::string> filenames = {userid, filename};
+    std::string file_path = create_path(filenames);
+    db.open(file_path);
+    db << data;
+    db.close();
 }
 
-void Database::delete_file(std::string username,std::string filename) {
-    users[username].files.erase(filename);
-    
-    std::string filename = file.filename.substr(0, file.filename.size() - 4) + "_file_data";
-    std::vector<std::string> filenames = { username, filename };
+void Database::delete_file(std::string userid, std::string filename) {
+    users[userid].files.erase(filename);
+
+    std::vector<std::string> filenames = {userid, filename};
+    std::string path = create_path(filenames);
+    delete_folder(path);
+
+    filename = filename.substr(0, filename.size() - 4) + "_file_data";
+    filenames = {userid, filename};
     std::string path = create_path(filenames);
     delete_folder(path);
 }
 
-CFile* Database::get_file(std::string username,std::string filename) {
-    if (users[username].files.find(filename) != users[username].files.end()) {
-        return &users[username].files[filename];
+CFile* Database::get_file(std::string userid, std::string filename) {
+    if (users[userid].files.find(filename) != users[userid].files.end()) {
+        return &users[userid].files[filename];
     }
     return nullptr;
 }
 
-void Database::add_comment(std::string username,std::string filename, Comment& comment) {
-    users[username].files[filename].comments.push_back(comment);
+void Database::add_comment(std::string userid, std::string filename,
+                           Comment& comment) {
+    users[userid].files[filename].comments.push_back(comment);
 }
 
-void Database::delete_comment(std::string username,std::string filename, int id) {
-    users[username].files[filename].comments.erase(users[username].files[filename].comments.begin() + id);
+void Database::delete_comment(std::string userid, std::string filename,
+                              int id) {
+    users[userid].files[filename].comments.erase(
+        users[userid].files[filename].comments.begin() + id);
 }
