@@ -1,5 +1,5 @@
 // Copyright 2021 <Ad Astra>
-#include "database.h"
+#include "headers/database.h"
 
 #include <fstream>
 #include <iostream>
@@ -131,7 +131,7 @@ Database::Database() {
     for (auto user : users) {
         std::cout << user.second.userid << std::endl;
         std::cout << user.second.password_hash << std::endl;
-        std::cout << (int)user.second.access_level << std::endl;
+        std::cout << static_cast<int>(user.second.access_level) << std::endl;
         std::cout << user.second.files.size() << std::endl;
         for (auto file : user.second.files) {
             std::cout << file.second.filename << std::endl;
@@ -183,7 +183,7 @@ void Database::write_users() {
         db << user.second.username << std::endl;
         db << user.second.password_hash << std::endl;
         db << user.second.email << std::endl;
-        db << (int)user.second.access_level << std::endl;
+        db << static_cast<int>(user.second.access_level) << std::endl;
         write_files(user.second);
     }
     db.close();
@@ -233,14 +233,16 @@ User* Database::get_user(std::string userid) {
 
 void Database::add_file(std::string userid, CFile& file, std::string data) {
     users[userid].files[file.filename] = file;
-   
+
     std::ofstream db;
-    std::string filename = file.filename.substr(0, file.filename.size() - 4) + "_file_data";
     std::vector<std::string> filenames = {userid, filename};
     std::string file_path = create_path(filenames);
     db.open(file_path);
     db << data;
     db.close();
+
+    write_comments(file, userid);
+
 }
 
 void Database::delete_file(std::string userid, std::string filename) {
@@ -248,12 +250,12 @@ void Database::delete_file(std::string userid, std::string filename) {
 
     std::vector<std::string> filenames = {userid, filename};
     std::string path = create_path(filenames);
-    delete_folder(path);
+    delete_file(path);
 
     filename = filename.substr(0, filename.size() - 4) + "_file_data";
     filenames = {userid, filename};
     std::string path = create_path(filenames);
-    delete_folder(path);
+    delete_file(path);
 }
 
 CFile* Database::get_file(std::string userid, std::string filename) {
@@ -263,13 +265,11 @@ CFile* Database::get_file(std::string userid, std::string filename) {
     return nullptr;
 }
 
-void Database::add_comment(std::string userid, std::string filename,
-                           Comment& comment) {
+void Database::add_comment(std::string userid, std::string filename, Comment& comment) {
     users[userid].files[filename].comments.push_back(comment);
 }
 
-void Database::delete_comment(std::string userid, std::string filename,
-                              int id) {
+void Database::delete_comment(std::string userid, std::string filename, int id) {
     users[userid].files[filename].comments.erase(
         users[userid].files[filename].comments.begin() + id);
 }
