@@ -1,0 +1,8 @@
+﻿  Caff.cpp
+E:\Repos\ad-astra-cs-2021\CAFF_Store\DAL\Caff.cpp(129,16): warning C4804: '<=': unsafe use of type 'bool' in operation
+E:\Repos\ad-astra-cs-2021\CAFF_Store\DAL\Caff.cpp(175,13): warning C4804: '<=': unsafe use of type 'bool' in operation
+E:\Repos\ad-astra-cs-2021\CAFF_Store\DAL\Caff.cpp(181,13): warning C4804: '<': unsafe use of type 'bool' in operation
+E:\Repos\ad-astra-cs-2021\CAFF_Store\DAL\Caff.cpp(194,43): warning C4244: '=': conversion from 'uint64_t' to 'unsigned int', possible loss of data
+E:\Repos\ad-astra-cs-2021\CAFF_Store\DAL\Caff.cpp(196,23): warning C4018: '<': signed/unsigned mismatch
+     Creating library E:\Repos\ad-astra-cs-2021\CAFF_Store\Debug\DAL.lib and object E:\Repos\ad-astra-cs-2021\CAFF_Store\Debug\DAL.exp
+  DAL.vcxproj -> E:\Repos\ad-astra-cs-2021\CAFF_Store\Debug\DAL.dll
