@@ -8,7 +8,6 @@ namespace CAFF_Store.Models
 	public class Comment
 	{
 		public int Id { get; set; }
-		public CaffFile File { get; set; }
 		public int FileID { get; set; }
 		public string Text { get; set; }
 		public string Username { get; set; }

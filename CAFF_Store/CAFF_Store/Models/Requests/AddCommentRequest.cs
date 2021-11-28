@@ -7,5 +7,7 @@ namespace CAFF_Store.Models.Requests
 {
 	public class AddCommentRequest
 	{
+		public string FileID { get; set; }
+		public string Text { get; set; }
 	}
 }

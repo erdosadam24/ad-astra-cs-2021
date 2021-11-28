@@ -17,5 +17,14 @@ namespace CAFF_Store.Data
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
         }
-    }
+
+		public DbSet<Comment> Comments { get; set; }
+
+		protected override void OnModelCreating(ModelBuilder builder)
+		{
+			base.OnModelCreating(builder);
+
+            builder.Entity<Comment>().HasKey(c => c.Id);
+		}
+	}
 }
