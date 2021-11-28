@@ -1,5 +1,6 @@
-#ifndef DATABASE_DATABASE_H_
-#define DATABASE_DATABASE_H_
+// Copyright 2021 <Ad Astra>
+#ifndef SRC_HEADERS_DATABASE_H_
+#define SRC_HEADERS_DATABASE_H_
 #include <map>
 #include <string>
 #include <vector>
@@ -27,7 +28,7 @@ struct User {
 };
 
 class Database {
-   public:
+ public:
     Database();
     ~Database();
     void add_user(User& user);
@@ -42,7 +43,7 @@ class Database {
                      Comment& comment);
     void delete_comment(std::string userid, std::string filename, int id);
 
-   private:
+ private:
     std::map<std::string, User> users;
     std::string path;
     void read_users();
@@ -60,4 +61,4 @@ class Database {
     std::string add_to_path(std::string path, std::string filename);
 };
 
-#endif  // DATABASE_DATABASE_H_
+#endif  // SRC_HEADERS_DATABASE_H_
