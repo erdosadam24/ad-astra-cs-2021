@@ -78,6 +78,13 @@ namespace CAFF_Store.Controllers
 			return new OkResult();
 		}
 
+		[HttpGet("dbtest")]
+		public void test()
+		{
+			var db =DatabaseService.createDatabase();
+			DatabaseService.addFile(db, "testfile", "testID", "testData");
+		}
+
 
 	}
 }
