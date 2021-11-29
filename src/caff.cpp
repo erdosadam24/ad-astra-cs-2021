@@ -308,20 +308,6 @@ void Caff::saveAsImage(const char* path, int ciff_number) {
     }
 }
 
-void Caff::getAsImage(const char* path, int ciff_number) {
-    if (ciffs.empty()) {
-        throw std::invalid_argument(
-            "There are no CIFF files so cannot create image.");
-    }
-    if (!ciffs[ciff_number].ciff_header.content_size == 0) {
-        ciffs[ciff_number].getAsImage(path);
-    }
-    else {
-        throw std::invalid_argument(
-            "Cannot create image from CIFF file. It has 0 pixels.");
-    }
-}
-
 void Caff::parseAnimation(int block_number) {
     char* animation_duration = new char[8];
     for (int i = 0; i < 8; ++i) {
