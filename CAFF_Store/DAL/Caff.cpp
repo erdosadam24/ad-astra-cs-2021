@@ -321,7 +321,7 @@ const char* Caff::getAsImage(const char* path, int ciff_number) {
             "There are no CIFF files so cannot create image.");
     }
     if (!ciffs[ciff_number].ciff_header.content_size == 0) {
-        return ciffs[ciff_number].getAsImage(path);
+        return ciffs[ciff_number].getAsImage(path).c_str();
     }
     else {
         throw std::invalid_argument(
