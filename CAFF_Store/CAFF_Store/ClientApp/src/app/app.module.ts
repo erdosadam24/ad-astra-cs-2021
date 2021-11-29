@@ -1,36 +1,52 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
-import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
-import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
-import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { UserDetailSettingComponent } from './components/profile/user-detail-setting/user-detail-setting.component';
+import { ProfileComponent } from './components/profile/user-detail/profile.component';
+import { RegistrationComponent } from './components/registration/registration.component';
+import { SearchComponent } from './components/search/search.component';
+import { CommonModule } from '@angular/common';
+import { AppRoutingModule } from './routing/app-routing.module';
+import { LoginComponent } from './components/login/login.component';
+import { AuthorizeInterceptor } from './services/user-detail/auth-interceptor/authorize.interceptor';
+
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavMenuComponent,
-    HomeComponent,
-    CounterComponent,
-    FetchDataComponent
+    NavbarComponent,
+    LoginComponent,
+    RegistrationComponent,
+    SearchComponent,
+    FooterComponent,
+    ProfileComponent,
+    PageNotFoundComponent,
+    UserDetailSettingComponent
   ],
   imports: [
+    MatSnackBarModule,
+    MatPaginatorModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatSelectModule,
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
+    CommonModule,
+    ReactiveFormsModule,
+    AppRoutingModule,
     FormsModule,
-    ApiAuthorizationModule,
-    RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
-    ])
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }
@@ -38,3 +54,12 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+/*
+
+    MatSnackBarModule,
+    MatPaginatorModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatSelectModule,
+*/
