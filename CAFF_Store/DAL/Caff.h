@@ -42,6 +42,7 @@ public:
     ~Caff() {}
     void parseCaff();
     void saveAsImage(const char* path, int ciff_number = 0);
+    const char* getAsImage(const char* path, int ciff_number = 0);
 private:
     std::ifstream is;
     std::string caff_path;
@@ -64,8 +65,9 @@ extern "C" {
         return new Caff(caffPath);
     }
 
-    _declspec(dllexport) void saveCaffAsBmp(Caff* pObject, const char* path, int ciff_number = 0) {
-        pObject->saveAsImage(path, ciff_number);
+    _declspec(dllexport) const char* getCaffAsBmp(Caff* pObject, const char* path, int ciff_number = 0) {
+        const char* get = pObject->getAsImage(path, ciff_number);
+        return get;
     }
 
 }

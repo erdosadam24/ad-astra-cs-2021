@@ -113,13 +113,6 @@ void Database::read_users() {
     for (int i = 0; i < user_count; i++) {
         User user;
         std::getline(db, user.userid);
-        std::getline(db, user.username);
-        std::getline(db, user.password_hash);
-        std::getline(db, user.email);
-        int access_level;
-        db >> access_level;
-        std::getline(db, junk);
-        user.access_level = (UserType)access_level;
         read_files(user);
         users[user.userid] = user;
     }
@@ -131,8 +124,6 @@ Database::Database() {
     create_filesystem();
     for (auto user : users) {
         std::cout << user.second.userid << std::endl;
-        std::cout << user.second.password_hash << std::endl;
-        std::cout << (int)user.second.access_level << std::endl;
         std::cout << user.second.files.size() << std::endl;
         for (auto file : user.second.files) {
             std::cout << file.second.filename << std::endl;
@@ -181,10 +172,6 @@ void Database::write_users() {
     db << users.size() << std::endl;
     for (auto user : users) {
         db << user.second.userid << std::endl;
-        db << user.second.username << std::endl;
-        db << user.second.password_hash << std::endl;
-        db << user.second.email << std::endl;
-        db << (int)user.second.access_level << std::endl;
         write_files(user.second);
     }
     db.close();
@@ -218,20 +205,16 @@ void Database::delete_folder(std::string foldername) {
 
 Database::~Database() { write_users(); }
 
-void Database::add_user(User& user) { users[user.userid] = user; }
+void Database::add_user(std::string userid) {
+    User user;
+    user.userid = userid;
+    users[user.userid] = user; }
 
 void Database::delete_user(std::string userid) {
     users.erase(userid);
 
     std::string path = create_path(userid);
     delete_folder(path);
-}
-
-User* Database::get_user(std::string userid) {
-    if (users.find(userid) != users.end()) {
-        return &users[userid];
-    }
-    return nullptr;
 }
 
 void Database::add_file(std::string userid, CFile& file, std::string data) {

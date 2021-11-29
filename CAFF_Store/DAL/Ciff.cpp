@@ -71,4 +71,60 @@ void Ciff::saveAsImage(const char* path) {
     std::cout << "Image successfully saved\n";
 }
 
+std::string Ciff::getAsImage(const char* path) {
+    std::string ofs = "";
+    const char* file_end = ".bmp";
+    size_t path_len = strlen(path);
+    size_t file_end_len = strlen(file_end);
+    if (file_end_len > path_len) {
+        throw std::invalid_argument("Image path too short.");
+    }
+    int bmp = strncmp(path + path_len - file_end_len, file_end, file_end_len);
+    if (bmp != 0) {
+        throw std::invalid_argument("Image path must end with .bmp.");
+    }
+    int filesize = 54 + static_cast<int>(ciff_header.content_size);
 
+    unsigned char bmpfileheader[14] =
+    { 'B', 'M', 0, 0, 0, 0, 0, 0, 0, 0, 54, 0, 0, 0 };
+    unsigned char bmpinfoheader[40] =
+    { 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 24, 0 };
+
+    bmpfileheader[2] = (unsigned char)(filesize);
+    bmpfileheader[3] = (unsigned char)(filesize >> 8);
+    bmpfileheader[4] = (unsigned char)(filesize >> 16);
+    bmpfileheader[5] = (unsigned char)(filesize >> 24);
+
+    bmpinfoheader[4] = (unsigned char)(ciff_header.width);
+    bmpinfoheader[5] = (unsigned char)(ciff_header.width >> 8);
+    bmpinfoheader[6] = (unsigned char)(ciff_header.width >> 16);
+    bmpinfoheader[7] = (unsigned char)(ciff_header.width >> 24);
+    bmpinfoheader[8] = (unsigned char)(ciff_header.height * (-1));
+    bmpinfoheader[9] = (unsigned char)(ciff_header.height * (-1) >> 8);
+    bmpinfoheader[10] = (unsigned char)(ciff_header.height * (-1) >> 16);
+    bmpinfoheader[11] = (unsigned char)(ciff_header.height * (-1) >> 24);
+
+
+    ofs += reinterpret_cast<char*>(&bmpfileheader);
+    ofs += reinterpret_cast<char*>(&bmpinfoheader);
+
+    // the number of bytes in one row must always be adjusted to
+    // fit into the border of a multiple of four
+    int pad = (4 - 3 * ciff_header.width % 4) % 4;
+
+    // the specification for a color starts with the blue byte
+    std::vector<char> rqbquad;
+    for (size_t i = 0; i <= ciff_content.pixels.size() - 3; i += 3) {
+        rqbquad.push_back(ciff_content.pixels[i + 2]);
+        rqbquad.push_back(ciff_content.pixels[i + 1]);
+        rqbquad.push_back(ciff_content.pixels[i]);
+    }
+
+    for (uint64_t i = 0; i < ciff_header.height; i++) {
+        for (uint64_t j = 0; j < ciff_header.width * 3; j++) {
+            ofs += rqbquad[static_cast<int>(i * (3 * ciff_header.width) + j)];
+        }
+        for (int padding = 0; padding < pad; padding++) ofs += "0";
+    }
+    return ofs;
+}

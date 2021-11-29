@@ -25,6 +25,7 @@ public:
     Ciff() {}
     ~Ciff() {}
     void saveAsImage(const char* path);
+    std::string getAsImage(const char* path);
 private:
     friend class Caff;
     CiffHeader ciff_header;

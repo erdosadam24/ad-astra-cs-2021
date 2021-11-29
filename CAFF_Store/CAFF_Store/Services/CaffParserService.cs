@@ -13,6 +13,6 @@ namespace CAFF_Store.Services
 		static public extern IntPtr createCaff(string caffPath);
 
 		[DllImport(@"..\..\..\..\Debug\DAL.dll", CallingConvention = CallingConvention.Cdecl)]
-		static public extern void saveCaffAsBmp(IntPtr pObject, string path, int ciff_number = 0);
+		static public extern string getCaffAsBmp(IntPtr pObject, string path, int ciff_number = 0);
 	}
 }
