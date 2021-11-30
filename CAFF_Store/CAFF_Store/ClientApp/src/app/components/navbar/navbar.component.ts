@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
+import { Alert } from 'selenium-webdriver';
 import { AuthorizeService } from 'src/app/api-authorization/authorize.service';
 import { FileUploadComponent } from '../content/file-upload/file-upload.component';
 
@@ -12,8 +13,6 @@ import { FileUploadComponent } from '../content/file-upload/file-upload.componen
 export class NavbarComponent implements OnInit {
 
   constructor(public authService:AuthorizeService,private readonly dialog: MatDialog) { 
-    dialog.afterAllClosed.subscribe(result => {
-    });
   }
 
   ngOnInit(): void {}
@@ -31,6 +30,7 @@ export class NavbarComponent implements OnInit {
   }
 
   isAuthenticated(){
-    return this.authService.isAuthenticated()
+    console.log("auth: " + String(this.authService.authenticated));
+    return this.authService.authenticated
   }
 }

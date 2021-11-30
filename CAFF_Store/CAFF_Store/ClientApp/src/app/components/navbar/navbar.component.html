@@ -1,33 +1,39 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" routerLink="/login">Caff Share</a>
+  <a class="navbar-brand" routerLink="/search" [queryParams]="{ 
+                page: 1,
+                size: 9,
+                sort: 'created',
+                asc: 'asc' }">Caff Share</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto" *ngIf="isAuthenticated()">
-      <li class="nav-item">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item" *ngIf="isAuthenticated()">
         <a class="nav-link" routerLink="/search" [queryParams]="{ 
-          page: 1,
-          size: 9,
-          sort: 'created',
-          asc: 'asc' }">Files</a>
+                page: 1,
+                size: 9,
+                sort: 'created',
+                asc: 'asc' }">Files</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="isAuthenticated()">
         <a class="nav-link" style="cursor:pointer;" (click)="upload()">Upload</a>
       </li>
     </ul>
     <div class="btn btn-secondary action-button d-none d-lg-block" [routerLink]='["/authentication/login"]' type="button">Log In</div>
     <div class="btn btn-primary action-button d-none d-lg-block" role="button" [routerLink]='["/authentication/register"]' routerLinkActive="active">Sign Up</div>
     
-    <div class="dropdown dropleft" id="dropdown-menu-icon" *ngIf="isAuthenticated()">
+
+
+    <div class="dropdown dropleft d-block d-lg-none" id="dropdown-menu-icon">
       <a aria-expanded="false" data-toggle="dropdown" href="#" style="margin-left: 1.2rem;"><i class="fa fa-gear"></i></a>
       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item d-block d-lg-none"  [routerLink]='["/authentication/login"]'>Login</a>
-          <a class="dropdown-item d-block d-lg-none"  [routerLink]='["/authentication/register"]'>Registration</a>
-          <a class="dropdown-item"  [routerLink]='["/authentication/profile"]'>Profile</a>
-          <a class="dropdown-item"  routerLink='/myfiles'>My Files</a>
-          <a class="dropdown-item" [routerLink]='["/authentication/logout"]' style="cursor:pointer;">Logout</a>
+          <a class="dropdown-item"  [routerLink]='["/authentication/login"]'>Login</a>
+          <a class="dropdown-item"  [routerLink]='["/authentication/register"]'>Registration</a>
+          <a class="dropdown-item" *ngIf="isAuthenticated()" [routerLink]='["/authentication/profile"]'>Profile</a>
+          <a class="dropdown-item" *ngIf="isAuthenticated()" routerLink='/myfiles'>My Files</a>
+          <a class="dropdown-item" *ngIf="isAuthenticated()" [routerLink]='["/authentication/logout"]' style="cursor:pointer;">Logout</a>
         </div>
     </div>
   </div>

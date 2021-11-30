@@ -27,6 +27,7 @@ import { LoadingPageComponent } from '../components/loading-page/loading-page.co
   ],
   declarations: [LoginMenuComponent, LoginComponent, LogoutComponent, LoadingPageComponent,
   ],
-  exports: [LoginMenuComponent, LoginComponent, LogoutComponent]
+  exports: [LoginMenuComponent, LoginComponent, LogoutComponent, LoadingPageComponent,
+  ]
 })
 export class ApiAuthorizationModule { }

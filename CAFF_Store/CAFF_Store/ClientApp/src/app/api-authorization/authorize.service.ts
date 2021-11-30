@@ -40,9 +40,17 @@ export class AuthorizeService {
   // By default pop ups are disabled because they don't work properly on Edge.
   // If you want to enable pop up authentication simply set this flag to false.
 
+  public authenticated:boolean 
+
   private popUpDisabled = true;
   private userManager: UserManager;
   private userSubject: BehaviorSubject<IUser | null> = new BehaviorSubject(null);
+
+  constructor(){
+    this.isAuthenticated().subscribe((o:boolean) => {
+      this.authenticated = o
+    })
+  }
 
   public isAuthenticated(): Observable<boolean> {
     return this.getUser().pipe(map(u => !!u));
