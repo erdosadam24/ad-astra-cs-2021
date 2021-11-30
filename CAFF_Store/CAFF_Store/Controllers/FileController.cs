@@ -62,9 +62,9 @@ namespace CAFF_Store.Controllers
 		}
 
 		[HttpGet("allfiles")]
-		public List<CaffFile> getAllFiles()
+		public List<CaffFile> getAllFiles(GetAllFilesRequest request)
 		{
-			var files = DatabaseService.GetAllFiles();
+			var files = DatabaseService.GetAllFiles(request);
 			foreach(var file in files)
 			{
 				file.Comments = dbContext.Comments.Where(c => c.UserID == file.UserID && c.FileName == file.FileName).ToList();

@@ -1,4 +1,5 @@
 ﻿using CAFF_Store.Models;
+using CAFF_Store.Models.Requests;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -51,17 +52,25 @@ namespace CAFF_Store.Services
 			File.Delete(caffPath);
 		}
 
-		public static List<CaffFile> GetAllFiles()
+		public static List<CaffFile> GetAllFiles(GetAllFilesRequest request)
 		{
 			var result = new List<CaffFile>();
 			foreach(var userDir in Directory.GetDirectories("caff_files"))
 			{
 				string userID = Path.GetFileName(userDir);
-				var bmpFiles = Directory.GetFiles(userDir).Where(fn => fn.EndsWith(".bmp")).ToList();
+				
+				var bmpFiles = Directory.GetFiles(userDir)
+					.Where(fn => fn.EndsWith(".bmp") && fn.ToUpper().Contains(request.NameFilter.ToUpper()))
+					.Select(fn => new FileInfo(fn))
+					.OrderBy(f =>f.CreationTime)
+					.Skip((request.PageNumber-1)*request.PageSize)
+					.Take(request.PageSize)
+					.ToList();
+
 				foreach(var file in bmpFiles)
 				{
-					var fileName = Path.GetFileName(file);
-					byte[] fileData = File.ReadAllBytes(file);		
+					var fileName = Path.GetFileName(file.Name);
+					byte[] fileData = File.ReadAllBytes(file.FullName);		
 					result.Add(new CaffFile
 					{
 						UserID = userID,
