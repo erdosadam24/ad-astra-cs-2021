@@ -30,7 +30,6 @@ export class NavbarComponent implements OnInit {
   }
 
   isAuthenticated(){
-    console.log("auth: " + String(this.authService.authenticated));
     return this.authService.authenticated
   }
 }

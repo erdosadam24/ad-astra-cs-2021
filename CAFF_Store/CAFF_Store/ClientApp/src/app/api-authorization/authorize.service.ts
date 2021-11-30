@@ -87,30 +87,12 @@ export class AuthorizeService {
     } catch (silentError) {
       // User might not be authenticated, fallback to popup authentication
       console.log('Silent authentication error: ', silentError);
-
       try {
-        if (this.popUpDisabled) {
-          throw new Error('Popup disabled. Change \'authorize.service.ts:AuthorizeService.popupDisabled\' to false to enable it.');
-        }
-        user = await this.userManager.signinPopup(this.createArguments());
-        this.userSubject.next(user.profile);
-        return this.success(state);
-      } catch (popupError) {
-        if (popupError.message === 'Popup window closed') {
-          // The user explicitly cancelled the login action by closing an opened popup.
-          return this.error('The user closed the window.');
-        } else if (!this.popUpDisabled) {
-          console.log('Popup authentication error: ', popupError);
-        }
-
-        // PopUps might be blocked by the user, fallback to redirect
-        try {
-          await this.userManager.signinRedirect(this.createArguments(state));
-          return this.redirect();
-        } catch (redirectError) {
-          console.log('Redirect authentication error: ', redirectError);
-          return this.error(redirectError);
-        }
+        await this.userManager.signinRedirect(this.createArguments(state));
+        return this.redirect();
+      } catch (redirectError) {
+        console.log('Redirect authentication error: ', redirectError);
+        return this.error(redirectError);
       }
     }
   }

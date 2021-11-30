@@ -33,6 +33,7 @@ import { AuthorizeInterceptor } from './api-authorization/authorize.interceptor'
 import { MyFilesComponent } from './components/my-files/my-files.component';
 import { ApiAuthorizationModule } from './api-authorization/api-authorization.module';
 import { LoadingPageComponent } from './components/loading-page/loading-page.component';
+import { FileModificationComponent } from './components/content/file-modification/file-modification.component';
 
 
 @NgModule({
@@ -48,6 +49,7 @@ import { LoadingPageComponent } from './components/loading-page/loading-page.com
     CommentEditorComponent,
     FileUploadComponent,
     MyFilesComponent,
+    FileModificationComponent,
 
   ],
   imports: [
@@ -75,7 +77,8 @@ import { LoadingPageComponent } from './components/loading-page/loading-page.com
   ],
   bootstrap: [AppComponent],
   entryComponents:[
-    FileUploadComponent
+    FileUploadComponent,
+    FileModificationComponent
   ]
 })
 export class AppModule { }

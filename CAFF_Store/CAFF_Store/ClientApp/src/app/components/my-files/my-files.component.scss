@@ -1,15 +1,11 @@
 .default-frame{
     display: flex;
     justify-content: center;
-    background: url(../../../assets/img/login_bg.jpg) center no-repeat;
-    background-size: cover;
     min-height: 95%;
+    background: url(../../../assets/img/login_bg.jpg) center fixed;
+    background-size: cover;
 
-    .card{
-        a{
-            color: white;
-        }       
-    
+    .card{    
         max-width: 60rem;
         width: 60%;
         height: min-content;
@@ -23,12 +19,29 @@
         .nav-link:hover {
             background-color: #545b62;
         }
+
+        .card-header{
+            text-align: center;
+            color: white;
+        }
     
         .card-body{
-            .card-title{
-                text-align: center
+            .file-link{
+                margin-right: 1rem;
+
+                span{
+                    cursor:pointer;
+                    color: #007bff;
+                    text-decoration: none;
+                    background-color: transparent;
+                }
+
+                span:hover {
+                    color: #0056b3;
+                    text-decoration: underline;
+                }
             }
-    
+
 
             .input-container{
                 margin-top: 1rem;
@@ -51,4 +64,26 @@
             color: white;
         }
     }
+
+      
+    .outer-pagination{
+        width: 100%;
+        position: static;
+        bottom: 8%;
+        left: 0px;
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+     
+    
+    
+        .inner-pagination{
+          background-color: white;
+          width: 80%;
+          height: 4rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      } 
 }

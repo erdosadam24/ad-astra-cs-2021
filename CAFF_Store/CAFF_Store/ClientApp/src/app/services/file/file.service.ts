@@ -35,7 +35,7 @@ export class FileService {
 
   getEmptyFileData():FileData{
       return {
-        id:"",
+        id:"-1",
         author: "Empty",
         filename: "Empty",
         created: "2000-01-01",

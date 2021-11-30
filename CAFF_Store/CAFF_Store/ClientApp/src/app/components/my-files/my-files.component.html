@@ -1,32 +1,46 @@
 <div class="default-frame">
     <div class="card">
         <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs">
-                <li class="nav-item"><a class="nav-link" type="button" routerLink="/profile">Profile Details</a></li>
-                <li class="nav-item"><a class="nav-link" type="button" routerLink="/userDetailSetting">Change Profile Details</a></li>
-            </ul>
+            My Uploaded Files
         </div>
-        <div class="card-body" style="padding: 0;">
+        <div class="card-body" style="padding: .5rem;">
             <table class="table table-dark" id="table-content">
+                <thead>
+                    <tr>
+                        <th>
+                            File names
+                        </th>
+                        <th>
+                            Links
+                        </th>
+                    </tr>
+
+                    
+                </thead>
                 <tbody>
-                    <tr>
-                        <td>Username:</td>
-                        <td>Valami</td>
-                    </tr>
-                    <tr>
-                        <td>E-mail address:</td>
-                        <td>Valami</td>
-                    </tr>
-                    <tr>
-                        <td>Registration date:</td>
-                        <td>Valami</td>
-                    </tr>
-                    <tr>
-                        <td>Last login date:</td>
-                        <td>Valami</td>
+                    <tr *ngFor="let it of list">
+                        <td>{{it.filename}}</td>
+                        <td  class="file-link">
+                            <span style="margin-right: 1rem;" routerLink="/fileview" [queryParams]="{ id: it.id}" style="cursor: pointer;">Go To</span>
+                            <i class="fa fa-long-arrow-right file-icons"></i>
+                        </td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="outer-pagination">
+            <div class="inner-pagination">
+                <nav *ngIf="collectionSize">
+                    <ngb-pagination 
+                    (pageChange)="loadPage($event)" 
+                    [(page)]="page" 
+                    [collectionSize]="collectionSize" 
+                    [maxSize]="8" 
+                    [rotate]="true" 
+                    [ellipses]="false" 
+                    [boundaryLinks]="true"></ngb-pagination>
+                </nav>
+            </div>
         </div>
     </div>
 </div>

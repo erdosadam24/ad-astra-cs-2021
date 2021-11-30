@@ -4,13 +4,14 @@ import { AppPaths } from './app-paths';
 import { FileSearchComponent } from '../components/content/file-search/file-search.component';
 import { FileViewComponent } from '../components/content/file-view/file-view.component';
 import { PageNotFoundComponent } from '../components/page-not-found/page-not-found.component';
+import { MyFilesComponent } from '../components/my-files/my-files.component';
 
 
 
 export const mainRoutes: Routes = [
   { path: '',  component: FileSearchComponent },
   { path: AppPaths.SEARCH, component: FileSearchComponent },
-  { path: AppPaths.MYFILES, component: FileSearchComponent },
+  { path: AppPaths.MYFILES, component: MyFilesComponent },
   { path: AppPaths.FILEVIEW, component: FileViewComponent },
   { path: '**', component: PageNotFoundComponent},
 ];
