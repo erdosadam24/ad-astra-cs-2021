@@ -1,0 +1,54 @@
+.default-frame{
+    display: flex;
+    justify-content: center;
+    background: url(../../../../../assets/img/login_bg.jpg) center no-repeat;
+    background-size: cover;
+    min-height: 95%;
+
+    .card{
+        a{
+            color: white;
+        }       
+    
+        max-width: 60rem;
+        width: 60%;
+        height: min-content;
+        background-color: #1e2833;
+        padding: 40px;
+        border-radius: 4px;
+        margin-top: 10rem;
+        color: #434a52;
+        box-shadow: 3px 3px 4px rgba(0,0,0,0.2);
+    
+        .nav-link:hover {
+            background-color: #545b62;
+        }
+    
+        .card-body{
+            .card-title{
+                text-align: center
+            }
+    
+
+            .input-container{
+                margin-top: 1rem;
+            }
+        }
+    }
+    
+    .card-title{
+        text-align: center;
+        color: white;
+    }
+    
+    #table-content{
+        margin-top: 1rem !important;
+        td, th {
+            padding: .75rem;
+            width: 50%;
+            vertical-align: top;
+            padding-left: 2rem;
+            color: white;
+        }
+    }
+}

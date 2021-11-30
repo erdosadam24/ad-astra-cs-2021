@@ -1,0 +1,37 @@
+<div class="outer-main-comments">
+    <div class="inner-main-comments">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>
+                        <div>
+                            <div class="p-sm-2  d-sm-inline d-block">
+                                <i class="fa fa-user" style="display: inline;"></i>
+                                <div class="user-info">{{comment.creator}}</div>
+                            </div>
+                            <div class="p-0 p-sm-2 d-sm-inline d-block">
+                                <i class="fas fa-clock user-icon" ></i>
+                                <div class="user-info">{{comment.created | date:'medium'}}</div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="width: 90%" [innerHTML]="sanitizer.bypassSecurityTrustHtml(comment.body)"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div *ngIf="isAuthenticated()" class="comment-links">
+                            <div class="comment-link">
+                                <span (click)="report()">Report</span>
+                                <i class="fa fa-exclamation comment-icons"></i>
+                            </div>  
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

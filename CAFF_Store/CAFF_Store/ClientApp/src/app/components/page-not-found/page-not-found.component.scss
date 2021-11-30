@@ -1,0 +1,23 @@
+.base{
+    height: 100%;
+    width: 100%;
+    background: url(../../../assets/img/login_bg.jpg) center no-repeat;
+    background-size: cover;
+    position: relative;
+
+
+    .pagenotfound{
+        max-width: 20rem;
+        background-color: #1e2833;
+    
+        padding: 40px;
+        border-radius: 4px;
+        transform: translate(-50%, -50%);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        color: #434a52;
+        box-shadow: 3px 3px 4px rgba(0,0,0,0.2);
+    }
+}
+
