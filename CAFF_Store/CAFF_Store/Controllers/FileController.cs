@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Buffers.Text;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -36,10 +37,16 @@ namespace CAFF_Store.Controllers
 		[HttpPost("upload")]
 		public ActionResult uploadFile([FromBody] CaffFile caffFile)
 		{
+			using (StreamWriter writetext = new StreamWriter("C:/Users/Benedek/Desktop/2021_01_02/SzámítógépBiztonság2/caff_files/encoded.txt"))
+			{
+				writetext.WriteLine(caffFile.Data);
+			}
 			
 			byte[] backToBytes = Convert.FromBase64String(caffFile.Data);
+			/*
 			var filePath = DatabaseService.UploadFileForUser(User.FindFirstValue(ClaimTypes.NameIdentifier), caffFile.FileName, backToBytes);
 			CaffParserService.createBmpForCaffFile(filePath);
+			*/
 			return new OkResult();
 		}
 
