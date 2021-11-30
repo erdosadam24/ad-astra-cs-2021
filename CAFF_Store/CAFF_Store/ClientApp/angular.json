@@ -25,6 +25,11 @@
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/assets/fontawesome-free/scss/fontawesome.scss",
+              "src/assets/fontawesome-free/scss/solid.scss",
+              "src/assets/fontawesome-free/scss/brands.scss",
+              "src/assets/fonts/font-awesome.min.css",
+              "src/assets/fonts/ionicons.min.css",
               "src/styles.scss"
             ],
             "scripts": []
