@@ -41,12 +41,7 @@ namespace CAFF_Store.Controllers
 			return new OkResult();
 		}
 
-
-		//TODO: Implement Modify file
-		/* Only title and file
-		 * 
-		 * 
-		 */
+		//TODO: Modify file
 
 		[Authorize]
 		[HttpGet("download")]
@@ -73,45 +68,37 @@ namespace CAFF_Store.Controllers
 		}
 
 
-		/*
-		 * PAge objektet kell visszaadni, hogy tudjuk hány elem van a query-nek
-		 */
 		[HttpGet("allfiles")]
-		public List<CaffFile> getAllFiles(GetAllFilesRequest request)
+		public PagedCaffFiles getAllFiles(GetAllFilesRequest request)
 		{
-			var files = DatabaseService.GetAllFiles(request);
-			foreach(var file in files)
+			var page = DatabaseService.GetAllFiles(request);
+			foreach(var file in page.Files)
 			{
 				file.Comments = dbContext.Comments.Where(c => c.UserID == file.UserID && c.FileName == file.FileName).ToList();
 			}
-			return files;
+			return page;
 		}
 
-		/*
-		 * PAge objektet kell visszaadni, hogy tudjuk hány elem van a query-nek
-		 */
+
 		[Authorize]
 		[HttpGet("userfiles")]
-		public List<CaffFile> getUserFiles(GetAllFilesRequest request)
+		public PagedCaffFiles getUserFiles(GetAllFilesRequest request)
 		{
-			var files = DatabaseService.GetUserFiles(User.FindFirstValue(ClaimTypes.NameIdentifier),request);
-			foreach (var file in files)
+			var page = DatabaseService.GetUserFiles(User.FindFirstValue(ClaimTypes.NameIdentifier),request);
+			foreach (var file in page.Files)
 			{
 				file.Comments = dbContext.Comments.Where(c => c.UserID == file.UserID && c.FileName == file.FileName).ToList();
 			}
-			return files;
+			return page;
 		}
 
 
-		/*
-		 * TODO: Implementálni
-		 */
 		[Authorize]
 		[HttpPost("addcomment")]
 		public async Task<ActionResult> addComment([FromBody] AddCommentRequest request)
 		{
 			var user = await userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
-			//TODO: Megcsinálni
+
 			/*
 			dbContext.Comments.Add(new Comment
 			{
@@ -121,6 +108,7 @@ namespace CAFF_Store.Controllers
 				FileName = request.FileName
 			});
 			*/
+			
 			await dbContext.SaveChangesAsync();
 			return new OkResult();
 		}

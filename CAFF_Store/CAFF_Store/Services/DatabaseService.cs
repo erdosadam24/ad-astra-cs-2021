@@ -1,5 +1,6 @@
 ﻿using CAFF_Store.Models;
 using CAFF_Store.Models.Requests;
+using CAFF_Store.Models.Responses;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -52,9 +53,10 @@ namespace CAFF_Store.Services
 			File.Delete(caffPath);
 		}
 
-		public static List<CaffFile> GetAllFiles(GetAllFilesRequest request)
+		public static PagedCaffFiles GetAllFiles(GetAllFilesRequest request)
 		{
 			var result = new List<CaffFile>();
+			var totalElements = 0;
 			foreach(var userDir in Directory.GetDirectories("caff_files"))
 			{
 				string userID = Path.GetFileName(userDir);
@@ -66,8 +68,10 @@ namespace CAFF_Store.Services
 					.Skip((request.PageNumber-1)*request.PageSize)
 					.Take(request.PageSize)
 					.ToList();
+				totalElements += Directory.GetFiles(userDir)
+					.Where(fn => fn.EndsWith(".bmp") && fn.ToUpper().Contains(request.NameFilter.ToUpper())).Count();
 
-				foreach(var file in bmpFiles)
+				foreach (var file in bmpFiles)
 				{
 					var fileName = Path.GetFileName(file.Name);
 					byte[] fileData = File.ReadAllBytes(file.FullName);		
@@ -75,16 +79,20 @@ namespace CAFF_Store.Services
 					{
 						UserID = userID,
 						FileName = fileName,
-						Data = fileData
+						Data = Convert.ToBase64String(fileData)
 					});
 
 				}
 			}
 
-			return result;
+			var page = new PagedCaffFiles();
+			page.Files = result;
+			page.TotalSize = totalElements;
+
+			return page;
 		}
 
-		public static List<CaffFile> GetUserFiles(string userID, GetAllFilesRequest request)
+		public static PagedCaffFiles GetUserFiles(string userID, GetAllFilesRequest request)
 		{
 			var result = new List<CaffFile>();
 			var userDir = Path.Combine("caff_files", userID);
@@ -95,6 +103,8 @@ namespace CAFF_Store.Services
 					.Skip((request.PageNumber - 1) * request.PageSize)
 					.Take(request.PageSize)
 					.ToList();
+			var totalElements = Directory.GetFiles(userDir)
+					.Where(fn => fn.EndsWith(".bmp") && fn.ToUpper().Contains(request.NameFilter.ToUpper())).Count();
 			foreach (var file in bmpFiles)
 			{
 				var fileName = Path.GetFileName(file.Name);
@@ -103,12 +113,16 @@ namespace CAFF_Store.Services
 				{
 					UserID = userID,
 					FileName = fileName,
-					Data = fileData
+					Data = Convert.ToBase64String(fileData)
 				});
 
 			}
 
-			return result;
+			var page = new PagedCaffFiles();
+			page.Files = result;
+			page.TotalSize = totalElements;
+
+			return page;
 		}
 	}
 
