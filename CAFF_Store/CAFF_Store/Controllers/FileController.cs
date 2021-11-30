@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace CAFF_Store.Controllers
@@ -31,40 +32,72 @@ namespace CAFF_Store.Controllers
 		[HttpPost("upload")]
 		public ActionResult uploadFile([FromBody] CaffFile caffFile)
 		{
+			var filePath = DatabaseService.UploadFileForUser(User.FindFirstValue(ClaimTypes.NameIdentifier), caffFile.FileName, caffFile.Data);
+			CaffParserService.createBmpForCaffFile(filePath);
 			return new OkResult();
 		}
 
 		[Authorize]
 		[HttpGet("download")]
-		public CaffFile downloadFile([FromQuery] string fileId)
+		public async Task<CaffFile> downloadFile([FromQuery] string fileName)
 		{
-			return new CaffFile();
+			var user = await userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+			var fileData = DatabaseService.DownloadFile(user.Id, fileName);
+			return new CaffFile
+			{
+				FileName = fileName,
+				Data = fileData,
+				UserID = user.Id
+			};
 		}
 
 		[Authorize]
 		[HttpDelete("delete")]
-		public ActionResult deleteFile([FromQuery] string FileID)
+		public ActionResult deleteFile([FromQuery] string fileName)
 		{
+			DatabaseService.DeleteFile(User.FindFirstValue(ClaimTypes.NameIdentifier), fileName);
+			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.UserID == User.FindFirstValue(ClaimTypes.NameIdentifier) && c.FileName == fileName).ToArray());
+			dbContext.SaveChanges();
 			return new OkResult();
 		}
 
 		[HttpGet("allfiles")]
 		public List<CaffFile> getAllFiles()
 		{
-			return new List<CaffFile>();
+			var files = DatabaseService.GetAllFiles();
+			foreach(var file in files)
+			{
+				file.Comments = dbContext.Comments.Where(c => c.UserID == file.UserID && c.FileName == file.FileName).ToList();
+			}
+			return files;
 		}
 
 		[Authorize]
 		[HttpGet("userfiles")]
 		public List<CaffFile> getUserFiles()
 		{
-			return new List<CaffFile>();
+			var files = DatabaseService.GetUserFiles(User.FindFirstValue(ClaimTypes.NameIdentifier));
+			foreach (var file in files)
+			{
+				file.Comments = dbContext.Comments.Where(c => c.UserID == file.UserID && c.FileName == file.FileName).ToList();
+			}
+			return files;
 		}
 
 		[Authorize]
 		[HttpPost("addcomment")]
-		public ActionResult addComment([FromBody] AddCommentRequest request)
+		public async Task<ActionResult> addComment([FromBody] AddCommentRequest request)
 		{
+			var user = await userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+			dbContext.Comments.Add(new Comment
+			{
+				UserID = request.UserID,
+				Username = user.Email,
+				Text = request.Text,
+				FileName = request.FileName
+			});
+			await dbContext.SaveChangesAsync();
 			return new OkResult();
 		}
 
@@ -72,17 +105,13 @@ namespace CAFF_Store.Controllers
 		[HttpPost("deleteUser")]
 		public async Task<ActionResult> deleteUser([FromQuery] string UserId)
 		{
-			var user = await userManager.GetUserAsync(User);
-			await userManager.DeleteAsync(user);
+			var currentUser = await userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+			var deletedUser = await userManager.FindByIdAsync(UserId);
+			await userManager.DeleteAsync(deletedUser);
 			await dbContext.SaveChangesAsync();
 			return new OkResult();
 		}
 
-		[HttpGet("dbtest")]
-		public void test()
-		{
-			DatabaseService.TestExe();
-		}
 
 
 	}

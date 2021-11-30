@@ -9,9 +9,11 @@ namespace CAFF_Store.Services
 {
 	public class CaffParserService
 	{
-		public void createBmpForCaffFile(string caffPath)
+		public static void createBmpForCaffFile(string caffPath)
 		{
-			Process.Start(@"E:\Repos\ad-astra-cs-2021\parser.exe", caffPath);
+			var proc = Process.Start(@"E:\Repos\ad-astra-cs-2021\parser.exe", caffPath);
+			proc.WaitForExit();
+			
 		}
 		
 	}
