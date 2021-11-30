@@ -5,4 +5,5 @@ export const AppPaths = {
     PROFILESETTING: "userDetailSetting",
     SEARCH: "search",
     FILEVIEW: "fileview",
+    MYFILES: "myfiles",
   }

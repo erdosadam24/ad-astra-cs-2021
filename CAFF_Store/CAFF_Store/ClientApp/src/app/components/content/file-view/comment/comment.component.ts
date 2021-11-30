@@ -2,9 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { AuthorizeService } from 'src/app/api-authorization/authorize.service';
 import { CommentData } from 'src/app/data/comment-data';
 import { CommentService } from 'src/app/services/comment/comment.service';
-import { AuthorizeService } from 'src/app/services/user-detail/authorize.service';
 import { Reload } from '../comment-editor/comment-editor.component';
 
 @Component({

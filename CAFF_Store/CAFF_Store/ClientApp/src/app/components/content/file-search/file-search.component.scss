@@ -1,9 +1,10 @@
 .main-container{
   display: flex;
   justify-content: center;
+  min-height: 95%;
   background: url(../../../../assets/img/content-background.jpg) center fixed;
   background-size: cover;
-  min-height: 95%;
+
 
   .search-result{
     padding-top: 3rem;
@@ -60,8 +61,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-
-        
       }
     } 
   }

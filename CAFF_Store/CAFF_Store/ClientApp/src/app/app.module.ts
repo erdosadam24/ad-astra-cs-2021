@@ -8,19 +8,14 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { RegistrationComponent } from './components/user/registration/registration.component';
 import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from './routing/app-routing.module';
-import { AuthorizeInterceptor } from './services/user-detail/auth-interceptor/authorize.interceptor';
 
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { LoginComponent } from './components/user/login/login.component';
-import { UserDetailSettingComponent } from './components/user/profile/user-detail-setting/user-detail-setting.component';
-import { ProfileComponent } from './components/user/profile/user-detail/profile.component';
 import { FileSearchComponent } from './components/content/file-search/file-search.component';
 import { FileCardComponent } from './components/content/file-card/file-card.component';
 import { CommentEditorComponent } from './components/content/file-view/comment-editor/comment-editor.component';
@@ -34,6 +29,11 @@ import { FileViewComponent } from './components/content/file-view/file-view.comp
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FileUploadComponent } from './components/content/file-upload/file-upload.component';
 import { FileUploadModule } from 'ng2-file-upload';
+import { AuthorizeInterceptor } from './api-authorization/authorize.interceptor';
+import { MyFilesComponent } from './components/my-files/my-files.component';
+import { ApiAuthorizationModule } from './api-authorization/api-authorization.module';
+import { LoadingPageComponent } from './components/loading-page/loading-page.component';
+import { FileModificationComponent } from './components/content/file-modification/file-modification.component';
 
 
 @NgModule({
@@ -42,19 +42,18 @@ import { FileUploadModule } from 'ng2-file-upload';
     NavbarComponent,
     FooterComponent,
     PageNotFoundComponent,
-    LoginComponent,
-    RegistrationComponent,
-    ProfileComponent,
-    UserDetailSettingComponent,
     FileSearchComponent,
     FileCardComponent,
     FileViewComponent,
     CommentComponent,
     CommentEditorComponent,
     FileUploadComponent,
+    MyFilesComponent,
+    FileModificationComponent,
 
   ],
   imports: [
+    ApiAuthorizationModule,
     MatSnackBarModule,
     MatPaginatorModule,
     MatDialogModule,
@@ -78,7 +77,8 @@ import { FileUploadModule } from 'ng2-file-upload';
   ],
   bootstrap: [AppComponent],
   entryComponents:[
-    FileUploadComponent
+    FileUploadComponent,
+    FileModificationComponent
   ]
 })
 export class AppModule { }

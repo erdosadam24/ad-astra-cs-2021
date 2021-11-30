@@ -1,0 +1,31 @@
+<form id="file-upload-dialog" [formGroup]="fileUploadForm" (ngSubmit)="onSubmit()" style="height: 100%;">
+    <h2 mat-dialog-title>Modifying file with id: {{data.id}}</h2>
+    <mat-dialog-content class="mat-typography" >
+
+
+    <label>Title of file:</label>
+    <div class="input-group">
+        <div class="input-group-prepend"><span class="input-group-text" style="border-radius: 4px;width: 40px;"><i class="fa fa-heading" style="width: 10px;"></i></span>
+        <input id="new-file-title" class="form-control" type="text" formControlName="title" placeholder="Title">
+        </div>
+    </div>
+  
+    <label>File:</label>
+    <div class="input-group">
+        <div class="input-group-prepend"><span class="input-group-text" style="border-radius: 4px;width: 40px;"><i class="fa fa-plus" style="width: 10px;"></i></span>
+        <input class="form-control-file"  formControlName="file" type="file" accept=".caff" style="margin-left: 3px;"  (change)="onFileSelect($event)">
+        </div>
+    </div>
+
+    </mat-dialog-content>
+  
+    
+    <mat-dialog-actions>
+      <div style="display: flex;justify-content: flex-end;width: 100%">
+        <button mat-dialog-close class="btn btn-secondary btn-block" style="width: 10rem;margin: 0.5rem;">Close</button>
+        <button mat-button cdkFocusInitial class="btn btn-primary btn-block" style="width: 10rem;margin: 0.5rem;">Submit</button>
+      </div>
+    </mat-dialog-actions>
+  </form>
+
+  <!-- #fileInput ng2FileSelect [uploader]="uploader" (onFileSelected)="onFileSelected($event)" -->
