@@ -25,7 +25,7 @@ namespace CAFF_Store.Data
 		{
 			base.OnModelCreating(builder);
 
-            builder.Entity<Comment>().HasKey(c => c.Id);
+            builder.Entity<Comment>().HasKey(c => c.CommentId);
 
 			builder.Entity<ApplicationUser>().HasData(new ApplicationUser
 			{

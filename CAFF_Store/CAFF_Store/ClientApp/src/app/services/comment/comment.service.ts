@@ -18,7 +18,7 @@ export class CommentService {
   constructor(private router: Router,private routerParams: RouterParamService,private http: HttpClient,public snackBar: MatSnackBar,private sanitizer:DomSanitizer) { }
 
   saveComment(comment:CommentData){
-    return this.http.post<any>(environment.commentDefaultUrl,comment,optionsForTextResponse)
+    return this.http.post<any>(environment.baseUrl,comment,optionsForTextResponse)
   }
 
 
@@ -33,12 +33,12 @@ export class CommentService {
       'asc':  this.routerParams.params['asc'],
       }
 
-    return this.http.get<any>(environment.fileDefaultUrl,opt)
+    return this.http.get<any>(environment.baseUrl + '',opt)
   }
 
   getEmptyCommentData():CommentData{
     return {
-      Id: -1,
+      CommentId: -1,
       Filename: "Empty",
       Body: "Empty",
       Author: "Empty",

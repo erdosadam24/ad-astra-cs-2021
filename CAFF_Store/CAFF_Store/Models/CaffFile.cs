@@ -14,6 +14,7 @@ namespace CAFF_Store.Models
 		public string Created { get; set; }
 
 		public string Data { get; set; }
+		public string Cover { get; set; }
 
 		public List<Comment> Comments { get; set; }
 	}

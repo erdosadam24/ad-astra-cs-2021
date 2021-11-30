@@ -14,17 +14,7 @@ import { environment } from 'src/environments/environment';
 export class FileUploadComponent implements OnInit {
 
   fileUploadForm:FormGroup;
-
-  uploader: FileUploader = new FileUploader({
-    url: environment.fileDefaultUrl,
-    disableMultipart : false,
-    autoUpload: true,
-    method: 'post',
-    itemAlias: 'caff',
-    allowedFileType: ['caff']
-  });
-
-  caffFile:File | undefined;
+  caffFile:any;
 
   
   get title() { return this.fileUploadForm.get('title');}
@@ -33,7 +23,7 @@ export class FileUploadComponent implements OnInit {
   constructor(private fileService:FileService, @Inject(MAT_DIALOG_DATA) public data:any,public dialogRef: MatDialogRef<FileUploadComponent>) {
     this.fileUploadForm = new FormGroup({
       title: new FormControl('', [Validators.required,Validators.minLength(4)]),
-      file: new FormControl('', [RxwebValidators.fileSize({maxSize:100000})]),
+      file: new FormControl('', []),
     })
    }
 
@@ -43,26 +33,38 @@ export class FileUploadComponent implements OnInit {
 
 
   onSubmit(){
-    if(this.fileUploadForm.valid){
-     
+    if(this.fileUploadForm.valid && this.caffFile != undefined){
+      this.fileService.uploadCaffFile(this.title!.value,this.caffFile).subscribe((resposne:any) => {
+        console.log("Result: " + JSON.stringify(resposne))
+      })
     }
-    else{
-      
+    else{ 
+      this.fileService.snackbarMessage("Error in form!")
     }
   }
 
   
-  onFileSelected(event: any) {
-    
-    this.caffFile = event[0];
-    console.log(this.caffFile);
-    
+
+
+  getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
   }
 
-  async onFileSelect(event: any){
-    const file = event.target.files.item(0)
-    const text = await file.bytes()
-    console.log(text);
+  onFileSelected(event: any){
+    var files = event.target.files;
+    var file = files[0];
+    console.log("Object: " + JSON.stringify(file))
+    this.getBase64(file).then(data => {
+      this.caffFile = data
+      console.log("CaffFile: " + data)
+      }
+    );
+    
   }
 
 }

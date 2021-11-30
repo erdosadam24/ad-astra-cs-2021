@@ -52,10 +52,13 @@ export class CommentEditorComponent implements OnInit {
 
   saveComment(){
     let comment:CommentData = {
-      body: "",
-      author: "",
-      created: "",
-      updated: ""
+        CommentId: -1,
+        Filename: "Empty",
+        Body: "Empty",
+        Author: "Empty",
+        UserID: "Empty",
+        Created: "2000-01-01",
+        Updated: "2000-01-01"
     }
 
 

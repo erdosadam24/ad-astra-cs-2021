@@ -28,3 +28,13 @@ export const optionsJSON = {
   observe: 'body',
   responseType: 'json'
 };
+
+
+export const uploadCaffOptions : any = {
+  observe: "response",
+  responseType: "blob",
+  headers: new HttpHeaders({
+      "Content-Type": "application/json",
+      "Accept": "application/octet-stream"
+  })
+};

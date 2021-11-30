@@ -17,15 +17,6 @@ export class FileModificationComponent implements OnInit {
   
   fileUploadForm:FormGroup;
 
-  uploader: FileUploader = new FileUploader({
-    url: environment.fileDefaultUrl,
-    disableMultipart : false,
-    autoUpload: true,
-    method: 'post',
-    itemAlias: 'caff',
-    allowedFileType: ['caff']
-  });
-
   caffFile:File | undefined;
 
   

@@ -68,8 +68,8 @@ namespace CAFF_Store.Controllers
 		}
 
 
-		[HttpGet("allfiles")]
-		public PagedCaffFiles getAllFiles(GetAllFilesRequest request)
+		[HttpPost("allfiles")]
+		public PagedCaffFiles getAllFiles([FromBody] GetAllFilesRequest request)
 		{
 			var page = DatabaseService.GetAllFiles(request);
 			foreach(var file in page.Files)
@@ -81,8 +81,8 @@ namespace CAFF_Store.Controllers
 
 
 		[Authorize]
-		[HttpGet("userfiles")]
-		public PagedCaffFiles getUserFiles(GetAllFilesRequest request)
+		[HttpPost("userfiles")]
+		public PagedCaffFiles getUserFiles([FromBody] GetAllFilesRequest request)
 		{
 			var page = DatabaseService.GetUserFiles(User.FindFirstValue(ClaimTypes.NameIdentifier),request);
 			foreach (var file in page.Files)

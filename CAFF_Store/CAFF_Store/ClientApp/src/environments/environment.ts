@@ -4,10 +4,14 @@
 
 export const environment = {
   production: false,
-  userDetailUrl: '',
-  fileDefaultUrl: '',
-  commentDefaultUrl: ''
+  baseUrl: "https://localhost:5001/api/files",
 };
+
+export const urls = {
+  userDetailUrl: environment.baseUrl + '',
+  fileDefaultUrl: environment.baseUrl + '',
+  commentDefaultUrl: environment.baseUrl + ''
+}
 
 /*
  * In development mode, to ignore zone related error stack frames such as

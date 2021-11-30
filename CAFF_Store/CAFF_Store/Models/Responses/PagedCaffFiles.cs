@@ -8,7 +8,7 @@ namespace CAFF_Store.Models.Responses
 	public class PagedCaffFiles
 	{
 		public int TotalSize { get; set; }
-		public List<CaffFile> files { get; set; }
+		public List<CaffFile> Files { get; set; }
 		
 	}
 }
