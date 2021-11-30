@@ -41,7 +41,11 @@
             </div>
             <div *ngIf="isAuthenticated()" class="file-links">
                 <div  class="file-link">
-                    <span (click)="report()">Moderate</span>
+                    <span (click)="deleteFile()">Delete File</span>
+                    <i class="fa fa-exclamation file-icons"></i>
+                </div>
+                <div  class="file-link">
+                    <span (click)="modifyFile()">Modify File</span>
                     <i class="fa fa-exclamation file-icons"></i>
                 </div>
                 <div class="file-link">

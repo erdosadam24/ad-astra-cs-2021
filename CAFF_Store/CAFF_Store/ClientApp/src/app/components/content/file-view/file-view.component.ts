@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { AuthorizeService } from 'src/app/api-authorization/authorize.service';
 import { CommentData } from 'src/app/data/comment-data';
 import { FileData } from 'src/app/data/file-data';
 import { CommentService } from 'src/app/services/comment/comment.service';
 import { FileService } from 'src/app/services/file/file.service';
-import { AuthorizeService } from 'src/app/services/user-detail/authorize.service';
+import { FileModificationComponent } from '../file-modification/file-modification.component';
 import { Reload } from './comment-editor/comment-editor.component';
 
 @Component({
@@ -26,7 +28,8 @@ export class FileViewComponent implements OnInit {
 
   constructor(public authorizationService:AuthorizeService, 
               public commentService:CommentService, 
-              public fileService:FileService) {
+              public fileService:FileService,
+              private readonly dialog: MatDialog) {
 
 
     this.initData()
@@ -54,8 +57,26 @@ export class FileViewComponent implements OnInit {
     })
   }
 
+  deleteFile(){
+
+  }
+
+  modifyFile(){
+    this.dialog.open(FileModificationComponent, {
+      width: '30rem',
+      height: '20rem',
+      data:{
+        id: this.fileData.id
+      }
+    });
+  }
+
   replyTo(){
     this.showEditor = !this.showEditor
+  }
+
+  download(){
+    
   }
 
   
@@ -69,9 +90,7 @@ export class FileViewComponent implements OnInit {
     
   }
 
-  download(){
-    
-  }
+
 
   initData(){
     let size = 5
