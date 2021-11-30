@@ -4,8 +4,8 @@
             <div class="intro">
                 <h1 class="text-center">Files:</h1>
                 <form [formGroup]="searchForm" (ngSubmit)="onSearch()" style="display: flex;justify-content: center;">
-                    <div id="search-container" style="display: flex;width: 50%;" >
-                        <input class="form-control form-element" type="search" formControlName="search" placeholder="Search">
+                    <div id="search-container" >
+                        <input class="form-control form-element" type="search" formControlName="search" placeholder="Search by title..">
                         <div class="btn btn-secondary form-element" type="submit" (click)="onSearch()">Search</div>
                     </div>
                 </form>

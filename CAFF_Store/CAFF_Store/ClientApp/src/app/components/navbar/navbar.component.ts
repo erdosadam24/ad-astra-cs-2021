@@ -11,7 +11,6 @@ export class NavbarComponent implements OnInit {
 
   constructor(private readonly dialog: MatDialog) { 
     dialog.afterAllClosed.subscribe(result => {
-      console.log(`Dialog result: ${result}`);
     });
   }
 
@@ -24,8 +23,8 @@ export class NavbarComponent implements OnInit {
 
   upload(){
     this.dialog.open(FileUploadComponent, {
-      width: '50rem',
-      height: '32rem'
+      width: '30rem',
+      height: '20rem'
     });
   }
 

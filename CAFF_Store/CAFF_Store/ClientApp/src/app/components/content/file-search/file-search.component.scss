@@ -7,10 +7,16 @@
 
   .search-result{
     padding-top: 3rem;
-    width: 80%;
+    width: 60%;
     .intro{
       padding-top: 2rem;
       width: 100%;
+
+      #search-container{
+        display: flex;
+        min-width: 10rem;
+        width: 20rem;
+      }
 
       .form-element{
         margin-right: .5rem;
