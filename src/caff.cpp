@@ -60,9 +60,10 @@ void Caff::parseCaff() {
                 throw std::invalid_argument("Invalid CAFF block id.");
             }
             std::cout << "ID: " << caff_block.id << "\n";
-            char* block_length = new char[8];
+            char* block_length = (char*)malloc(8);
             is.read(block_length, 8);
             caff_block.length = convert8Byte(block_length);
+            free(block_length);
             std::cout << "Block length: " << caff_block.length << "\n";
             caff_block.data = new char[static_cast<int>(caff_block.length)];
             is.read(caff_block.data, caff_block.length);
@@ -101,7 +102,7 @@ void Caff::parseHeader(int block_number) {
             "Invalid CAFF file. Header magic does not spell CAFF.");
     }
     std::cout << "magic: " << caff_header.magic << '\n';
-    char* header_header_size = new char[8];
+    auto* header_header_size = new char[8];
     for (int i = 0; i < 8; ++i) {
         header_header_size[i] = caff_blocks[0].data[i + 4];
     }
@@ -111,7 +112,7 @@ void Caff::parseHeader(int block_number) {
             "Invalid CAFF file. Header size is not equal to block size.");
     }
     std::cout << "header size: " << caff_header.header_size << '\n';
-    char* header_num_anim = new char[8];
+    auto* header_num_anim = new char[8];
     for (int i = 0; i < 8; ++i) {
         header_num_anim[i] = caff_blocks[0].data[i + 4 + 8];
     }
@@ -120,11 +121,16 @@ void Caff::parseHeader(int block_number) {
 }
 
 void Caff::parseCredits(int block_number) {
-    char* credit_year = new char[2];
+    if(block_number < 0 || block_number >= caff_blocks.size()) {
+        throw std::invalid_argument(
+            "Invalid block number");
+    }
+    char* credit_year = (char*)malloc(2);
     for (int i = 0; i < 2; ++i) {
         credit_year[i] = caff_blocks[block_number].data[i];
     }
     caff_credit.year = convert2Byte(credit_year);
+    free(credit_year);
     if (!(1000 <= caff_credit.year <= 2021)) {
         throw std::invalid_argument(
             "Invalid CAFF file. Created year is invalid.");
@@ -167,13 +173,13 @@ void Caff::parseCredits(int block_number) {
     }
     char credit_hour = caff_blocks[block_number].data[4];
     caff_credit.hour = static_cast<unsigned int>(credit_hour);
-    if (!(0 <= caff_credit.hour <= 23)) {
+    if (!(caff_credit.hour <= 23)) {
         throw std::invalid_argument(
             "Invalid CAFF file. Created hour is invalid.");
     }
     char credit_minute = caff_blocks[block_number].data[5];
     caff_credit.minute = static_cast<unsigned int>(credit_minute);
-    if (!(0 <= caff_credit.minute < 60)) {
+    if (!(caff_credit.minute < 60)) {
         throw std::invalid_argument(
             "Invalid CAFF file. Created minute is invalid.");
     }
@@ -182,7 +188,7 @@ void Caff::parseCredits(int block_number) {
         << '/' << std::to_string(caff_credit.day) << "  "
         << std::to_string(caff_credit.hour)
         << ':' << std::to_string(caff_credit.minute) << '\n';
-    char* credit_creator_len = new char[8];
+    auto* credit_creator_len = new char[8];
     for (int i = 0; i < 8; ++i) {
         credit_creator_len[i] = caff_blocks[block_number].data[i + 6];
     }
@@ -209,7 +215,7 @@ void Caff::parseCiffHeader(int block_number) {
         throw std::invalid_argument(
             "Invalid CIFF file. Header magic does not spell CIFF.");
     }
-    char* ciff_header_size = new char[8];
+    auto* ciff_header_size = new char[8];
     for (int i = 0; i < 8; ++i) {
         ciff_header_size[i] = caff_blocks[block_number].data[i + 8 + 4];
     }
@@ -217,7 +223,7 @@ void Caff::parseCiffHeader(int block_number) {
         convert8Byte(ciff_header_size);
     std::cout << "header size: "
         << caff_animation.ciff_data.ciff_header.header_size << "\n";
-    char* ciff_content_size = new char[8];
+    auto* ciff_content_size = new char[8];
     for (int i = 0; i < 8; ++i) {
         ciff_content_size[i] = caff_blocks[block_number].data[i + 8 + 4 + 8];
     }
@@ -225,14 +231,14 @@ void Caff::parseCiffHeader(int block_number) {
         convert8Byte(ciff_content_size);
     std::cout << "content size: "
         << caff_animation.ciff_data.ciff_header.content_size << "\n";
-    char* ciff_width = new char[8];
+    auto* ciff_width = new char[8];
     for (int i = 0; i < 8; ++i) {
         ciff_width[i] = caff_blocks[block_number].data[i + 8 + 4 + 8 + 8];
     }
     caff_animation.ciff_data.ciff_header.width = convert8Byte(ciff_width);
     std::cout << "width: " << caff_animation.ciff_data.ciff_header.width
         << "\n";
-    char* ciff_height = new char[8];
+    auto* ciff_height = new char[8];
     for (int i = 0; i < 8; ++i) {
         ciff_height[i] = caff_blocks[block_number].data[i + 8 + 4 + 8 + 8 + 8];
     }
@@ -309,12 +315,12 @@ void Caff::saveAsImage(const char* path, int ciff_number) {
 }
 
 void Caff::parseAnimation(int block_number) {
-    char* animation_duration = new char[8];
+    auto* animation_duration = new char[8];
     for (int i = 0; i < 8; ++i) {
         animation_duration[i] = caff_blocks[block_number].data[i];
     }
     caff_animation.duration = convert8Byte(animation_duration);
-    std::cout << "duration: " << caff_animation.duration << "\n";;
+    std::cout << "duration: " << caff_animation.duration << "\n";
     parseCiffHeader(block_number);
     parseCiffContent(block_number);
     ciffs.push_back(caff_animation.ciff_data);
