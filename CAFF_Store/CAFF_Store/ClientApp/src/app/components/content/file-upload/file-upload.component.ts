@@ -24,7 +24,7 @@ export class FileUploadComponent implements OnInit {
     allowedFileType: ['caff']
   });
 
-  iconFile:File | undefined;
+  caffFile:File | undefined;
 
   
   get title() { return this.fileUploadForm.get('title');}
@@ -53,7 +53,16 @@ export class FileUploadComponent implements OnInit {
 
   
   onFileSelected(event: any) {
-    this.iconFile = event[0];
-    console.log(this.iconFile);
+    
+    this.caffFile = event[0];
+    console.log(this.caffFile);
+    
   }
+
+  async onFileSelect(event: any){
+    const file = event.target.files.item(0)
+    const text = await file.text();
+    console.log(text);
+  }
+
 }

@@ -1,11 +1,11 @@
 <form id="file-upload-dialog" [formGroup]="fileUploadForm" (ngSubmit)="onSubmit()" style="height: 100%;">
     <h2 mat-dialog-title>Share a CAFF file</h2>
-    <mat-dialog-content class="mat-typography" style="height: 75%">
+    <mat-dialog-content class="mat-typography" >
 
 
     <label>Title of file:</label>
     <div class="input-group">
-        <div class="input-group-prepend"><span class="input-group-text" style="border-radius: 4px;width: 40px;"><i class="fa fa-user-circle" style="width: 10px;"></i></span>
+        <div class="input-group-prepend"><span class="input-group-text" style="border-radius: 4px;width: 40px;"><i class="fa fa-heading" style="width: 10px;"></i></span>
         <input id="new-file-title" class="form-control" type="text" formControlName="title" placeholder="Title">
         </div>
     </div>
@@ -13,8 +13,7 @@
     <label>File:</label>
     <div class="input-group">
         <div class="input-group-prepend"><span class="input-group-text" style="border-radius: 4px;width: 40px;"><i class="fa fa-plus" style="width: 10px;"></i></span>
-        <input class="form-control-file"  formControlName="file" type="file" accept=".caff" style="margin-left: 3px;"
-        #fileInput ng2FileSelect [uploader]="uploader" (onFileSelected)="onFileSelected($event)">
+        <input class="form-control-file"  formControlName="file" type="file" accept=".caff" style="margin-left: 3px;"  (change)="onFileSelect($event)">
         </div>
     </div>
 
@@ -28,3 +27,5 @@
       </div>
     </mat-dialog-actions>
   </form>
+
+  <!-- #fileInput ng2FileSelect [uploader]="uploader" (onFileSelected)="onFileSelected($event)" -->
