@@ -81,8 +81,7 @@ namespace CAFF_Store.Controllers
 		[HttpGet("dbtest")]
 		public void test()
 		{
-			var db =DatabaseService.createDatabase();
-			DatabaseService.addFile(db, "testfile", "testID", "testData");
+			DatabaseService.TestExe();
 		}
 
 
