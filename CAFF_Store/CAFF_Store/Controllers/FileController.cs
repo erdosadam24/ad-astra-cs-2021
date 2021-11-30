@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Buffers.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -35,6 +36,7 @@ namespace CAFF_Store.Controllers
 		[HttpPost("upload")]
 		public ActionResult uploadFile([FromBody] CaffFile caffFile)
 		{
+			
 			byte[] backToBytes = Convert.FromBase64String(caffFile.Data);
 			var filePath = DatabaseService.UploadFileForUser(User.FindFirstValue(ClaimTypes.NameIdentifier), caffFile.FileName, backToBytes);
 			CaffParserService.createBmpForCaffFile(filePath);

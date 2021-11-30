@@ -20,6 +20,6 @@ export class FileCardComponent implements OnInit {
   ngOnInit(): void {}
 
   onClick(){
-    this.router.navigate(['/file-view'], {queryParams: {id: this.file.FileId}});
+    this.router.navigate(['/file-view'], {queryParams: {id: this.file.FileName}});
   }
 }

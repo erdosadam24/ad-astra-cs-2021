@@ -3,15 +3,6 @@
     <mat-dialog-content class="mat-typography" >
 
 
-    <label>Title of file:</label>
-    <div class="input-group">
-        <div class="input-group-prepend"><span class="input-group-text" style="border-radius: 4px;width: 40px;"><i class="fa fa-heading" style="width: 10px;"></i></span>
-        <input id="new-file-title" class="form-control" type="text" formControlName="title" placeholder="Title">
-        </div>
-    </div>
-    <div *ngIf="fileUploadForm.controls['title'].invalid">
-      Title is invalid.
-    </div>
   
     <label>File:</label>
     <div class="input-group">

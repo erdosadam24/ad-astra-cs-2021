@@ -1,5 +1,5 @@
 <div class="file-card" style="margin-top: 1rem;" >
-    <span class="icon-link" routerLink="/fileview" [queryParams]="{ id: file.id}">
+    <span class="icon-link" routerLink="/fileview" [queryParams]="{ id: file.FileName}">
         <div class="file-title">{{file.FileName}} ({{file.Created}})</div>
         <div class="file-icon">
             <img *ngIf="icon != undefined" class="img-fluid" src="{{icon}}">

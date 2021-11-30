@@ -43,7 +43,6 @@ export class FileService {
   uploadCaffFile(filename:string, file:string){
     let opt:any = _.clone(uploadCaffOptions)
     let data:FileData={
-      FileId: "",
       FileName: filename,
       Author:"",
       UserID: "",
@@ -74,7 +73,6 @@ export class FileService {
 
   getEmptyFileData():FileData{
       return {
-        FileId: "Empty",
         FileName: "Empty",
         Author:"Empty",
         UserID: "Empty",

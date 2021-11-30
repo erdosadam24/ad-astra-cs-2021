@@ -46,7 +46,7 @@ export class FileViewComponent implements OnInit {
 
 
   loadComments(){
-    this.commentService.getComments(this.fileData.FileId).subscribe((response:any) => {
+    this.commentService.getComments(this.fileData.FileName).subscribe((response:any) => {
       console.log("Comments: "+JSON.stringify(response))
       this.page = Number.parseInt(response.comments.pageable.pageNumber) + 1
       this.collectionSize = Number.parseInt(response.comments.totalElements)
@@ -66,7 +66,7 @@ export class FileViewComponent implements OnInit {
       width: '30rem',
       height: '20rem',
       data:{
-        id: this.fileData.FileId
+        id: this.fileData.FileName
       }
     });
   }
