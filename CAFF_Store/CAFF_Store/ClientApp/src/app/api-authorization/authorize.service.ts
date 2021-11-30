@@ -73,18 +73,38 @@ export class AuthorizeService {
     await this.ensureUserManagerInitialized();
     let user: User = null;
     try {
-      user = await this.userManager.signinSilent(this.createArguments()); //Important!
-
+      user = await this.userManager.signinSilent(this.createArguments());
       this.userSubject.next(user.profile);
       return this.success(state);
     } catch (silentError) {
       // User might not be authenticated, fallback to popup authentication
       console.log('Silent authentication error: ', silentError);
-        user = await this.userManager.signinPopup(this.createArguments()); //Important! changeToAuth
-        this.userSubject.next(user.profile);
-    }
 
-    //https://localhost:5001/Identity/Account/Login
+      try {
+        if (this.popUpDisabled) {
+          throw new Error('Popup disabled. Change \'authorize.service.ts:AuthorizeService.popupDisabled\' to false to enable it.');
+        }
+        user = await this.userManager.signinPopup(this.createArguments());
+        this.userSubject.next(user.profile);
+        return this.success(state);
+      } catch (popupError) {
+        if (popupError.message === 'Popup window closed') {
+          // The user explicitly cancelled the login action by closing an opened popup.
+          return this.error('The user closed the window.');
+        } else if (!this.popUpDisabled) {
+          console.log('Popup authentication error: ', popupError);
+        }
+
+        // PopUps might be blocked by the user, fallback to redirect
+        try {
+          await this.userManager.signinRedirect(this.createArguments(state));
+          return this.redirect();
+        } catch (redirectError) {
+          console.log('Redirect authentication error: ', redirectError);
+          return this.error(redirectError);
+        }
+      }
+    }
   }
 
   public async completeSignIn(url: string): Promise<IAuthenticationResult> {
@@ -115,7 +135,7 @@ export class AuthorizeService {
         await this.userManager.signoutRedirect(this.createArguments(state));
         return this.redirect();
       } catch (redirectSignOutError) {
-        console.log('Redirect signout error: ', popupSignOutError);
+        console.log('Redirect signout error: ', redirectSignOutError);
         return this.error(redirectSignOutError);
       }
     }

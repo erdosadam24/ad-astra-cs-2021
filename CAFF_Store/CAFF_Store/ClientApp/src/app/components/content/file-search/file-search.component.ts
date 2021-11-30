@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { takeUntil } from 'rxjs/operators';
+import { AuthorizeService } from 'src/app/api-authorization/authorize.service';
 import { FileData } from 'src/app/data/file-data';
 import { AutoDestroy } from 'src/app/directive/auto-destroy';
 import { FileService } from 'src/app/services/file/file.service';
 import { RouterParamService } from 'src/app/services/router-param/router-param.service';
-import { AuthorizeService } from 'src/app/services/user-detail/authorize.service';
 
 @Component({
   selector: 'app-file-search',

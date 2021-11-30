@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthorizeService } from 'src/app/api-authorization/authorize.service';
 import { CommentData } from 'src/app/data/comment-data';
 import { FileData } from 'src/app/data/file-data';
 import { CommentService } from 'src/app/services/comment/comment.service';
 import { FileService } from 'src/app/services/file/file.service';
-import { AuthorizeService } from 'src/app/services/user-detail/authorize.service';
 import { Reload } from './comment-editor/comment-editor.component';
 
 @Component({
