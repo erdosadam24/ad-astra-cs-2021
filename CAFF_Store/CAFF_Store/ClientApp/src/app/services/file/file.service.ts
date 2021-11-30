@@ -35,11 +35,13 @@ export class FileService {
 
   getEmptyFileData():FileData{
       return {
-        id:"-1",
-        author: "Empty",
-        filename: "Empty",
-        created: "2000-01-01",
-        file: "Empty"
+        FileId: "Empty",
+        FileName: "Empty",
+        Author:"Empty",
+        UserID: "Empty",
+        Created: "2000-01-01",
+        Data: "Empty",
+        Comments: []
       }
   }
 }

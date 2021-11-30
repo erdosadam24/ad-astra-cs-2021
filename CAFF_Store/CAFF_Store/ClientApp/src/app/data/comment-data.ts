@@ -1,6 +1,9 @@
 export interface CommentData{
-    body: string,
-    author: string,
-    created: string,
-    updated: string
+    CommentId: number,
+	Filename: string,
+    Body: string,
+    Author: string,
+	UserID: string,
+    Created: string,
+    Updated: string
 }

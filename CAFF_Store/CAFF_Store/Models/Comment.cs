@@ -9,8 +9,11 @@ namespace CAFF_Store.Models
 	{
 		public int Id { get; set; }
 		public string FileName { get; set; }
-		public string Text { get; set; }
-		public string Username { get; set; }
+		public string Body { get; set; }
+		public string Author { get; set; }
 		public string UserID { get; set; }
+		public string Created { get; set; }
+
+		public string Updated { get; set; }
 	}
 }

@@ -1,7 +1,11 @@
+import { CommentData } from "./comment-data";
+
 export interface FileData{
-    id: string,
-    author:string,
-    filename: string,
-    created: string,
-    file: any
+    FileId: string,
+    FileName: string,
+    Author:string,
+    UserID: string,
+    Created: string,
+	Data: string,
+    Comments: Array<CommentData>
 }

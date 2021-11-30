@@ -38,10 +38,13 @@ export class CommentService {
 
   getEmptyCommentData():CommentData{
     return {
-      body: "Empty",
-      author: "Empty",
-      created: "2000-01-01",
-      updated: "2000-01-01"
+      Id: -1,
+      Filename: "Empty",
+      Body: "Empty",
+      Author: "Empty",
+      UserID: "Empty",
+      Created: "2000-01-01",
+      Updated: "2000-01-01"
     }
   }
 

@@ -7,9 +7,14 @@ namespace CAFF_Store.Models
 {
 	public class CaffFile
 	{
-		public string UserID { get; set; }
-		public byte[] Data { get; set; }
+		public string FileId { get; set; }
 		public string FileName { get; set; }
+		public string Author { get; set; }
+		public string UserID { get; set; }
+		public string Created { get; set; }
+
+		public string Data { get; set; }
+
 		public List<Comment> Comments { get; set; }
 	}
 }

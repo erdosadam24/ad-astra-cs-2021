@@ -35,10 +35,18 @@ namespace CAFF_Store.Controllers
 		[HttpPost("upload")]
 		public ActionResult uploadFile([FromBody] CaffFile caffFile)
 		{
-			var filePath = DatabaseService.UploadFileForUser(User.FindFirstValue(ClaimTypes.NameIdentifier), caffFile.FileName, caffFile.Data);
+			byte[] backToBytes = Convert.FromBase64String(caffFile.Data);
+			var filePath = DatabaseService.UploadFileForUser(User.FindFirstValue(ClaimTypes.NameIdentifier), caffFile.FileName, backToBytes);
 			CaffParserService.createBmpForCaffFile(filePath);
 			return new OkResult();
 		}
+
+
+		//TODO: Implement Modify file
+		/* Only title and file
+		 * 
+		 * 
+		 */
 
 		[Authorize]
 		[HttpGet("download")]
@@ -49,7 +57,7 @@ namespace CAFF_Store.Controllers
 			return new CaffFile
 			{
 				FileName = fileName,
-				Data = fileData,
+				Data = Convert.ToBase64String(fileData),
 				UserID = user.Id
 			};
 		}
@@ -64,6 +72,10 @@ namespace CAFF_Store.Controllers
 			return new OkResult();
 		}
 
+
+		/*
+		 * PAge objektet kell visszaadni, hogy tudjuk hány elem van a query-nek
+		 */
 		[HttpGet("allfiles")]
 		public List<CaffFile> getAllFiles(GetAllFilesRequest request)
 		{
@@ -75,6 +87,9 @@ namespace CAFF_Store.Controllers
 			return files;
 		}
 
+		/*
+		 * PAge objektet kell visszaadni, hogy tudjuk hány elem van a query-nek
+		 */
 		[Authorize]
 		[HttpGet("userfiles")]
 		public List<CaffFile> getUserFiles(GetAllFilesRequest request)
@@ -87,12 +102,17 @@ namespace CAFF_Store.Controllers
 			return files;
 		}
 
+
+		/*
+		 * TODO: Implementálni
+		 */
 		[Authorize]
 		[HttpPost("addcomment")]
 		public async Task<ActionResult> addComment([FromBody] AddCommentRequest request)
 		{
 			var user = await userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
+			//TODO: Megcsinálni
+			/*
 			dbContext.Comments.Add(new Comment
 			{
 				UserID = request.UserID,
@@ -100,6 +120,7 @@ namespace CAFF_Store.Controllers
 				Text = request.Text,
 				FileName = request.FileName
 			});
+			*/
 			await dbContext.SaveChangesAsync();
 			return new OkResult();
 		}
@@ -113,7 +134,7 @@ namespace CAFF_Store.Controllers
 			{
 				return new UnauthorizedResult();
 			}
-			var deletedComment = await dbContext.Comments.FirstOrDefaultAsync(c => c.Id == commentID);
+			var deletedComment = await dbContext.Comments.FirstOrDefaultAsync(c => c.CommentId == commentID);
 			if(deletedComment!= null)
 			{
 				dbContext.Comments.Remove(deletedComment);

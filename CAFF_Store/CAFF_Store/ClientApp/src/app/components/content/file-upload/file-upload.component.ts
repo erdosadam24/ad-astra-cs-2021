@@ -61,7 +61,7 @@ export class FileUploadComponent implements OnInit {
 
   async onFileSelect(event: any){
     const file = event.target.files.item(0)
-    const text = await file.text();
+    const text = await file.bytes()
     console.log(text);
   }
 
