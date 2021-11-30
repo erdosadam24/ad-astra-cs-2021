@@ -84,15 +84,21 @@ namespace CAFF_Store.Services
 			return result;
 		}
 
-		public static List<CaffFile> GetUserFiles(string userID)
+		public static List<CaffFile> GetUserFiles(string userID, GetAllFilesRequest request)
 		{
 			var result = new List<CaffFile>();
 			var userDir = Path.Combine("caff_files", userID);
-			var bmpFiles = Directory.GetFiles(userDir).Where(fn => fn.EndsWith(".bmp")).ToList();
+			var bmpFiles = Directory.GetFiles(userDir)
+					.Where(fn => fn.EndsWith(".bmp") && fn.ToUpper().Contains(request.NameFilter.ToUpper()))
+					.Select(fn => new FileInfo(fn))
+					.OrderBy(f => f.CreationTime)
+					.Skip((request.PageNumber - 1) * request.PageSize)
+					.Take(request.PageSize)
+					.ToList();
 			foreach (var file in bmpFiles)
 			{
-				var fileName = Path.GetFileName(file);
-				byte[] fileData = File.ReadAllBytes(file);
+				var fileName = Path.GetFileName(file.Name);
+				byte[] fileData = File.ReadAllBytes(file.FullName);
 				result.Add(new CaffFile
 				{
 					UserID = userID,

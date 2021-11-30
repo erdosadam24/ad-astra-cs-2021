@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +22,13 @@ namespace CAFF_Store.Controllers
 	{
 		private readonly ApplicationDbContext dbContext;
 		private readonly UserManager<ApplicationUser> userManager;
+		private readonly RoleManager<IdentityRole> roleManager;
 
-		public FileController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
+		public FileController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
 		{
 			this.dbContext = dbContext;
 			this.userManager = userManager;
+			this.roleManager = roleManager;
 		}
 
 		[Authorize]
@@ -74,9 +77,9 @@ namespace CAFF_Store.Controllers
 
 		[Authorize]
 		[HttpGet("userfiles")]
-		public List<CaffFile> getUserFiles()
+		public List<CaffFile> getUserFiles(GetAllFilesRequest request)
 		{
-			var files = DatabaseService.GetUserFiles(User.FindFirstValue(ClaimTypes.NameIdentifier));
+			var files = DatabaseService.GetUserFiles(User.FindFirstValue(ClaimTypes.NameIdentifier),request);
 			foreach (var file in files)
 			{
 				file.Comments = dbContext.Comments.Where(c => c.UserID == file.UserID && c.FileName == file.FileName).ToList();
@@ -102,17 +105,50 @@ namespace CAFF_Store.Controllers
 		}
 
 		[Authorize]
+		[HttpDelete("removeComment")]
+		public async Task<ActionResult> removeComment([FromQuery] int commentID)
+		{
+			var currentUser = await userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+			if (!await userManager.IsInRoleAsync(currentUser, "admin"))
+			{
+				return new UnauthorizedResult();
+			}
+			var deletedComment = await dbContext.Comments.FirstOrDefaultAsync(c => c.Id == commentID);
+			if(deletedComment!= null)
+			{
+				dbContext.Comments.Remove(deletedComment);
+				await dbContext.SaveChangesAsync();
+			}
+			return new OkResult();
+		}
+
+		[Authorize]
 		[HttpPost("deleteUser")]
 		public async Task<ActionResult> deleteUser([FromQuery] string UserId)
 		{
 			var currentUser = await userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+			if(!await userManager.IsInRoleAsync(currentUser, "admin"))
+			{
+				return new UnauthorizedResult();
+			}
 			var deletedUser = await userManager.FindByIdAsync(UserId);
 			await userManager.DeleteAsync(deletedUser);
 			await dbContext.SaveChangesAsync();
 			return new OkResult();
 		}
-
-
+		[Authorize]
+		[HttpPost("grantAdmin")]
+		public async Task<ActionResult> grantAdmin([FromQuery] string userId)
+		{
+			var currentUser = await userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+			if (!await userManager.IsInRoleAsync(currentUser, "admin"))
+			{
+				return new UnauthorizedResult();
+			}
+			var selectedUser = await userManager.FindByIdAsync(userId);
+			await userManager.AddToRoleAsync(selectedUser, "admin");
+			return new OkResult();
+		}
 
 	}
 }
