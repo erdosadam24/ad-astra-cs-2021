@@ -15,16 +15,10 @@ int main(int argc, char* argv[]) {
     CaffObj.parseCaff();
 
     const char* path = argv[1];
-    size_t path_len = strlen(path);
-    char one[path_len];
-    strcpy(one, path);
-    one[path_len - 5] = '\0';
+    std::string one = path;
+    one.erase(one.size() - 5);
+    one.append(".bmp");
 
-    char buf[path_len];
-    strcpy(buf, one);
-    strcat(buf, ".bmp");
-
-
-    CaffObj.saveAsImage(buf, 1);
+    CaffObj.saveAsImage(one.c_str(), 1);
     return 0;
 }
