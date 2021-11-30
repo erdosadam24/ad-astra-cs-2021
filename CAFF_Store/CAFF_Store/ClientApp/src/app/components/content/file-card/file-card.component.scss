@@ -1,0 +1,23 @@
+$base-width: 80%;
+$max-width: 100%;
+
+.file-card{
+    background-color: #343a40;
+    color: white;
+    width: 90%;
+
+    .icon-link{
+      cursor: pointer;
+
+      .file-title{
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        height: 20%;
+        font-size: 1.3rem;
+        font-style: bold;
+      }
+
+      
+    }
+  }

@@ -1,0 +1,13 @@
+<div style="margin-top: 2rem;">
+    <div id="quill-editor">
+        <form [formGroup]="newComment">
+            <quill-editor id="comment-quill-editor" [styles]="{borderBottom:'none'}" [required]="true" [modules]="modules" [formControl]="comment" (onContentChanged)="onContentChanged($event)" placeholder="Add content here...">
+            </quill-editor>
+        </form>
+        
+    </div>
+    <div style="display: flex;justify-content: flex-end;">
+        <button class="btn btn-secondary btn-block" (click)="close()" style="width: 10rem;margin: 0.5rem;">Close</button>
+        <button class="btn btn-primary btn-block" (click)="submit()" style="width: 10rem;margin: 0.5rem;">Submit</button>
+    </div>
+</div>

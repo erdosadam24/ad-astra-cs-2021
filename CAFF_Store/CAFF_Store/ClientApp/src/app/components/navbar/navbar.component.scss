@@ -1,0 +1,46 @@
+
+.navbar {
+  position: fixed;
+  z-index: 100;
+  width: 100%;
+  padding: 0.5rem 1rem;
+}
+
+.my-nav{
+  color: #212529;
+  background: #282d32;
+  border-color: #747474;
+}
+
+.action-button {
+  min-width: 7rem;
+  margin-left: 1rem;
+  border-radius: 20px;
+  box-shadow: none;
+  border: none;
+  text-shadow: none;
+  transition: background-color 0.25s;
+}
+
+@media (max-width: 992px){
+  #dropdown-menu-icon{
+    position: absolute;
+    right: 2rem;
+  }
+}
+
+.dropleft{
+  font-size: 2rem;
+  .dropdown-menu{
+    top: 3rem;
+    right: -1rem;
+    margin-top: 0;
+    margin-right: .125rem;
+  }
+
+  .dropdown-item.active, .dropdown-item:active {
+    color: #212529;
+    text-decoration: none;
+    background-color: white;
+  }
+} 
