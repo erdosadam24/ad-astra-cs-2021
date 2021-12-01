@@ -43,7 +43,6 @@ class Caff {
      void parseCaff();
      void saveAsImage(const char* path, int ciff_number = 0);
  private:
-     std::ifstream is;
      std::string caff_path;
      std::vector<CaffBlock> caff_blocks;
      std::vector<Ciff> ciffs;

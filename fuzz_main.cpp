@@ -1,10 +1,155 @@
 // Copyright 2021 <Ad Astra>
 
-#include "headers/caff.h"
-#include <stdio.h>
-#include <string.h>
 #include <iostream>
+#include <stdio.h>
 #include <stdexcept>
+#include <fstream>
+#include <stdint.h>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <cstring>
+
+struct CiffHeader {
+    char* magic;
+    uint64_t header_size;
+    uint64_t content_size;
+    uint64_t width;
+    uint64_t height;
+    std::string caption;
+    std::string tags;
+};
+
+struct CiffContent {
+    std::vector<char> pixels;
+};
+
+class Ciff {
+ public:
+     Ciff() = default;
+     ~Ciff() = default;
+     void saveAsImage(const char* path);
+ private:
+     friend class Caff;
+     CiffHeader ciff_header;
+     CiffContent ciff_content;
+};
+struct CaffBlock {
+    int id;
+    uint64_t length;
+    char* data;
+};
+
+struct CaffHeader {
+    char* magic;
+    uint64_t header_size;
+    uint64_t num_anim;
+};
+
+struct CaffCredit {
+    uint64_t year;
+    unsigned int month;
+    unsigned int day;
+    unsigned int hour;
+    unsigned int minute;
+    unsigned int creator_len;
+    std::string creator;
+};
+
+struct CaffAnimation {
+    uint64_t duration;
+    Ciff ciff_data;
+};
+
+class Caff {
+ public:
+     explicit Caff(std::string caff_path);
+     ~Caff() = default;
+     void parseCaff();
+     void saveAsImage(const char* path, int ciff_number = 0);
+ private:
+     std::ifstream is;
+     std::string caff_path;
+     std::vector<CaffBlock> caff_blocks;
+     std::vector<Ciff> ciffs;
+     CaffHeader caff_header;
+     CaffCredit caff_credit;
+     CaffAnimation caff_animation;
+     void parseHeader(int block_number);
+     void parseCredits(int block_number);
+     void parseAnimation(int block_number);
+     void parseCiffHeader(int block_number);
+     void parseCiffContent(int block_number);
+     uint64_t convert8Byte(const char* arr);
+     uint16_t convert2Byte(const char* arr);
+};
+
+// bmp -> https://web.archive.org/web/20080912171714/http://www.fortunecity.com/skyscraper/windows/364/bmpffrmt.html
+
+void Ciff::saveAsImage(const char* path) {
+    std::ofstream ofs;
+    try {
+        ofs.open(path);
+    }
+    catch (int e) {
+        std::cerr << "Exception during saving the image.\n";
+    }
+    const char* file_end = ".bmp";
+    size_t path_len = strlen(path);
+    size_t file_end_len = strlen(file_end);
+    if (file_end_len > path_len) {
+        throw std::invalid_argument("Image path too short.");
+    }
+    int bmp = strncmp(path + path_len - file_end_len, file_end, file_end_len);
+    if (bmp != 0) {
+        throw std::invalid_argument("Image path must end with .bmp.");
+    }
+    int filesize = 54 + static_cast<int>(ciff_header.content_size);
+
+    unsigned char bmpfileheader[14] =
+        { 'B', 'M', 0, 0, 0, 0, 0, 0, 0, 0, 54, 0, 0, 0 };
+    unsigned char bmpinfoheader[40] =
+        {40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 24, 0 };
+
+    bmpfileheader[2] = (unsigned char)(filesize);
+    bmpfileheader[3] = (unsigned char)(filesize >> 8);
+    bmpfileheader[4] = (unsigned char)(filesize >> 16);
+    bmpfileheader[5] = (unsigned char)(filesize >> 24);
+
+    bmpinfoheader[4] = (unsigned char)(ciff_header.width);
+    bmpinfoheader[5] = (unsigned char)(ciff_header.width >> 8);
+    bmpinfoheader[6] = (unsigned char)(ciff_header.width >> 16);
+    bmpinfoheader[7] = (unsigned char)(ciff_header.width >> 24);
+    bmpinfoheader[8] = (unsigned char)(ciff_header.height * (-1));
+    bmpinfoheader[9] = (unsigned char)(ciff_header.height * (-1) >> 8);
+    bmpinfoheader[10] = (unsigned char)(ciff_header.height * (-1) >> 16);
+    bmpinfoheader[11] = (unsigned char)(ciff_header.height * (-1) >> 24);
+
+
+    ofs.write(reinterpret_cast<char*>(&bmpfileheader), sizeof(bmpfileheader));
+    ofs.write(reinterpret_cast<char*>(&bmpinfoheader), sizeof(bmpinfoheader));
+
+    // the number of bytes in one row must always be adjusted to
+    // fit into the border of a multiple of four
+    int pad = (4 - 3 * ciff_header.width % 4) % 4;
+
+    // the specification for a color starts with the blue byte
+    std::vector<char> rqbquad;
+    for (size_t i = 0; i <= ciff_content.pixels.size() - 3; i += 3) {
+        rqbquad.push_back(ciff_content.pixels[i + 2]);
+        rqbquad.push_back(ciff_content.pixels[i + 1]);
+        rqbquad.push_back(ciff_content.pixels[i]);
+    }
+
+    for (uint64_t i = 0; i < ciff_header.height; i++) {
+        for (uint64_t j = 0; j < ciff_header.width * 3 ; j++) {
+            ofs << rqbquad[static_cast<int>(i * (3 * ciff_header.width) + j)];
+        }
+        for (int padding = 0; padding < pad; padding++) ofs << 0;
+    }
+    ofs.close();
+    std::cout << "Image successfully saved\n";
+}
 
 Caff::Caff(std::string caff_path) {
     const char* file_end = ".caff";
@@ -18,8 +163,13 @@ Caff::Caff(std::string caff_path) {
     if (caff != 0) {
         throw std::invalid_argument("Caff path must end with .caff.");
     }
-    caff_path = caff_path;
-
+    is.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    try {
+        is.open(caff_path, std::ios::binary);
+    }
+    catch (std::ifstream::failure e) {
+        std::cerr << "Exception during opening the file.\n";
+    }
 }
 
 uint64_t Caff::convert8Byte(const char* arr) {
@@ -41,15 +191,6 @@ uint16_t Caff::convert2Byte(const char* arr) {
 }
 
 void Caff::parseCaff() {
-    
-    std::ifstream is;
-    is.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-    try {
-        is.open(caff_path, std::ios::binary);
-    }
-    catch (std::ifstream::failure e) {
-        std::cerr << "Exception during opening the file.\n";
-    }
     if (is.is_open()) {
         is.seekg(0, is.end);
         std::streamoff length = is.tellg();
@@ -328,4 +469,16 @@ void Caff::parseAnimation(int block_number) {
     parseCiffHeader(block_number);
     parseCiffContent(block_number);
     ciffs.push_back(caff_animation.ciff_data);
+}
+
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        std::cerr << "Not enough arguments. Add the path of the CAFF "
+            << "you want to parse and then add the path where "
+            << "you want to save an image from it.";
+        return 1;
+    }
+    Caff CaffObj(argv[1]);
+    CaffObj.parseCaff();
+    return 0;
 }
