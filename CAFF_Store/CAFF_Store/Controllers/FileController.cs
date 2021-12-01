@@ -68,7 +68,7 @@ namespace CAFF_Store.Controllers
 			if (userName == null) return BadRequest("No user found with this userID");
 			var coverData = DatabaseService.DownloadFile(userId, fileName.Replace(".caff", ".bmp"));
 			if (coverData == null) return BadRequest("File not found");
-			return new CaffFile
+			var caffFile = new CaffFile
 			{
 				FileName = fileName,
 				Cover = Convert.ToBase64String(coverData),
