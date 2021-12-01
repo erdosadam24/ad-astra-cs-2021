@@ -37,7 +37,8 @@ namespace CAFF_Store.Services
             }
 			string path = Path.Combine(userFolder,fileName);
 			File.WriteAllBytes(path, data);
-			CaffParserService.createBmpForCaffFile(path);
+			var result = CaffParserService.createBmpForCaffFile(path);
+			if (!result) return null;
 			return path;
 		}
 
@@ -74,6 +75,29 @@ namespace CAFF_Store.Services
 				return false;
 			}
 		
+		}
+
+		public static bool DeleteUserDirectory(string userID)
+		{
+			var path = Path.Combine("caff_files", userID);
+			try
+			{
+				DirectoryInfo di = new DirectoryInfo(path);
+
+				foreach (FileInfo file in di.GetFiles())
+				{
+					file.Delete();
+				}
+				foreach (DirectoryInfo dir in di.GetDirectories())
+				{
+					dir.Delete(true);
+				}
+				return true;
+			}
+			catch(Exception e)
+			{
+				return false;
+			}
 		}
 
 		public static PagedCaffFiles GetAllFiles(GetAllFilesRequest request)

@@ -38,7 +38,8 @@ namespace CAFF_Store.Controllers
 		public ActionResult uploadFile([FromBody] CaffFile caffFile)
 		{			
 			byte[] backToBytes = Convert.FromBase64String(caffFile.Data.Substring(37)); //"data:application/octet-stream;base64," az elején
-			DatabaseService.UploadFileForUser(User.FindFirstValue(ClaimTypes.NameIdentifier), caffFile.FileName, backToBytes);
+			var result = DatabaseService.UploadFileForUser(User.FindFirstValue(ClaimTypes.NameIdentifier), caffFile.FileName, backToBytes);
+			if (result == null) return BadRequest("File parsing failed");
 			return new OkResult();
 		}
 
@@ -58,7 +59,8 @@ namespace CAFF_Store.Controllers
 			dbContext.SaveChanges();
 
 			byte[] backToBytes = Convert.FromBase64String(caffFile.Data.Substring(37)); //"data:application/octet-stream;base64," az elején
-			DatabaseService.UploadFileForUser(User.FindFirstValue(ClaimTypes.NameIdentifier), caffFile.FileName, backToBytes);
+			var result = DatabaseService.UploadFileForUser(User.FindFirstValue(ClaimTypes.NameIdentifier), caffFile.FileName, backToBytes);
+			if (result == null) return BadRequest("File parsing failed");
 			return new OkResult();
 		}
 
@@ -194,8 +196,12 @@ namespace CAFF_Store.Controllers
 			{
 				return new UnauthorizedResult();
 			}
+
+			var result = DatabaseService.DeleteUserDirectory(UserId);
+			if (!result) return BadRequest("User folder was not found");
 			var deletedUser = await userManager.FindByIdAsync(UserId);
 			await userManager.DeleteAsync(deletedUser);
+			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.UserID == UserId).ToArray());
 			await dbContext.SaveChangesAsync();
 			return new OkResult();
 		}

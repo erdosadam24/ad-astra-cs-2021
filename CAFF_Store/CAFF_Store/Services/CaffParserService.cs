@@ -9,10 +9,19 @@ namespace CAFF_Store.Services
 {
 	public class CaffParserService
 	{
-		public static void createBmpForCaffFile(string caffPath)
+		public static bool createBmpForCaffFile(string caffPath)
 		{
-			var proc = Process.Start(@"regenerated_parser.exe", caffPath);
-			proc.WaitForExit();
+			try
+			{
+				var proc = Process.Start(@"regenerated_parser.exe", caffPath);
+				proc.WaitForExit();
+				return true;
+
+			}catch(Exception e)
+			{
+				return false;
+			}
+			
 			
 		}
 		
