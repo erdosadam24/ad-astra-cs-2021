@@ -30,7 +30,12 @@ namespace CAFF_Store.Services
 
 		public static string UploadFileForUser(string userID, string fileName, byte[] data)
 		{
-			string path = Path.Combine(GetUserFolderPath(userID),fileName);
+			string userFolder = GetUserFolderPath(userID);
+			if (!Directory.Exists(userFolder))
+            {
+				Directory.CreateDirectory(userFolder);
+            }
+			string path = Path.Combine(userFolder,fileName);
 			File.WriteAllBytes(path, data);
 			CaffParserService.createBmpForCaffFile(path);
 			return path;
@@ -45,9 +50,9 @@ namespace CAFF_Store.Services
 
 		public static void DeleteFile(string userID, string fileName)
 		{
-			var caffName = fileName.Replace(".bmp", ".caff");
-			string bmpPath = Path.Combine(GetUserFolderPath(userID), fileName);
-			string caffPath = Path.Combine(GetUserFolderPath(userID), caffName);
+			var bmpName = fileName.Replace(".caff", ".bmp");
+			string bmpPath = Path.Combine(GetUserFolderPath(userID), bmpName);
+			string caffPath = Path.Combine(GetUserFolderPath(userID), fileName);
 
 			File.Delete(bmpPath);
 			File.Delete(caffPath);
@@ -73,13 +78,13 @@ namespace CAFF_Store.Services
 
 				foreach (var file in bmpFiles)
 				{
-					var fileName = Path.GetFileName(file.Name);
+					var fileName = Path.GetFileName(file.Name.Replace(".bmp", ".caff"));
 					byte[] fileData = File.ReadAllBytes(file.FullName);		
 					result.Add(new CaffFile
 					{
 						UserID = userID,
 						FileName = fileName,
-						Data = Convert.ToBase64String(fileData)
+						Cover = Convert.ToBase64String(fileData)
 					});
 
 				}
@@ -107,7 +112,7 @@ namespace CAFF_Store.Services
 					.Where(fn => fn.EndsWith(".bmp") && fn.ToUpper().Contains(request.NameFilter.ToUpper())).Count();
 			foreach (var file in bmpFiles)
 			{
-				var fileName = Path.GetFileName(file.Name);
+				var fileName = Path.GetFileName(file.Name.Replace(".bmp", ".caff"));
 				byte[] fileData = File.ReadAllBytes(file.FullName);
 				result.Add(new CaffFile
 				{

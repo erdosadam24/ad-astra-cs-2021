@@ -36,36 +36,46 @@ namespace CAFF_Store.Controllers
 		[Authorize]
 		[HttpPost("upload")]
 		public ActionResult uploadFile([FromBody] CaffFile caffFile)
-		{
-			using (StreamWriter writetext = new StreamWriter("C:/Users/Benedek/Desktop/2021_01_02/SzámítógépBiztonság2/caff_files/encoded.txt"))
-			{
-				writetext.WriteLine(caffFile.Data);
-			}
-			
-			byte[] backToBytes = Convert.FromBase64String(caffFile.Data);
-			/*
-			var filePath = DatabaseService.UploadFileForUser(User.FindFirstValue(ClaimTypes.NameIdentifier), caffFile.FileName, backToBytes);
-			CaffParserService.createBmpForCaffFile(filePath);
-			*/
+		{			
+			byte[] backToBytes = Convert.FromBase64String(caffFile.Data.Substring(37)); //"data:application/octet-stream;base64," az elején
+			DatabaseService.UploadFileForUser(User.FindFirstValue(ClaimTypes.NameIdentifier), caffFile.FileName, backToBytes);
 			return new OkResult();
 		}
 
 		//TODO: Modify file
 
+		[HttpGet("preview")]
+		public CaffFile getPreview([FromQuery] string userId, string fileName)
+		{
+			var userName = dbContext.Users.FirstOrDefault(u => u.Id == userId).UserName;
+			var coverData = DatabaseService.DownloadFile(userId, fileName.Replace(".caff", ".bmp"));
+			return new CaffFile
+			{
+				FileName = fileName,
+				Cover = Convert.ToBase64String(coverData),
+				Author = userName,
+				UserID = userId
+			};
+		}
+
 		[Authorize]
 		[HttpGet("download")]
-		public async Task<CaffFile> downloadFile([FromQuery] string fileName)
+		public async Task<CaffFile> downloadFile([FromQuery] string userId, string fileName)
 		{
-			var user = await userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
-			var fileData = DatabaseService.DownloadFile(user.Id, fileName);
+			var userName = dbContext.Users.FirstOrDefault(u => u.Id == userId).UserName;
+			var fileData = DatabaseService.DownloadFile(userId, fileName);
+			//var coverData = DatabaseService.DownloadFile(userId, fileName.Replace(".caff", ".bmp"));
 			return new CaffFile
 			{
 				FileName = fileName,
 				Data = Convert.ToBase64String(fileData),
-				UserID = user.Id
+				//Cover = Convert.ToBase64String(coverData),
+				Author = userName,
+				UserID = userId
 			};
 		}
 
+		// Csak saját fájlt lehet törölni
 		[Authorize]
 		[HttpDelete("delete")]
 		public ActionResult deleteFile([FromQuery] string fileName)
@@ -108,15 +118,13 @@ namespace CAFF_Store.Controllers
 		{
 			var user = await userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-			/*
 			dbContext.Comments.Add(new Comment
 			{
-				UserID = request.UserID,
-				Username = user.Email,
-				Text = request.Text,
+				UserID = user.Id,
+				Author = user.UserName,
+				Body = request.Body,
 				FileName = request.FileName
 			});
-			*/
 			
 			await dbContext.SaveChangesAsync();
 			return new OkResult();

@@ -1,10 +1,11 @@
 import { CommentData } from "./comment-data";
 
 export interface FileData{
-    FileName: string,
-    Author:string,
-    UserID: string,
-    Created: string,
-	Data: string,
-    Comments: Array<CommentData>
+    fileName: string,
+    author:string,
+    userID: string,
+    created: string,
+    data: string,
+    cover: string,
+    comments: Array<CommentData>
 }

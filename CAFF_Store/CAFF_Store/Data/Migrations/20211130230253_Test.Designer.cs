@@ -4,14 +4,16 @@ using CAFF_Store.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CAFF_Store.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211130230253_Test")]
+    partial class Test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,16 +91,16 @@ namespace CAFF_Store.Data.Migrations
                             Id = "b8774540-eec6-46b3-803a-413a38b9c386",
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "0e0a85bd-82cb-4d75-853e-42bb308c4d9b",
-                            Email = "admin@email.com",
+                            Email = "string",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@EMAIL.COM",
-                            NormalizedUserName = "ADMIN@EMAIL.COM",
+                            NormalizedEmail = "STRING",
+                            NormalizedUserName = "STRING",
                             PasswordHash = "AQAAAAEAACcQAAAAEO0w0uCrnzqnHAow/7wEpXbjFse51LaYsKSXyuH1N3A4waCxLpSSpnxTfK2OAJkGig==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "EO2N5S75T7KKJP4BQJ2FR3MDMCNLUJRZ",
                             TwoFactorEnabled = false,
-                            UserName = "admin@email.com"
+                            UserName = "string"
                         });
                 });
 

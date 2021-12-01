@@ -11,7 +11,7 @@ namespace CAFF_Store.Services
 	{
 		public static void createBmpForCaffFile(string caffPath)
 		{
-			var proc = Process.Start(@"E:\Repos\ad-astra-cs-2021\parser.exe", caffPath);
+			var proc = Process.Start(@"regenerated_parser.exe", caffPath);
 			proc.WaitForExit();
 			
 		}

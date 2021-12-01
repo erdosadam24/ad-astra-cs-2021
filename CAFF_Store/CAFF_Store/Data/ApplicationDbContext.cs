@@ -30,10 +30,10 @@ namespace CAFF_Store.Data
 			builder.Entity<ApplicationUser>().HasData(new ApplicationUser
 			{
 				Id = "b8774540-eec6-46b3-803a-413a38b9c386",
-				UserName = "string",
-				NormalizedUserName = "STRING",
-				Email = "string",
-				NormalizedEmail = "STRING",
+				UserName = "admin@email.com",
+				NormalizedUserName = "ADMIN@EMAIL.COM",
+				Email = "admin@email.com",
+				NormalizedEmail = "ADMIN@EMAIL.COM",
 				EmailConfirmed = false,
 				PasswordHash = "AQAAAAEAACcQAAAAEO0w0uCrnzqnHAow/7wEpXbjFse51LaYsKSXyuH1N3A4waCxLpSSpnxTfK2OAJkGig==",
 				SecurityStamp = "EO2N5S75T7KKJP4BQJ2FR3MDMCNLUJRZ",

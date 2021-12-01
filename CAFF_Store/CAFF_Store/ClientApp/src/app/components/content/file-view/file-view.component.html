@@ -3,7 +3,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="card-header-table-row" style="margin-bottom: .2rem;">
-                    <div class="inline-items" style="font-size:1.8rem;">{{fileData.FileName}}</div>
+                    <div class="inline-items" style="font-size:1.8rem;">{{fileData.fileName}}</div>
                 </div>
             </div>
             <div class="card-body" style="width: 100%;height: 60%;">
@@ -13,8 +13,8 @@
                             <tr>
                                 <td style="width: 60%;" class="no-border-top" colspan="2">
                                     <div class="file-icon">
-                                        <img *ngIf="icon != undefined" class="img-fluid" src="{{icon}}">
-                                        <img *ngIf="icon == undefined" class="img-fluid" src="../../../../assets/img/image-not-found.png"> 
+                                        <img *ngIf="fileData.cover" class="img-fluid" src="{{'data:image/bmp;base64,' + fileData.cover}}">
+                                        <img *ngIf="!fileData.cover" class="img-fluid" src="../../../../assets/img/image-not-found.png"> 
                                     </div>
                                 </td>
                                 <td style="width: 40%;" class="no-border-top">
@@ -25,11 +25,11 @@
                                         <tbody>
                                             <tr class="inner-table-row">
                                                 <td>Uploaded by:</td>
-                                                <td>{{fileData.Author}}<td>
+                                                <td>{{fileData.author}}<td>
                                             </tr>
                                             <tr class="inner-table-row">
                                                 <td>Created:</td>
-                                                <td>{{fileData.Created | date:'medium'}}</td>
+                                                <td>{{fileData.created | date:'medium'}}</td>
                                             </tr>
                                         </tbody>
                                     </table>

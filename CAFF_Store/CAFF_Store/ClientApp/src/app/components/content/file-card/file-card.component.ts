@@ -11,7 +11,7 @@ import { FileService } from 'src/app/services/file/file.service';
 export class FileCardComponent implements OnInit {
 
   @Input() file:FileData | undefined
-  icon:any = undefined
+  //icon:any = undefined
 
 
   constructor(private fileService:FileService,
@@ -19,7 +19,7 @@ export class FileCardComponent implements OnInit {
   
   ngOnInit(): void {}
 
-  onClick(){
-    this.router.navigate(['/file-view'], {queryParams: {id: this.file.FileName}});
+  onClick() {
+    this.router.navigate(['/file-view'], { queryParams: { userId: this.file.userID, fileName: this.file.fileName } });
   }
 }

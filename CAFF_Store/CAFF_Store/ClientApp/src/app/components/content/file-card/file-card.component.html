@@ -1,9 +1,9 @@
 <div class="file-card" style="margin-top: 1rem;" >
-    <span class="icon-link" routerLink="/fileview" [queryParams]="{ id: file.FileName}">
-        <div class="file-title">{{file.FileName}} ({{file.Created}})</div>
+    <span class="icon-link" routerLink="/fileview" [queryParams]="{userID: file.userID, fileName: file.fileName}">
+        <div class="file-title">{{file.fileName}} ({{file.created}})</div>
         <div class="file-icon">
-            <img *ngIf="icon != undefined" class="img-fluid" src="{{icon}}">
-            <img *ngIf="icon == undefined" class="img-fluid" src="../../../../assets/img/image-not-found.png"> 
+            <img *ngIf="file.cover" class="img-fluid" src="{{'data:image/bmp;base64,' + file.cover}}">
+            <img *ngIf="!file.cover" class="img-fluid" src="../../../../assets/img/image-not-found.png"> 
         </div>
     </span>
 </div>

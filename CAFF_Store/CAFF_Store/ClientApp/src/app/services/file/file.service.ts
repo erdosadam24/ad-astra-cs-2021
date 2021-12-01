@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { options, uploadCaffOptions } from '../options';
 import * as _ from 'lodash';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -26,7 +26,15 @@ export class FileService {
       NameFilter: query
     }
 
-    return this.http.get<any>(environment.baseUrl+'/allfiles',opt)
+    return this.http.post<any>(environment.baseUrl+'/allfiles',data,opt);
+  }
+
+  getPreviewFile(userId: string, fileName: string) {
+    let opt: any = _.clone(options)
+    let params = new HttpParams()
+      .set('userId', userId)
+      .set('fileName', fileName);
+    return this.http.get<any>(environment.baseUrl + '/preview', { params: params, headers: opt });
   }
 
   getMyFilesPage(){
@@ -43,12 +51,13 @@ export class FileService {
   uploadCaffFile(filename:string, file:string){
     let opt:any = _.clone(uploadCaffOptions)
     let data:FileData={
-      FileName: filename,
-      Author:"",
-      UserID: "",
-      Created: "",
-      Data: file,
-      Comments: []
+      fileName: filename,
+      author:"",
+      userID: "",
+      created: "",
+      data: file,
+      cover: "",
+      comments: []
     }
 
     return this.http.post<any>(environment.baseUrl + '/upload',data,opt)
@@ -73,12 +82,13 @@ export class FileService {
 
   getEmptyFileData():FileData{
       return {
-        FileName: "Empty",
-        Author:"Empty",
-        UserID: "Empty",
-        Created: "2000-01-01",
-        Data: "Empty",
-        Comments: []
+        fileName: "Empty",
+        author:"Empty",
+        userID: "Empty",
+        created: "2000-01-01",
+        data: "Empty",
+        cover: "Empty",
+        comments: []
       }
   }
 

@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Security.Claims;
 
 namespace CAFF_Store
 {
@@ -32,6 +33,7 @@ namespace CAFF_Store
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser,IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()
@@ -47,7 +49,12 @@ namespace CAFF_Store
                 configuration.RootPath = "ClientApp/dist";
             });
 
-            //CSAK TESZTELÉSRE 
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
+            });
+
+            /*//CSAK TESZTELÉSRE 
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -56,7 +63,7 @@ namespace CAFF_Store
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 1;
                 options.Password.RequiredUniqueChars = 1;
-            });
+            });*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

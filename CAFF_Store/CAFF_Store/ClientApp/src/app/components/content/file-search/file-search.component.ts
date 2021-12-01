@@ -38,7 +38,7 @@ export class FileSearchComponent implements OnInit {
     
     this.routerParams.onParamChange().pipe(takeUntil(destroy)).subscribe(o => {
       //IMPORTANT!
-      //this.getFiles(undefined)
+      this.getFiles("")
     })
 
     this.searchForm = new FormGroup({
@@ -51,10 +51,10 @@ export class FileSearchComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.page = Number.parseInt(this.routerParams.params["page"])
+    /*this.page = Number.parseInt(this.routerParams.params["page"])
     this.size = Number.parseInt(this.routerParams.params["size"])
     this.asc = this.routerParams.params["asc"]
-    this.sort = this.routerParams.params["sort"]
+    this.sort = this.routerParams.params["sort"]*/
     this.updateQueryParams()
   }
 
@@ -67,7 +67,7 @@ export class FileSearchComponent implements OnInit {
   }
 
   clearFilter(){
-    this.getFiles(undefined)
+    this.getFiles("")
   }
   
   loadPage($event:any){
@@ -79,12 +79,11 @@ export class FileSearchComponent implements OnInit {
   }
 
   getFiles(query:string){
-    this.fileService.getFileList(undefined).subscribe((resp:any) => {
-      //console.log("Response: "+JSON.stringify(resp))
-      this.page = Number.parseInt(resp.pageable.pageNumber) + 1
-      this.size = Number.parseInt(resp.pageable.pageSize)
-      this.collectionSize = Number.parseInt(resp.totalElements)
-      this.list = resp.content
+    this.fileService.getFileList(query).subscribe((resp:any) => {
+      //this.page = Number.parseInt(resp.pageable.pageNumber) + 1
+      //this.size = Number.parseInt(resp.pageable.pageSize)
+      this.collectionSize = Number.parseInt(resp.totalSize)
+      this.list = resp.files
     },
     err => {
       console.log("Response: "+JSON.stringify(err))
