@@ -49,13 +49,16 @@ namespace CAFF_Store.Controllers
 		{
 			var userName = dbContext.Users.FirstOrDefault(u => u.Id == userId).UserName;
 			var coverData = DatabaseService.DownloadFile(userId, fileName.Replace(".caff", ".bmp"));
-			return new CaffFile
+			var caffFile = new CaffFile
 			{
 				FileName = fileName,
 				Cover = Convert.ToBase64String(coverData),
 				Author = userName,
 				UserID = userId
 			};
+
+			caffFile.Comments = dbContext.Comments.Where(c => c.UserID == caffFile.UserID && c.FileName == caffFile.FileName).ToList();
+			return caffFile;
 		}
 
 		[Authorize]

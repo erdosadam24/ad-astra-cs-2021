@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 import { optionsForTextResponse, options } from '../options';
 import { RouterParamService } from '../router-param/router-param.service';
 import * as _ from 'lodash';
+import { AddCommentRequest } from 'src/app/data/add-comment-request';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +18,8 @@ export class CommentService {
 
   constructor(private router: Router,private routerParams: RouterParamService,private http: HttpClient,public snackBar: MatSnackBar,private sanitizer:DomSanitizer) { }
 
-  saveComment(comment:CommentData){
-    return this.http.post<any>(environment.baseUrl,comment,optionsForTextResponse)
+  saveComment(comment:AddCommentRequest){
+    return this.http.post<any>(environment.baseUrl + '/addcomment',comment,options)
   }
 
 
@@ -38,13 +39,13 @@ export class CommentService {
 
   getEmptyCommentData():CommentData{
     return {
-      CommentId: -1,
-      Filename: "Empty",
-      Body: "Empty",
-      Author: "Empty",
-      UserID: "Empty",
-      Created: "2000-01-01",
-      Updated: "2000-01-01"
+      commentId: -1,
+      filename: "Empty",
+      body: "Empty",
+      author: "Empty",
+      userID: "Empty",
+      created: "2000-01-01",
+      updated: "2000-01-01"
     }
   }
 

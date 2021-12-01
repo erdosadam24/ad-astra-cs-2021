@@ -24,6 +24,7 @@ export class FileViewComponent implements OnInit {
   loggedInSubscription: Subscription | undefined
 
   list: Array<CommentData> = []
+  loadedList: Array<CommentData> = []
   collectionSize:number = 0
 
   page:number = 0
@@ -43,25 +44,12 @@ export class FileViewComponent implements OnInit {
     this.loggedInSubscription = this.authorizationService.isAuthenticated().subscribe((o:boolean) => {
       this.loggedIn = o
     })
-    //this.initData()
   }
 
   ngOnInit() {
     this.fileOwnerUserId = this.routerParams.params["userID"]
     this.fileName = this.routerParams.params["fileName"]
-    this.initData()
-  }
-
-  loadComments(){
-    this.commentService.getComments(this.fileData.fileName).subscribe((response:any) => {
-      console.log("Comments: "+JSON.stringify(response))
-      this.page = Number.parseInt(response.comments.pageable.pageNumber) + 1
-      this.collectionSize = Number.parseInt(response.comments.totalElements)
-      this.list = this.list.concat(response.comments.content)
-    },
-    err => {
-        console.log(err)
-    })
+    this.loadPreview()
   }
 
   deleteFile(){
@@ -83,6 +71,7 @@ export class FileViewComponent implements OnInit {
       }
     });
   }
+  
 
   replyTo(){
     this.showEditor = !this.showEditor
@@ -94,7 +83,20 @@ export class FileViewComponent implements OnInit {
       var file = this.dataUrlToFile(resp.data,this.fileName)
       saveAs(file, this.fileName);
     });
-    
+  }
+
+  loadPreview(){
+    this.fileService.getPreviewFile(this.fileOwnerUserId, this.fileName).subscribe((resp: FileData) => {
+      this.fileData = resp;
+      this.list = resp.comments
+      this.loadedList = this.list.slice(0,this.size)
+      this.collectionSize  = resp.comments.length
+    });
+  }
+
+  loadMoreComments(){
+    this.size += 5;
+    this.loadedList = this.list.slice(0,this.size)
   }
 
   
@@ -103,7 +105,7 @@ export class FileViewComponent implements OnInit {
     
     let result = $event as Reload
     if(result.reload){
-      //this.resetState()
+      this.loadPreview()
     }
     
   }
@@ -120,19 +122,4 @@ export class FileViewComponent implements OnInit {
         
         return new File([u8arr], filename);
   }
-
-
-  initData(){
-    let size = 5
-    this.collectionSize = 2*size;
-
-    this.fileService.getPreviewFile(this.fileOwnerUserId, this.fileName).subscribe(resp => {
-      this.fileData = resp;
-    });
-
-    for(let i = 0; i < size; i++){
-      this.list.push(this.commentService.getEmptyCommentData())
-    }
-  }
-
 }

@@ -66,15 +66,15 @@
         </div>
 
         <div *ngIf="showEditor" style="width: 100%;">
-            <app-comment-editor (onClose)="onEditorClose($event)"></app-comment-editor>
+            <app-comment-editor [caffFile]="fileData" (onClose)="onEditorClose($event)"></app-comment-editor>
         </div>
 
         <div class="main-comments">
-            <div *ngFor="let item of list;" class="root-comment">
+            <div *ngFor="let item of loadedList;" class="root-comment">
                 <app-comment [comment]="item"></app-comment>
             </div>
-            <div *ngIf="list.length != 0 && list.length != collectionSize" class="load-more-comment">
-                <button class="btn btn-primary btn-block" (click)="loadComments()">Load more comment (remaining:{{collectionSize - list.length}})</button>
+            <div *ngIf="loadedList.length != 0 && list.length != loadedList.length" class="load-more-comment">
+                <button class="btn btn-primary btn-block" (click)="loadMoreComments()">Load more comment (remaining:{{list.length - loadedList.length}})</button>
             </div>
         </div>
     </div>

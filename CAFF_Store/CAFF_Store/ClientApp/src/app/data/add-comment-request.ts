@@ -1,4 +1,5 @@
 export interface AddCommentRequest{
     Body:string,
-    FileId:string
+    FileName:string,
+    FileOwnerUserId:string,
 }
