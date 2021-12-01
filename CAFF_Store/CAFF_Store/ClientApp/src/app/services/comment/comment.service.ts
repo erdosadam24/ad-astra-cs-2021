@@ -16,48 +16,53 @@ import { AddCommentRequest } from 'src/app/data/add-comment-request';
 })
 export class CommentService {
 
-  constructor(private router: Router,private routerParams: RouterParamService,private http: HttpClient,public snackBar: MatSnackBar,private sanitizer:DomSanitizer) { }
+  constructor(
+    private router: Router,
+    private routerParams: RouterParamService,
+    private http: HttpClient,
+    public snackBar: MatSnackBar,
+    private sanitizer: DomSanitizer) { }
 
-  saveComment(comment:AddCommentRequest){
-    return this.http.post<any>(environment.baseUrl + '/addcomment',comment,options)
+  saveComment(comment: AddCommentRequest) {
+    return this.http.post<any>(environment.baseUrl + '/addcomment', comment, options);
   }
 
 
 
-  getComments(file_id:string){
-    let opt:any = _.clone(options)
-    opt["params"] = {
+  getComments(file_id: string) {
+    const opt: any = _.clone(options);
+    opt['params'] = {
       'id': file_id,
       'page': Number.parseInt(this.routerParams.params['page']) - 1,
       'size': Number.parseInt(this.routerParams.params['size']),
       'sort': this.routerParams.params['sort'],
-      'asc':  this.routerParams.params['asc'],
-      }
+      'asc': this.routerParams.params['asc'],
+    };
 
-    return this.http.get<any>(environment.baseUrl + '',opt)
+    return this.http.get<any>(environment.baseUrl + '', opt);
   }
 
-  removeComment(commentId:number){
-    let opt: any = _.clone(options)
-    let params = new HttpParams()
+  removeComment(commentId: number) {
+    const opt: any = _.clone(options);
+    const params = new HttpParams()
       .set('commentId', commentId.toString());
     return this.http.delete<any>(environment.baseUrl + '/removeComment', { params: params, headers: opt });
   }
 
-  getEmptyCommentData():CommentData{
+  getEmptyCommentData(): CommentData {
     return {
       commentId: -1,
-      filename: "Empty",
-      body: "Empty",
-      author: "Empty",
-      userID: "Empty",
-      created: "2000-01-01",
-      updated: "2000-01-01"
-    }
+      filename: 'Empty',
+      body: 'Empty',
+      author: 'Empty',
+      userID: 'Empty',
+      created: '2000-01-01',
+      updated: '2000-01-01'
+    };
   }
 
-  snackbarMessage(message:string){
-    this.snackBar.open(message,"Accept",{
+  snackbarMessage(message: string) {
+    this.snackBar.open(message, 'Accept', {
       duration: 4000,
     });
   }

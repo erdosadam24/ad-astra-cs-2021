@@ -18,47 +18,52 @@ export class UserService {
 
   private userSubject: BehaviorSubject<UserInfo | null> = new BehaviorSubject(null);
 
-  constructor(private router: Router,private routerParams: RouterParamService,private http: HttpClient,public snackBar: MatSnackBar,private sanitizer:DomSanitizer) {     
+  constructor(
+    private router: Router,
+    private routerParams: RouterParamService,
+    private http: HttpClient,
+    public snackBar: MatSnackBar,
+    private sanitizer: DomSanitizer) {
   }
 
-  grantAdmin(userId:string){
-    let opt: any = _.clone(options)
-    let params = new HttpParams()
-      .set('userId', userId)
-    return this.http.post<any>(environment.baseUrl + '/grantAdmin', undefined ,{ params: params, headers: opt });
+  grantAdmin(userId: string) {
+    const opt: any = _.clone(options);
+    const params = new HttpParams()
+      .set('userId', userId);
+    return this.http.post<any>(environment.baseUrl + '/grantAdmin', undefined, { params: params, headers: opt });
   }
 
-  loadUserInformation(){
-    let headers = new HttpHeaders({
+  loadUserInformation() {
+    const headers = new HttpHeaders({
       'Content-Type': 'application/json'
-    })
-    this.http.get<any>(environment.baseUrl + '/userinfo', {headers}).subscribe((response:UserInfo) =>{
-      //console.log("User info: " + JSON.stringify(response))
-      this.userSubject.next(response)
-    })
+    });
+    this.http.get<any>(environment.baseUrl + '/userinfo', { headers }).subscribe((response: UserInfo) => {
+      // console.log("User info: " + JSON.stringify(response))
+      this.userSubject.next(response);
+    });
   }
 
-  getUserInformation(): UserInfo{
-    if(this.userSubject.getValue() == null){
+  getUserInformation(): UserInfo {
+    if (this.userSubject.getValue() == null) {
       return this.getEmptyUserInfo();
     }
-    return this.userSubject.getValue()
+    return this.userSubject.getValue();
   }
 
-  deleteLocalUserInformation(){
-    this.userSubject.next(this.getEmptyUserInfo())
+  deleteLocalUserInformation() {
+    this.userSubject.next(this.getEmptyUserInfo());
   }
 
-  isAdmin(){
-    return this.getUserInformation().roles.includes("admin")
+  isAdmin() {
+    return this.getUserInformation().roles.includes('admin');
   }
 
-  private getEmptyUserInfo(): UserInfo{
+  private getEmptyUserInfo(): UserInfo {
     return {
-      userID: "Empty",
-      userName: "Empty",
-      email: "Empty",
-      roles:[]
-    }
+      userID: 'Empty',
+      userName: 'Empty',
+      email: 'Empty',
+      roles: []
+    };
   }
 }

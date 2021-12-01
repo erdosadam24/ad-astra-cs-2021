@@ -16,46 +16,45 @@ import { Reload } from '../comment-editor/comment-editor.component';
 })
 export class CommentComponent implements OnInit {
 
-  canEdit: boolean = false
+  canEdit = false;
 
-  @Input() comment:CommentData
+  @Input() comment: CommentData;
 
   @Output() deleted = new EventEmitter<string>();
 
   constructor(
-    public userService:UserService,
-    public authorizationService:AuthorizeService,
-    public commentService:CommentService,
+    public userService: UserService,
+    public authorizationService: AuthorizeService,
+    public commentService: CommentService,
     public dialog: MatDialog,
-    public sanitizer:DomSanitizer,
-    private router: Router) 
-    { 
-    this.comment = commentService.getEmptyCommentData()
+    public sanitizer: DomSanitizer,
+    private router: Router) {
+    this.comment = commentService.getEmptyCommentData();
   }
 
   ngOnInit(): void {
-    this.checkCanEdit()
+    this.checkCanEdit();
   }
 
-  checkCanEdit(){
-    if(this.comment != undefined){
-      this.canEdit = (this.userService.isAdmin() || this.userService.getUserInformation().userID == this.comment.userID)
+  checkCanEdit() {
+    if (this.comment !== undefined) {
+      this.canEdit = (this.userService.isAdmin() || this.userService.getUserInformation().userID === this.comment.userID);
     }
   }
 
-  isAuthenticated(){
-    this.authorizationService.authenticated
+  isAuthenticated() {
+    this.authorizationService.authenticated;
   }
 
-  remove(){
-    this.commentService.removeComment(this.comment.commentId).subscribe((response)=>{
-      console.log("Response: " + JSON.stringify(response))
-      this.commentService.snackbarMessage("Comment Deleted!")
-      this.deleted.emit("Deleted")
+  remove() {
+    this.commentService.removeComment(this.comment.commentId).subscribe((response) => {
+      console.log('Response: ' + JSON.stringify(response));
+      this.commentService.snackbarMessage('Comment Deleted!');
+      this.deleted.emit('Deleted');
     },
-    error => {
-      this.commentService.snackbarMessage("Could not delete comment!")
-    })
+      error => {
+        this.commentService.snackbarMessage('Could not delete comment!');
+      });
   }
 
 }

@@ -10,13 +10,13 @@ import { FileService } from 'src/app/services/file/file.service';
 })
 export class FileCardComponent implements OnInit {
 
-  @Input() file:FileData | undefined
-  //icon:any = undefined
+  @Input() file: FileData | undefined;
+  // icon:any = undefined
 
 
-  constructor(private fileService:FileService,
+  constructor(private fileService: FileService,
               private router: Router) { }
-  
+
   ngOnInit(): void {}
 
   onClick() {

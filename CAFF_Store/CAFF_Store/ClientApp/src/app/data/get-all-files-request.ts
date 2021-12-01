@@ -1,5 +1,5 @@
-export interface GetAllFilesRequest{
-    PageSize: number,
-    PageNumber:number,
-    NameFilter:string
+export interface GetAllFilesRequest {
+    PageSize: number;
+    PageNumber: number;
+    NameFilter: string;
 }

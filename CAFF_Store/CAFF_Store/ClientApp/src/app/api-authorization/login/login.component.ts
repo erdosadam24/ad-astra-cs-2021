@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   public message = new BehaviorSubject<string>(null);
 
   constructor(
-    private userService:UserService,
+    private userService: UserService,
     private authorizeService: AuthorizeService,
     private activatedRoute: ActivatedRoute,
     private router: Router) { }

@@ -1,4 +1,4 @@
-import { HttpHeaders } from "@angular/common/http";
+import { HttpHeaders } from '@angular/common/http';
 
 export const options = {
     headers: new HttpHeaders({
@@ -30,11 +30,11 @@ export const optionsJSON = {
 };
 
 
-export const uploadCaffOptions : any = {
-  observe: "response",
-  responseType: "blob",
+export const uploadCaffOptions: any = {
+  observe: 'response',
+  responseType: 'blob',
   headers: new HttpHeaders({
-      "Content-Type": "application/json",
-      "Accept": "application/octet-stream"
+      'Content-Type': 'application/json',
+      'Accept': 'application/octet-stream'
   })
 };

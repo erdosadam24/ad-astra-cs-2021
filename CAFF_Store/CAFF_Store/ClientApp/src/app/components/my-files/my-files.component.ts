@@ -14,48 +14,48 @@ import { RouterParamService } from 'src/app/services/router-param/router-param.s
   viewProviders: [AutoDestroy]
 })
 export class MyFilesComponent implements OnInit {
-  public  list:Array<FileData> | undefined = []
-  public  collectionSize:number = 0
+  public  list: Array<FileData> | undefined = [];
+  public  collectionSize = 0;
 
-  
-  page:number = 1
-  size:number = 9
-  asc:string = "asc"
-  sort:string = "label"
+
+  page = 1;
+  size = 9;
+  asc = 'asc';
+  sort = 'label';
 
   constructor(private routerParams: RouterParamService,
-              private fileService:FileService,
+              private fileService: FileService,
               public snackBar: MatSnackBar,
-              public authorizationService:AuthorizeService,
-              private readonly destroy:AutoDestroy) { 
+              public authorizationService: AuthorizeService,
+              private readonly destroy: AutoDestroy) {
     this.initCollection();
 
     this.routerParams.onParamChange().pipe(takeUntil(destroy)).subscribe(o => {
-      this.getFiles()
-    })
+      this.getFiles();
+    });
   }
 
   ngOnInit() {
   }
 
-  getFiles(){
-    this.fileService.getMyFileList().subscribe((resp:any) => {
-      this.collectionSize = Number.parseInt(resp.totalSize)
-      this.list = resp.files
+  getFiles() {
+    this.fileService.getMyFileList().subscribe((resp: any) => {
+      this.collectionSize = Number.parseInt(resp.totalSize);
+      this.list = resp.files;
     },
     err => {
-      console.log("Response: "+JSON.stringify(err))
-    })
+      console.log('Response: ' + JSON.stringify(err));
+    });
   }
 
-  initCollection(){
+  initCollection() {
     this.collectionSize = 200;
-    for(let i = 0;i<9;i++){
-      this.list.push(this.fileService.getEmptyFileData())
+    for (let i = 0; i < 9; i++) {
+      this.list.push(this.fileService.getEmptyFileData());
     }
   }
 
-  updateQueryParams(){
-    this.routerParams.paginationQueryParams(this.page,this.size,this.sort,this.asc)
+  updateQueryParams() {
+    this.routerParams.paginationQueryParams(this.page, this.size, this.sort, this.asc);
   }
 }

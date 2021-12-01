@@ -5,7 +5,7 @@
 
       [{ list: 'ordered' }, { list: 'bullet' }],
       [{ indent: '-1' }, { indent: '+1' }],
-      [{ size: ['small', false, 'large', 'huge'] }], 
+      [{ size: ['small', false, 'large', 'huge'] }],
 
       [{ color: [] }],
       [{ font: [] }],
@@ -14,4 +14,4 @@
       ['clean'],
       ['image'],
     ]
-  }
+  };

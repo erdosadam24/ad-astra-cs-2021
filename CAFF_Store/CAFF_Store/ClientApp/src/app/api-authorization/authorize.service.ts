@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { User, UserManager, WebStorageStateStore } from 'oidc-client';
 import { BehaviorSubject, concat, from, Observable, Subscription } from 'rxjs';
 import { filter, map, mergeMap, take, tap } from 'rxjs/operators';
@@ -37,26 +37,26 @@ export interface IUser {
 @Injectable({
   providedIn: 'root'
 })
-export class AuthorizeService {
+export class AuthorizeService implements OnDestroy {
   // By default pop ups are disabled because they don't work properly on Edge.
   // If you want to enable pop up authentication simply set this flag to false.
 
-  public authenticated:boolean 
-  private authenticationSubscription:Subscription
+  public authenticated: boolean;
+  private authenticationSubscription: Subscription;
 
   private popUpDisabled = true;
   private userManager: UserManager;
   private userSubject: BehaviorSubject<IUser | null> = new BehaviorSubject(null);
 
-  constructor(private userService:UserService){
-    this.authenticationSubscription = this.isAuthenticated().subscribe((o:boolean) => {
-      this.authenticated = o
+  constructor(private userService: UserService) {
+    this.authenticationSubscription = this.isAuthenticated().subscribe((o: boolean) => {
+      this.authenticated = o;
       this.userService.loadUserInformation();
-    })
+    });
   }
 
   ngOnDestroy() {
-    this.authenticationSubscription.unsubscribe()
+    this.authenticationSubscription.unsubscribe();
   }
 
   public isAuthenticated(): Observable<boolean> {

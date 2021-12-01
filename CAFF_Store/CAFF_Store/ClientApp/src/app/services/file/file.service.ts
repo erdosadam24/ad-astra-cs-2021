@@ -15,105 +15,110 @@ import { GetAllFilesRequest } from 'src/app/data/get-all-files-request';
 })
 export class FileService {
 
-  constructor(private router: Router,private routerParams: RouterParamService,private http: HttpClient,public snackBar: MatSnackBar,private sanitizer:DomSanitizer) { }
+  constructor(
+    private router: Router,
+    private routerParams: RouterParamService,
+    private http: HttpClient,
+    public snackBar: MatSnackBar,
+    private sanitizer: DomSanitizer) { }
 
-  getFileList(query:string){
-    let opt:any = _.clone(options)
-    let data:GetAllFilesRequest = {
+  getFileList(query: string) {
+    const opt: any = _.clone(options);
+    const data: GetAllFilesRequest = {
       PageSize: Number.parseInt(this.routerParams.params['size']),
       PageNumber: Number.parseInt(this.routerParams.params['page']) - 1,
       NameFilter: query
-    }
+    };
 
-    return this.http.post<any>(environment.baseUrl+'/allfiles',data,opt);
+    return this.http.post<any>(environment.baseUrl + '/allfiles', data, opt);
   }
 
-  getMyFileList(){
-    //GetAllFilesRequest
-    let opt:any = _.clone(options)
-    let data:GetAllFilesRequest = {
+  getMyFileList() {
+    // GetAllFilesRequest
+    const opt: any = _.clone(options);
+    const data: GetAllFilesRequest = {
       PageSize: Number.parseInt(this.routerParams.params['size']),
       PageNumber: Number.parseInt(this.routerParams.params['page']) - 1,
-      NameFilter: ""
-    }
+      NameFilter: ''
+    };
 
-    return this.http.post<any>(environment.baseUrl+'/userfiles',data,opt);
+    return this.http.post<any>(environment.baseUrl + '/userfiles', data, opt);
   }
 
   getPreviewFile(userId: string, fileName: string) {
-    let opt: any = _.clone(options)
-    let params = new HttpParams()
+    const opt: any = _.clone(options);
+    const params = new HttpParams()
       .set('userId', userId)
       .set('fileName', fileName);
     return this.http.get<any>(environment.baseUrl + '/preview', { params: params, headers: opt });
   }
 
   downloadFile(userId: string, fileName: string) {
-    let opt: any = _.clone(options)
-    let params = new HttpParams()
+    const opt: any = _.clone(options);
+    const params = new HttpParams()
       .set('userId', userId)
       .set('fileName', fileName);
     return this.http.get<any>(environment.baseUrl + '/download', { params: params, headers: opt });
   }
 
-  modifyFile(file:FileData,userId: string, fileName: string) {
-    let opt: any = _.clone(options)
-    let params = new HttpParams()
+  modifyFile(file: FileData, userId: string, fileName: string) {
+    const opt: any = _.clone(options);
+    const params = new HttpParams()
       .set('userId', userId)
       .set('fileName', fileName);
-    return this.http.put<any>(environment.baseUrl + '/modify', file ,{ params: params, headers: opt });
+    return this.http.put<any>(environment.baseUrl + '/modify', file, { params: params, headers: opt });
   }
-  
+
 
   deleteFile(fileName: string) {
-    let opt: any = _.clone(options)
-    let params = new HttpParams()
+    const opt: any = _.clone(options);
+    const params = new HttpParams()
       .set('fileName', fileName);
     return this.http.delete<any>(environment.baseUrl + '/delete', { params: params, headers: opt });
   }
-  
-  getMyFilesPage(){
-    let opt:any = _.clone(options)
-    let data:GetAllFilesRequest = {
+
+  getMyFilesPage() {
+    const opt: any = _.clone(options);
+    const data: GetAllFilesRequest = {
       PageSize: Number.parseInt(this.routerParams.params['size']),
       PageNumber: Number.parseInt(this.routerParams.params['page']) - 1,
-      NameFilter: ""
-    }
+      NameFilter: ''
+    };
 
-    return this.http.get<any>(environment.baseUrl+'/allfiles',opt)
+    return this.http.get<any>(environment.baseUrl + '/allfiles', opt);
   }
 
-  uploadCaffFile(filename:string, file:string){
-    let opt:any = _.clone(uploadCaffOptions)
-    let data:FileData={
+  uploadCaffFile(filename: string, file: string) {
+    const opt: any = _.clone(uploadCaffOptions);
+    const data: FileData = {
       fileName: filename,
-      author:"",
-      userID: "",
-      created: "",
+      author: '',
+      userID: '',
+      created: '',
       data: file,
-      cover: "",
+      cover: '',
       comments: []
-    }
+    };
 
-    return this.http.post<any>(environment.baseUrl + '/upload',data,opt)
+    return this.http.post<any>(environment.baseUrl + '/upload', data, opt);
   }
 
-  
 
-  getEmptyFileData():FileData{
-      return {
-        fileName: "Empty",
-        author:"Empty",
-        userID: "Empty",
-        created: "2000-01-01",
-        data: "Empty",
-        cover: "Empty",
-        comments: []
-      }
+
+  getEmptyFileData(): FileData {
+    return {
+      fileName: 'Empty',
+      author: 'Empty',
+      userID: 'Empty',
+      created: '2000-01-01',
+      data: 'Empty',
+      cover: 'Empty',
+      comments: []
+    };
   }
 
-  snackbarMessage(message:string){
-    this.snackBar.open(message,"Accept",{
+  snackbarMessage(message: string) {
+    this.snackBar.open(message, 'Accept', {
       duration: 4000,
     });
   }

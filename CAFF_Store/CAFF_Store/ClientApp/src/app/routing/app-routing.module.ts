@@ -19,10 +19,10 @@ export const mainRoutes: Routes = [
 
 
 @NgModule({
-  imports: [ 
+  imports: [
       RouterModule.forRoot(mainRoutes)
     ],
-    exports:[
+    exports: [
       RouterModule
     ],
   declarations: [],

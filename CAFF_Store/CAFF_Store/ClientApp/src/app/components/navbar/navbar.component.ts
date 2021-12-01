@@ -12,19 +12,19 @@ import { FileUploadComponent } from '../content/file-upload/file-upload.componen
 })
 export class NavbarComponent implements OnInit {
 
-  constructor(public authService:AuthorizeService,private readonly dialog: MatDialog) { 
+  constructor(public authService: AuthorizeService, private readonly dialog: MatDialog) {
   }
 
   ngOnInit(): void {}
 
-  upload(){
+  upload() {
     this.dialog.open(FileUploadComponent, {
       width: '30rem',
       height: '20rem'
     });
   }
 
-  isAuthenticated(){
-    return this.authService.authenticated
+  isAuthenticated() {
+    return this.authService.authenticated;
   }
 }

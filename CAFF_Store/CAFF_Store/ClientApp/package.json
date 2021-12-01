@@ -8,6 +8,7 @@
     "build:ssr": "ng run CAFF_Store:server:dev",
     "test": "ng test",
     "lint": "ng lint",
+    "lint-fix": "tslint --fix src/**/*.ts -t verbose",
     "e2e": "ng e2e"
   },
   "private": true,

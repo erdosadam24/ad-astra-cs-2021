@@ -8,32 +8,32 @@ export class RouterParamService {
 
   params: any;
 
-  constructor(public router: Router, private activatedRoute: ActivatedRoute) { 
+  constructor(public router: Router, private activatedRoute: ActivatedRoute) {
     this.activatedRoute.queryParams.subscribe(routerParams => {
-      this.params = routerParams
+      this.params = routerParams;
     });
   }
 
 
-  paginationQueryParams(page:number,size:number,sort:string,asc?:string) {
-    let params = { 
+  paginationQueryParams(page: number, size: number, sort: string, asc?: string) {
+    const params = {
       page: page,
       size: size,
       sort: sort,
       asc: asc
-    }
+    };
 
-    this.params = params
+    this.params = params;
     this.router.navigate(
-        [], 
-        { 
+        [],
+        {
             queryParams: params,
             queryParamsHandling: 'merge',
         }
     );
   }
 
-  onParamChange(){
-    return this.activatedRoute.queryParams
+  onParamChange() {
+    return this.activatedRoute.queryParams;
   }
 }

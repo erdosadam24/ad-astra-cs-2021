@@ -66,7 +66,7 @@ import { FileModificationComponent } from './components/content/file-modificatio
     AppRoutingModule,
     FileUploadModule,
     FormsModule,
-    DlDateTimeDateModule, 
+    DlDateTimeDateModule,
     DlDateTimePickerModule,
     QuillModule.forRoot(),
     NgbModule,
@@ -76,7 +76,7 @@ import { FileModificationComponent } from './components/content/file-modificatio
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
-  entryComponents:[
+  entryComponents: [
     FileUploadComponent,
     FileModificationComponent
   ]

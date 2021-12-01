@@ -14,11 +14,13 @@
                             <tr>
                                 <td style="width: 60%;" class="no-border-top" colspan="2">
                                     <div class="file-icon" *ngIf="fileData">
-                                        <img *ngIf="fileData.cover" class="img-fluid" src="{{'data:image/bmp;base64,' + fileData.cover}}">
-                                        <img *ngIf="!fileData.cover" class="img-fluid" src="../../../../assets/img/image-not-found.png"> 
+                                        <img *ngIf="fileData.cover" class="img-fluid"
+                                            src="{{'data:image/bmp;base64,' + fileData.cover}}">
+                                        <img *ngIf="!fileData.cover" class="img-fluid"
+                                            src="../../../../assets/img/image-not-found.png">
                                     </div>
                                     <div class="file-icon" *ngIf="!fileData">
-                                        <img class="img-fluid" src="../../../../assets/img/image-not-found.png"> 
+                                        <img class="img-fluid" src="../../../../assets/img/image-not-found.png">
                                     </div>
                                 </td>
                                 <td style="width: 40%;" class="no-border-top">
@@ -29,8 +31,10 @@
                                         <tbody>
                                             <tr class="inner-table-row">
                                                 <td>Uploaded by:</td>
-                                                <td *ngIf="fileData">{{fileData.author}}<td>
-                                                <td *ngIf="!fileData">Not loaded!<td>
+                                                <td *ngIf="fileData">{{fileData.author}}
+                                                <td>
+                                                <td *ngIf="!fileData">Not loaded!
+                                                <td>
                                             </tr>
                                             <tr class="inner-table-row">
                                                 <td>Created:</td>
@@ -46,15 +50,15 @@
                 </div>
             </div>
             <div *ngIf="loggedIn" class="file-links">
-                <div  class="file-link" *ngIf="userService.isAdmin()">
+                <div class="file-link" *ngIf="userService.isAdmin()">
                     <span (click)="grantAdmin()">Grant Admin</span>
                     <i class="fa fa-user-plus file-icons"></i>
                 </div>
-                <div  class="file-link" *ngIf="canEdit">
+                <div class="file-link" *ngIf="canEdit">
                     <span (click)="deleteFile()">Delete File</span>
                     <i class="fa fa-ban file-icons"></i>
                 </div>
-                <div  class="file-link" *ngIf="canEdit">
+                <div class="file-link" *ngIf="canEdit">
                     <span (click)="modifyFile()">Modify File</span>
                     <i class="fa fa-upload file-icons"></i>
                 </div>
@@ -70,7 +74,7 @@
         </div>
 
         <div *ngIf="showEditor" style="width: 100%;">
-            <app-comment-editor [caffFile]="fileData" (onClose)="onEditorClose($event)"></app-comment-editor>
+            <app-comment-editor [caffFile]="fileData" (close)="onEditorClose($event)"></app-comment-editor>
         </div>
 
         <div class="main-comments">
@@ -78,7 +82,8 @@
                 <app-comment (deleted)="loadPreview()" [comment]="item"></app-comment>
             </div>
             <div *ngIf="loadedList.length != 0 && list.length != loadedList.length" class="load-more-comment">
-                <button class="btn btn-primary btn-block" (click)="loadMoreComments()">Load more comment (remaining:{{list.length - loadedList.length}})</button>
+                <button class="btn btn-primary btn-block" (click)="loadMoreComments()">Load more comment
+                    (remaining:{{list.length - loadedList.length}})</button>
             </div>
         </div>
     </div>

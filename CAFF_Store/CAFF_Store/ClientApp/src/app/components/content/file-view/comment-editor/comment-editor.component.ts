@@ -16,68 +16,67 @@ import { CommentService } from 'src/app/services/comment/comment.service';
   styleUrls: ['./comment-editor.component.scss']
 })
 export class CommentEditorComponent implements OnInit {
-  newCommentContent: any
+  newCommentContent: any;
 
   newComment: FormGroup;
-  
-  modules = qlModules
+
+  modules = qlModules;
 
 
-  @Input() caffFile: FileData | undefined
+  @Input() caffFile: FileData | undefined;
 
-  @Output() onClose = new EventEmitter<Reload>();
+  @Output() close = new EventEmitter<Reload>();
 
-  get comment() { return this.newComment.get('comment');}
+  get comment() { return this.newComment.get('comment'); }
 
-  constructor(private commentService: CommentService ) 
-    {
+  constructor(private commentService: CommentService) {
     this.newComment = new FormGroup({
-      comment: new FormControl('', [Validators.required,Validators.minLength(10)])
-    })
+      comment: new FormControl('', [Validators.required, Validators.minLength(10)])
+    });
 
   }
 
-  ngOnInit(): void {}
-  
-  onContentChanged(content:qlContent){
-    this.newCommentContent = content.html
+  ngOnInit(): void { }
+
+  onContentChanged(content: QlContent) {
+    this.newCommentContent = content.html;
   }
 
-  close(){
-    this.onClose.emit({reload:false,body:undefined})
+  closeEditor() {
+    this.close.emit({ reload: false, body: undefined });
   }
 
-  submit(){
+  submit() {
     if (this.newComment.valid) {
-      this.saveComment()
+      this.saveComment();
     } else {
-      console.log("Invalid form!")
+      console.log('Invalid form!');
     }
   }
 
-  saveComment(){
-    let comment:AddCommentRequest = {
-      Body:this.newCommentContent,
+  saveComment() {
+    const comment: AddCommentRequest = {
+      Body: this.newCommentContent,
       FileName: this.caffFile.fileName,
       FileOwnerUserId: this.caffFile.userID,
-    }
-    this.commentService.saveComment(comment).subscribe((resp:any) => {
-      this.commentService.snackbarMessage(JSON.stringify(resp))
-      this.onClose.emit({reload:true,body:resp})
+    };
+    this.commentService.saveComment(comment).subscribe((resp: any) => {
+      this.commentService.snackbarMessage(JSON.stringify(resp));
+      this.close.emit({ reload: true, body: resp });
     },
-    error => {
-      console.log(error)
-    })
+      error => {
+        console.log(error);
+      });
   }
 }
 
-export interface Reload{
-  reload:boolean,
-  body:any
+export interface Reload {
+  reload: boolean;
+  body: any;
 }
 
-interface qlContent{
-  quill:any, 
-  html:any, 
-  text:any,
+interface QlContent {
+  quill: any;
+  html: any;
+  text: any;
 }
