@@ -123,7 +123,11 @@ export class FileViewComponent implements OnInit {
       this.loadedList = this.list.slice(0, this.size);
       this.collectionSize = resp.comments.length;
       this.checkCanEdit();
-    });
+    },
+      error => {
+        this.fileService.snackbarMessage("Error while loading file!")
+        console.log(error)
+      });
   }
 
   loadMoreComments() {
