@@ -27,6 +27,8 @@ namespace CAFF_Store.Data
 
             builder.Entity<Comment>().HasKey(c => c.CommentId);
 
+			builder.Entity<ApplicationUser>().Property(u => u.UserName).IsRequired();
+
 			builder.Entity<ApplicationUser>().HasData(new ApplicationUser
 			{
 				Id = "b8774540-eec6-46b3-803a-413a38b9c386",

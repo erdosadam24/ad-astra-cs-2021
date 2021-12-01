@@ -45,34 +45,62 @@ export class FileService {
     return this.http.post<any>(environment.baseUrl + '/userfiles', data, opt);
   }
 
+<<<<<<< HEAD
   getPreviewFile(userId: string, fileName: string) {
     const opt: any = _.clone(options);
     const params = new HttpParams()
       .set('userId', userId)
+=======
+  getPreviewFile(userName: string, fileName: string) {
+    let opt: any = _.clone(options)
+    let params = new HttpParams()
+      .set('userName', userName)
+>>>>>>> ce048c5d849a2949af73d13798e1d29af7a64012
       .set('fileName', fileName);
     return this.http.get<any>(environment.baseUrl + '/preview', { params: params, headers: opt });
   }
 
+<<<<<<< HEAD
   downloadFile(userId: string, fileName: string) {
     const opt: any = _.clone(options);
     const params = new HttpParams()
       .set('userId', userId)
+=======
+  downloadFile(userName: string, fileName: string) {
+    let opt: any = _.clone(options)
+    let params = new HttpParams()
+      .set('userName', userName)
+>>>>>>> ce048c5d849a2949af73d13798e1d29af7a64012
       .set('fileName', fileName);
     return this.http.get<any>(environment.baseUrl + '/download', { params: params, headers: opt });
   }
 
+<<<<<<< HEAD
   modifyFile(file: FileData, userId: string, fileName: string) {
     const opt: any = _.clone(options);
     const params = new HttpParams()
       .set('userId', userId)
+=======
+  modifyFile(file:FileData,userName: string, fileName: string) {
+    let opt: any = _.clone(options)
+    let params = new HttpParams()
+      .set('userName', userName)
+>>>>>>> ce048c5d849a2949af73d13798e1d29af7a64012
       .set('fileName', fileName);
     return this.http.put<any>(environment.baseUrl + '/modify', file, { params: params, headers: opt });
   }
 
 
+<<<<<<< HEAD
   deleteFile(fileName: string) {
     const opt: any = _.clone(options);
     const params = new HttpParams()
+=======
+  deleteFile(author:string, fileName: string) {
+    let opt: any = _.clone(options)
+    let params = new HttpParams()
+      .set('userName', author)
+>>>>>>> ce048c5d849a2949af73d13798e1d29af7a64012
       .set('fileName', fileName);
     return this.http.delete<any>(environment.baseUrl + '/delete', { params: params, headers: opt });
   }
@@ -92,9 +120,14 @@ export class FileService {
     const opt: any = _.clone(uploadCaffOptions);
     const data: FileData = {
       fileName: filename,
+<<<<<<< HEAD
       author: '',
       userID: '',
       created: '',
+=======
+      author:"",
+      created: "",
+>>>>>>> ce048c5d849a2949af73d13798e1d29af7a64012
       data: file,
       cover: '',
       comments: []
@@ -103,6 +136,7 @@ export class FileService {
     return this.http.post<any>(environment.baseUrl + '/upload', data, opt);
   }
 
+<<<<<<< HEAD
 
 
   getEmptyFileData(): FileData {
@@ -115,6 +149,19 @@ export class FileService {
       cover: 'Empty',
       comments: []
     };
+=======
+  
+
+  getEmptyFileData():FileData{
+      return {
+        fileName: "Empty",
+        author:"Empty",
+        created: "2000-01-01",
+        data: "Empty",
+        cover: "Empty",
+        comments: []
+      }
+>>>>>>> ce048c5d849a2949af73d13798e1d29af7a64012
   }
 
   snackbarMessage(message: string) {

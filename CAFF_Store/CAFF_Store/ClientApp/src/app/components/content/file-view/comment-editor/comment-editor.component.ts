@@ -58,11 +58,19 @@ export class CommentEditorComponent implements OnInit {
     const comment: AddCommentRequest = {
       Body: this.newCommentContent,
       FileName: this.caffFile.fileName,
+<<<<<<< HEAD
       FileOwnerUserId: this.caffFile.userID,
     };
     this.commentService.saveComment(comment).subscribe((resp: any) => {
       this.commentService.snackbarMessage(JSON.stringify(resp));
       this.close.emit({ reload: true, body: resp });
+=======
+      FileOwnerUserName: this.caffFile.author,
+    }
+    this.commentService.saveComment(comment).subscribe((resp:any) => {
+      this.commentService.snackbarMessage(JSON.stringify(resp))
+      this.onClose.emit({reload:true,body:resp})
+>>>>>>> ce048c5d849a2949af73d13798e1d29af7a64012
     },
       error => {
         console.log(error);

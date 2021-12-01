@@ -45,16 +45,26 @@ export class FileModificationComponent implements OnInit {
     if (this.fileUploadForm.valid) {
       const data: FileData = {
         fileName: this.fileName,
+<<<<<<< HEAD
         author: '',
         userID: '',
         created: '',
+=======
+        author:"",
+        created: "",
+>>>>>>> ce048c5d849a2949af73d13798e1d29af7a64012
         data: this.fileName,
         cover: '',
         comments: []
       };
 
+<<<<<<< HEAD
       this.fileService.modifyFile(data, this.caffFileData.userID, this.caffFileData.fileName).subscribe(resp => {
         this.fileService.snackbarMessage(JSON.stringify(resp));
+=======
+      this.fileService.modifyFile(data,this.caffFileData.author,this.caffFileData.fileName).subscribe(resp => {
+        this.fileService.snackbarMessage(JSON.stringify(resp))
+>>>>>>> ce048c5d849a2949af73d13798e1d29af7a64012
       },
         error => {
           this.fileService.snackbarMessage('Could not modify file!');

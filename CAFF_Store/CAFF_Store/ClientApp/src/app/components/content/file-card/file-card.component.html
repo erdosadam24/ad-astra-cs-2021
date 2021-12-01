@@ -1,5 +1,5 @@
 <div class="file-card" style="margin-top: 1rem;" >
-    <span class="icon-link" routerLink="/fileview" [queryParams]="{userID: file.userID, fileName: file.fileName}">
+    <span class="icon-link" routerLink="/fileview" [queryParams]="{userName: file.author, fileName: file.fileName}">
         <div class="file-title">{{file.fileName}} ({{file.created}})</div>
         <div class="file-icon">
             <img *ngIf="file.cover" class="img-fluid" src="{{'data:image/bmp;base64,' + file.cover}}">
