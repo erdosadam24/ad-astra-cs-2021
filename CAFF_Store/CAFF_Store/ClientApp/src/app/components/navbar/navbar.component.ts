@@ -17,11 +17,6 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {}
 
-
-  logout(){
-    alert('TODO!')
-  }
-
   upload(){
     this.dialog.open(FileUploadComponent, {
       width: '30rem',

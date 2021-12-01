@@ -37,7 +37,6 @@ export class FileSearchComponent implements OnInit {
         private readonly destroy:AutoDestroy) { 
     
     this.routerParams.onParamChange().pipe(takeUntil(destroy)).subscribe(o => {
-      //IMPORTANT!
       this.getFiles("")
     })
 

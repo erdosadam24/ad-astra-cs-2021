@@ -18,7 +18,6 @@ export class FileService {
   constructor(private router: Router,private routerParams: RouterParamService,private http: HttpClient,public snackBar: MatSnackBar,private sanitizer:DomSanitizer) { }
 
   getFileList(query:string){
-    //GetAllFilesRequest
     let opt:any = _.clone(options)
     let data:GetAllFilesRequest = {
       PageSize: Number.parseInt(this.routerParams.params['size']),
@@ -29,6 +28,18 @@ export class FileService {
     return this.http.post<any>(environment.baseUrl+'/allfiles',data,opt);
   }
 
+  getMyFileList(){
+    //GetAllFilesRequest
+    let opt:any = _.clone(options)
+    let data:GetAllFilesRequest = {
+      PageSize: Number.parseInt(this.routerParams.params['size']),
+      PageNumber: Number.parseInt(this.routerParams.params['page']) - 1,
+      NameFilter: ""
+    }
+
+    return this.http.post<any>(environment.baseUrl+'/userfiles',data,opt);
+  }
+
   getPreviewFile(userId: string, fileName: string) {
     let opt: any = _.clone(options)
     let params = new HttpParams()
@@ -37,6 +48,21 @@ export class FileService {
     return this.http.get<any>(environment.baseUrl + '/preview', { params: params, headers: opt });
   }
 
+  downloadFile(userId: string, fileName: string) {
+    let opt: any = _.clone(options)
+    let params = new HttpParams()
+      .set('userId', userId)
+      .set('fileName', fileName);
+    return this.http.get<any>(environment.baseUrl + '/download', { params: params, headers: opt });
+  }
+
+  deleteFile(fileName: string) {
+    let opt: any = _.clone(options)
+    let params = new HttpParams()
+      .set('fileName', fileName);
+    return this.http.get<any>(environment.baseUrl + '/delete', { params: params, headers: opt });
+  }
+  
   getMyFilesPage(){
     let opt:any = _.clone(options)
     let data:GetAllFilesRequest = {
