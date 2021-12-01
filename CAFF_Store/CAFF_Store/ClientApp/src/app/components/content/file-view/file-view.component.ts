@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { AuthorizeService } from 'src/app/api-authorization/authorize.service';
 import { CommentData } from 'src/app/data/comment-data';
@@ -11,17 +11,22 @@ import { Reload } from './comment-editor/comment-editor.component';
 import { saveAs } from 'file-saver';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { UserService } from 'src/app/services/user/user.service';
+import { AutoDestroy } from 'src/app/directive/auto-destroy';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-file-view',
   templateUrl: './file-view.component.html',
-  styleUrls: ['./file-view.component.scss']
+  styleUrls: ['./file-view.component.scss'],
+  viewProviders: [AutoDestroy]
 })
 export class FileViewComponent implements OnInit {
   showEditor = false;
   fileData: FileData
   icon:any = undefined
   loggedIn:boolean = false
+  canEdit:boolean = false
   loggedInSubscription: Subscription | undefined
 
   list: Array<CommentData> = []
@@ -37,13 +42,14 @@ export class FileViewComponent implements OnInit {
   fileName:string
 
   constructor(public authorizationService:AuthorizeService, 
+              public userService:UserService, 
               public commentService:CommentService, 
               public fileService:FileService,
               private readonly dialog: MatDialog,
               private routerParams: RouterParamService,
-              private router: Router  ) {
-
-    this.loggedInSubscription = this.authorizationService.isAuthenticated().subscribe((o:boolean) => {
+              private router: Router,
+              private readonly destroy:AutoDestroy  ) {
+    this.authorizationService.isAuthenticated().pipe(takeUntil(destroy)).subscribe(o => {
       this.loggedIn = o
     })
   }
@@ -54,8 +60,20 @@ export class FileViewComponent implements OnInit {
     this.loadPreview()
   }
 
+  checkCanEdit(){
+    /*
+    console.log("Can Edit: " + this.canEdit)
+    console.log("Is Admin: " + this.userService.isAdmin())
+    console.log("Current user: " + this.userService.getUserInformation().userID)
+    console.log("File creator: " + this.fileData.userID)
+    */
+    if(this.fileData != undefined){
+      this.canEdit = (this.userService.isAdmin() || this.userService.getUserInformation().userID == this.fileData.userID)
+    }
+  }
+
   grantAdmin(){
-    this.fileService.grantAdmin(this.fileData.author).subscribe((resp) => {
+    this.userService.grantAdmin(this.fileData.author).subscribe((resp) => {
       console.log("Result: " + JSON.stringify(resp))
       this.fileService.snackbarMessage("Admin role granted!")
     },
@@ -104,6 +122,7 @@ export class FileViewComponent implements OnInit {
       this.list = resp.comments
       this.loadedList = this.list.slice(0,this.size)
       this.collectionSize  = resp.comments.length
+      this.checkCanEdit()
     });
   }
 

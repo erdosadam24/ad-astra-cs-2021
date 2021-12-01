@@ -98,13 +98,6 @@ export class FileService {
     return this.http.post<any>(environment.baseUrl + '/upload',data,opt)
   }
 
-
-  grantAdmin(userId:string){
-    let opt: any = _.clone(options)
-    let params = new HttpParams()
-      .set('userId', userId)
-    return this.http.post<any>(environment.baseUrl + '/grantAdmin', undefined ,{ params: params, headers: opt });
-  }
   
 
   getEmptyFileData():FileData{

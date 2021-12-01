@@ -86,7 +86,7 @@ export class FileSearchComponent implements OnInit {
       this.list = resp.files
     },
     err => {
-      console.log("Response: "+JSON.stringify(err))
+      console.log("Error: "+err.message)
     })
   }
 

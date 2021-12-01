@@ -46,15 +46,15 @@
                 </div>
             </div>
             <div *ngIf="loggedIn" class="file-links">
-                <div  class="file-link">
+                <div  class="file-link" *ngIf="userService.isAdmin()">
                     <span (click)="grantAdmin()">Grant Admin</span>
                     <i class="fa fa-user-plus file-icons"></i>
                 </div>
-                <div  class="file-link">
+                <div  class="file-link" *ngIf="canEdit">
                     <span (click)="deleteFile()">Delete File</span>
                     <i class="fa fa-ban file-icons"></i>
                 </div>
-                <div  class="file-link">
+                <div  class="file-link" *ngIf="canEdit">
                     <span (click)="modifyFile()">Modify File</span>
                     <i class="fa fa-upload file-icons"></i>
                 </div>

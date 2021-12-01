@@ -33,13 +33,11 @@ export class FileUploadComponent implements OnInit {
 
   onSubmit(){
     if(this.fileUploadForm.valid && this.caffFile != undefined){
-      console.log("Alma")
       this.fileService.uploadCaffFile(this.fileName,this.caffFile).subscribe((resposne:any) => {
-        console.log("Result: " + JSON.stringify(resposne))
+        //console.log("Result: " + JSON.stringify(resposne))
         this.dialogRef.close()
       },
       error => {
-        console.log("Körte")
         this.fileService.snackbarMessage("Error on file upload!")
       })
     }

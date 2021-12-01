@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { User, UserManager, WebStorageStateStore } from 'oidc-client';
-import { BehaviorSubject, concat, from, Observable } from 'rxjs';
+import { BehaviorSubject, concat, from, Observable, Subscription } from 'rxjs';
 import { filter, map, mergeMap, take, tap } from 'rxjs/operators';
+import { UserService } from '../services/user/user.service';
 import { ApplicationPaths, ApplicationName } from './api-authorization.constants';
 
 export type IAuthenticationResult =
@@ -41,15 +42,21 @@ export class AuthorizeService {
   // If you want to enable pop up authentication simply set this flag to false.
 
   public authenticated:boolean 
+  private authenticationSubscription:Subscription
 
   private popUpDisabled = true;
   private userManager: UserManager;
   private userSubject: BehaviorSubject<IUser | null> = new BehaviorSubject(null);
 
-  constructor(){
-    this.isAuthenticated().subscribe((o:boolean) => {
+  constructor(private userService:UserService){
+    this.authenticationSubscription = this.isAuthenticated().subscribe((o:boolean) => {
       this.authenticated = o
+      this.userService.loadUserInformation();
     })
+  }
+
+  ngOnDestroy() {
+    this.authenticationSubscription.unsubscribe()
   }
 
   public isAuthenticated(): Observable<boolean> {
@@ -118,6 +125,7 @@ export class AuthorizeService {
       await this.ensureUserManagerInitialized();
       await this.userManager.signoutPopup(this.createArguments());
       this.userSubject.next(null);
+      this.userService.deleteLocalUserInformation();
       return this.success(state);
     } catch (popupSignOutError) {
       console.log('Popup signout error: ', popupSignOutError);
@@ -136,6 +144,7 @@ export class AuthorizeService {
     try {
       const response = await this.userManager.signoutCallback(url);
       this.userSubject.next(null);
+      this.userService.deleteLocalUserInformation();
       return this.success(response && response.state);
     } catch (error) {
       console.log(`There was an error trying to log out '${error}'.`);

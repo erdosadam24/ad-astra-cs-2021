@@ -2,9 +2,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { User } from 'oidc-client';
 import { AuthorizeService } from 'src/app/api-authorization/authorize.service';
 import { CommentData } from 'src/app/data/comment-data';
 import { CommentService } from 'src/app/services/comment/comment.service';
+import { UserService } from 'src/app/services/user/user.service';
 import { Reload } from '../comment-editor/comment-editor.component';
 
 @Component({
@@ -14,11 +16,14 @@ import { Reload } from '../comment-editor/comment-editor.component';
 })
 export class CommentComponent implements OnInit {
 
+  canEdit: boolean = false
+
   @Input() comment:CommentData
 
   @Output() deleted = new EventEmitter<string>();
 
   constructor(
+    public userService:UserService,
     public authorizationService:AuthorizeService,
     public commentService:CommentService,
     public dialog: MatDialog,
@@ -29,7 +34,13 @@ export class CommentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-      
+    this.checkCanEdit()
+  }
+
+  checkCanEdit(){
+    if(this.comment != undefined){
+      this.canEdit = (this.userService.isAdmin() || this.userService.getUserInformation().userID == this.comment.userID)
+    }
   }
 
   isAuthenticated(){

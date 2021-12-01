@@ -31,7 +31,7 @@
         <a class="dropdown-item" *ngIf="isAuthenticated()" routerLink='/myfiles' [queryParams]="{
           page: 1,
           size: 9}">My Files</a>
-        <a class="dropdown-item" *ngIf="isAuthenticated()" [routerLink]='["/authentication/logout"]' style="cursor:pointer;">Logout</a>
+        <a class="dropdown-item" *ngIf="isAuthenticated()" [routerLink]='["/authentication/logout"]'>Logout</a>
       </div>
     </div>
   </div>

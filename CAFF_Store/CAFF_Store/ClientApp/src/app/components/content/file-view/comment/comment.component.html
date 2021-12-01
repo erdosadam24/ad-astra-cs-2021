@@ -23,10 +23,10 @@
                 </tr>
                 <tr>
                     <td>
-                        <div *ngIf="isAuthenticated()" class="comment-links">
-                            <div class="comment-link">
-                                <span (click)="remove()">Delete</span>
-                                <i class="fa fa-exclamation comment-icons"></i>
+                        <div class="comment-links">
+                            <div class="comment-link" *ngIf="canEdit">
+                                <span (click)="remove()">Delete Comment</span>
+                                <i class="fa fa-ban comment-icons"></i>
                             </div>  
                         </div>
                     </td>
