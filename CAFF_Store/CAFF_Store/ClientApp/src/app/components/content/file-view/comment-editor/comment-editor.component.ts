@@ -3,7 +3,9 @@ import { AfterViewInit, Output, ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { post } from 'jquery';
+import { AddCommentRequest } from 'src/app/data/add-comment-request';
 import { CommentData } from 'src/app/data/comment-data';
+import { FileData } from 'src/app/data/file-data';
 import { qlModules } from 'src/app/directive/qleditor-module-config';
 import { CommentService } from 'src/app/services/comment/comment.service';
 
@@ -19,6 +21,9 @@ export class CommentEditorComponent implements OnInit {
   newComment: FormGroup;
   
   modules = qlModules
+
+
+  @Input() caffFile: FileData | undefined
 
   @Output() onClose = new EventEmitter<Reload>();
 
@@ -51,17 +56,11 @@ export class CommentEditorComponent implements OnInit {
   }
 
   saveComment(){
-    let comment:CommentData = {
-        CommentId: -1,
-        Filename: "Empty",
-        Body: "Empty",
-        Author: "Empty",
-        UserID: "Empty",
-        Created: "2000-01-01",
-        Updated: "2000-01-01"
+    let comment:AddCommentRequest = {
+      Body:this.newCommentContent,
+      FileName: this.caffFile.fileName,
+      FileOwnerUserId: this.caffFile.userID,
     }
-
-
     this.commentService.saveComment(comment).subscribe((resp:any) => {
       this.commentService.snackbarMessage(JSON.stringify(resp))
       this.onClose.emit({reload:true,body:resp})

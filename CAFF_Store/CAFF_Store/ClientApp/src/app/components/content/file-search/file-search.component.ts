@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { takeUntil } from 'rxjs/operators';
 import { AuthorizeService } from 'src/app/api-authorization/authorize.service';
 import { FileData } from 'src/app/data/file-data';
@@ -34,10 +34,14 @@ export class FileSearchComponent implements OnInit {
         private fileService:FileService,
         public snackBar: MatSnackBar,
         public authorizationService:AuthorizeService,
+        private readonly dialog: MatDialog,
         private readonly destroy:AutoDestroy) { 
     
     this.routerParams.onParamChange().pipe(takeUntil(destroy)).subscribe(o => {
-      //IMPORTANT!
+      this.getFiles("")
+    })
+
+    this.dialog.afterAllClosed.pipe(takeUntil(destroy)).subscribe(() => {
       this.getFiles("")
     })
 
@@ -45,7 +49,6 @@ export class FileSearchComponent implements OnInit {
       search: new FormControl('',[Validators.required])
     })
 
-    this.initCollection()
   }
 
 
@@ -55,6 +58,7 @@ export class FileSearchComponent implements OnInit {
     this.size = Number.parseInt(this.routerParams.params["size"])
     this.asc = this.routerParams.params["asc"]
     this.sort = this.routerParams.params["sort"]*/
+    this.getFiles("")
     this.updateQueryParams()
   }
 
@@ -64,10 +68,6 @@ export class FileSearchComponent implements OnInit {
     } else {
       console.warn("Invalid form!")
     }
-  }
-
-  clearFilter(){
-    this.getFiles("")
   }
   
   loadPage($event:any){
@@ -92,12 +92,5 @@ export class FileSearchComponent implements OnInit {
 
   updateQueryParams(){
     this.routerParams.paginationQueryParams(this.page,this.size,this.sort,this.asc)
-  }
-
-  initCollection(){
-    this.collectionSize = 200;
-    for(let i = 0;i<9;i++){
-      this.list.push(this.fileService.getEmptyFileData())
-    }
   }
 }

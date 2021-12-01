@@ -1,9 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <a class="navbar-brand" routerLink="/search" [queryParams]="{ 
                 page: 1,
-                size: 9,
-                sort: 'created',
-                asc: 'asc' }">Caff Share</a>
+                size: 9}">Caff Share</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -13,9 +11,7 @@
       <li class="nav-item" *ngIf="isAuthenticated()">
         <a class="nav-link" routerLink="/search" [queryParams]="{
                 page: 1,
-                size: 9,
-                sort: 'created',
-                asc: 'asc' }">Files</a>
+                size: 9}">Files</a>
       </li>
       <li class="nav-item" *ngIf="isAuthenticated()">
         <a class="nav-link" style="cursor:pointer;" (click)="upload()">Upload</a>
@@ -32,7 +28,9 @@
         <a class="dropdown-item" *ngIf="!isAuthenticated()" [routerLink]='["/authentication/login"]'>Login</a>
         <a class="dropdown-item" *ngIf="!isAuthenticated()" [routerLink]='["/authentication/register"]'>Registration</a>
         <a class="dropdown-item" *ngIf="isAuthenticated()" [routerLink]='["/authentication/profile"]'>Profile</a>
-        <a class="dropdown-item" *ngIf="isAuthenticated()" routerLink='/myfiles'>My Files</a>
+        <a class="dropdown-item" *ngIf="isAuthenticated()" routerLink='/myfiles' [queryParams]="{
+          page: 1,
+          size: 9}">My Files</a>
         <a class="dropdown-item" *ngIf="isAuthenticated()" [routerLink]='["/authentication/logout"]' style="cursor:pointer;">Logout</a>
       </div>
     </div>

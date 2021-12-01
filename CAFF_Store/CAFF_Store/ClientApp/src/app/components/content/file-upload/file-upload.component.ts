@@ -33,8 +33,14 @@ export class FileUploadComponent implements OnInit {
 
   onSubmit(){
     if(this.fileUploadForm.valid && this.caffFile != undefined){
+      console.log("Alma")
       this.fileService.uploadCaffFile(this.fileName,this.caffFile).subscribe((resposne:any) => {
         console.log("Result: " + JSON.stringify(resposne))
+        this.dialogRef.close()
+      },
+      error => {
+        console.log("Körte")
+        this.fileService.snackbarMessage("Error on file upload!")
       })
     }
     else{ 
@@ -62,10 +68,7 @@ export class FileUploadComponent implements OnInit {
     this.getBase64(file).then(data => {
       this.caffFile = data
       console.log("Filename: " + this.fileName)
-      this.checkValidBase64(this.caffFile)
-      //console.log("CaffFile: " + data)
-      }
-    );
+    });
   }
 
   checkValidBase64(str:string){

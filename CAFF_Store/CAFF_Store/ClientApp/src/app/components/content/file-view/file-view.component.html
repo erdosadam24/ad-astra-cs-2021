@@ -3,7 +3,8 @@
         <div class="card">
             <div class="card-header">
                 <div class="card-header-table-row" style="margin-bottom: .2rem;">
-                    <div class="inline-items" style="font-size:1.8rem;">{{fileData.fileName}}</div>
+                    <div *ngIf="fileData" class="inline-items" style="font-size:1.8rem;">{{fileData.fileName}}</div>
+                    <div *ngIf="!fileData" class="inline-items" style="font-size:1.8rem;">Not loaded!</div>
                 </div>
             </div>
             <div class="card-body" style="width: 100%;height: 60%;">
@@ -12,9 +13,12 @@
                         <tbody>
                             <tr>
                                 <td style="width: 60%;" class="no-border-top" colspan="2">
-                                    <div class="file-icon">
+                                    <div class="file-icon" *ngIf="fileData">
                                         <img *ngIf="fileData.cover" class="img-fluid" src="{{'data:image/bmp;base64,' + fileData.cover}}">
                                         <img *ngIf="!fileData.cover" class="img-fluid" src="../../../../assets/img/image-not-found.png"> 
+                                    </div>
+                                    <div class="file-icon" *ngIf="!fileData">
+                                        <img class="img-fluid" src="../../../../assets/img/image-not-found.png"> 
                                     </div>
                                 </td>
                                 <td style="width: 40%;" class="no-border-top">
@@ -25,11 +29,13 @@
                                         <tbody>
                                             <tr class="inner-table-row">
                                                 <td>Uploaded by:</td>
-                                                <td>{{fileData.author}}<td>
+                                                <td *ngIf="fileData">{{fileData.author}}<td>
+                                                <td *ngIf="!fileData">Not loaded!<td>
                                             </tr>
                                             <tr class="inner-table-row">
                                                 <td>Created:</td>
-                                                <td>{{fileData.created | date:'medium'}}</td>
+                                                <td *ngIf="fileData">{{fileData.created | date:'medium'}}</td>
+                                                <td *ngIf="!fileData">Not loaded!</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -39,7 +45,11 @@
                     </table>
                 </div>
             </div>
-            <div *ngIf="isAuthenticated()" class="file-links">
+            <div *ngIf="loggedIn" class="file-links">
+                <div  class="file-link">
+                    <span (click)="grantAdmin()">Grant Admin</span>
+                    <i class="fa fa-exclamation file-icons"></i>
+                </div>
                 <div  class="file-link">
                     <span (click)="deleteFile()">Delete File</span>
                     <i class="fa fa-exclamation file-icons"></i>
@@ -60,15 +70,15 @@
         </div>
 
         <div *ngIf="showEditor" style="width: 100%;">
-            <app-comment-editor (onClose)="onEditorClose($event)"></app-comment-editor>
+            <app-comment-editor [caffFile]="fileData" (onClose)="onEditorClose($event)"></app-comment-editor>
         </div>
 
         <div class="main-comments">
-            <div *ngFor="let item of list;" class="root-comment">
+            <div *ngFor="let item of loadedList;" class="root-comment">
                 <app-comment [comment]="item"></app-comment>
             </div>
-            <div *ngIf="list.length != 0 && list.length != collectionSize" class="load-more-comment">
-                <button class="btn btn-primary btn-block" (click)="loadComments()">Load more comment (remaining:{{collectionSize - list.length}})</button>
+            <div *ngIf="loadedList.length != 0 && list.length != loadedList.length" class="load-more-comment">
+                <button class="btn btn-primary btn-block" (click)="loadMoreComments()">Load more comment (remaining:{{list.length - loadedList.length}})</button>
             </div>
         </div>
     </div>
