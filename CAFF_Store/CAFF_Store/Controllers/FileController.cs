@@ -45,10 +45,12 @@ namespace CAFF_Store.Controllers
 		//TODO: Modify file
 
 		[HttpGet("preview")]
-		public CaffFile getPreview([FromQuery] string userId, string fileName)
+		public ActionResult<CaffFile> getPreview([FromQuery] string userId, string fileName)
 		{
-			var userName = dbContext.Users.FirstOrDefault(u => u.Id == userId).UserName;
+			var userName = dbContext.Users.FirstOrDefault(u => u.Id == userId)?.UserName;
+			if (userName == null) return BadRequest("No user found with this userID");
 			var coverData = DatabaseService.DownloadFile(userId, fileName.Replace(".caff", ".bmp"));
+			if (coverData == null) return BadRequest("File not found");
 			return new CaffFile
 			{
 				FileName = fileName,
@@ -60,10 +62,15 @@ namespace CAFF_Store.Controllers
 
 		[Authorize]
 		[HttpGet("download")]
-		public async Task<CaffFile> downloadFile([FromQuery] string userId, string fileName)
+		public ActionResult<CaffFile> downloadFile([FromQuery] string userId, string fileName)
 		{
-			var userName = dbContext.Users.FirstOrDefault(u => u.Id == userId).UserName;
+			var userName = dbContext.Users.FirstOrDefault(u => u.Id == userId)?.UserName;
+			if (userName == null) return BadRequest("No user found with this userID");
 			var fileData = DatabaseService.DownloadFile(userId, fileName);
+			if(fileData == null)
+			{
+				return BadRequest("File was not found");
+			}
 			//var coverData = DatabaseService.DownloadFile(userId, fileName.Replace(".caff", ".bmp"));
 			return new CaffFile
 			{
@@ -80,7 +87,7 @@ namespace CAFF_Store.Controllers
 		[HttpDelete("delete")]
 		public ActionResult deleteFile([FromQuery] string fileName)
 		{
-			DatabaseService.DeleteFile(User.FindFirstValue(ClaimTypes.NameIdentifier), fileName);
+			var ressult = DatabaseService.DeleteFile(User.FindFirstValue(ClaimTypes.NameIdentifier), fileName);
 			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.UserID == User.FindFirstValue(ClaimTypes.NameIdentifier) && c.FileName == fileName).ToArray());
 			dbContext.SaveChanges();
 			return new OkResult();
@@ -174,6 +181,21 @@ namespace CAFF_Store.Controllers
 			var selectedUser = await userManager.FindByIdAsync(userId);
 			await userManager.AddToRoleAsync(selectedUser, "admin");
 			return new OkResult();
+		}
+
+		[Authorize]
+		[HttpGet("userinfo")]
+		public async Task<UserInfoResponse> getUserInfo()
+		{
+			var user = await userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+			var roles = (await userManager.GetRolesAsync(user)).ToList();
+			return new UserInfoResponse
+			{
+				UserID = user.Id,
+				UserName = user.UserName,
+				Email = user.Email,
+				Roles = roles
+			};
 		}
 
 	}

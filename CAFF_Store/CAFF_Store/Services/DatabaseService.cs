@@ -44,18 +44,36 @@ namespace CAFF_Store.Services
 		public static byte[] DownloadFile(string userID, string fileName)
 		{
 			string path = Path.Combine(GetUserFolderPath(userID), fileName);
-			byte[] fileData = File.ReadAllBytes(path);
-			return fileData;
+			try
+			{
+				byte[] fileData = File.ReadAllBytes(path);
+				return fileData;
+
+			}
+			catch(Exception e)
+			{
+				return null;
+			}
+			
+			
 		}
 
-		public static void DeleteFile(string userID, string fileName)
+		public static bool DeleteFile(string userID, string fileName)
 		{
 			var bmpName = fileName.Replace(".caff", ".bmp");
 			string bmpPath = Path.Combine(GetUserFolderPath(userID), bmpName);
 			string caffPath = Path.Combine(GetUserFolderPath(userID), fileName);
 
-			File.Delete(bmpPath);
-			File.Delete(caffPath);
+			try {
+				File.Delete(bmpPath);
+				File.Delete(caffPath);
+				return true;
+			}
+			catch (Exception e)
+			{
+				return false;
+			}
+		
 		}
 
 		public static PagedCaffFiles GetAllFiles(GetAllFilesRequest request)
