@@ -59,7 +59,7 @@ export class CommentEditorComponent implements OnInit {
     let comment:AddCommentRequest = {
       Body:this.newCommentContent,
       FileName: this.caffFile.fileName,
-      FileOwnerUserId: this.caffFile.userID,
+      FileOwnerUserName: this.caffFile.author,
     }
     this.commentService.saveComment(comment).subscribe((resp:any) => {
       this.commentService.snackbarMessage(JSON.stringify(resp))

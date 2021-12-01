@@ -50,7 +50,6 @@ export class CommentService {
       filename: "Empty",
       body: "Empty",
       author: "Empty",
-      userID: "Empty",
       created: "2000-01-01",
       updated: "2000-01-01"
     }

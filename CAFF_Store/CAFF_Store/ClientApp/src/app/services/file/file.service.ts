@@ -40,34 +40,35 @@ export class FileService {
     return this.http.post<any>(environment.baseUrl+'/userfiles',data,opt);
   }
 
-  getPreviewFile(userId: string, fileName: string) {
+  getPreviewFile(userName: string, fileName: string) {
     let opt: any = _.clone(options)
     let params = new HttpParams()
-      .set('userId', userId)
+      .set('userName', userName)
       .set('fileName', fileName);
     return this.http.get<any>(environment.baseUrl + '/preview', { params: params, headers: opt });
   }
 
-  downloadFile(userId: string, fileName: string) {
+  downloadFile(userName: string, fileName: string) {
     let opt: any = _.clone(options)
     let params = new HttpParams()
-      .set('userId', userId)
+      .set('userName', userName)
       .set('fileName', fileName);
     return this.http.get<any>(environment.baseUrl + '/download', { params: params, headers: opt });
   }
 
-  modifyFile(file:FileData,userId: string, fileName: string) {
+  modifyFile(file:FileData,userName: string, fileName: string) {
     let opt: any = _.clone(options)
     let params = new HttpParams()
-      .set('userId', userId)
+      .set('userName', userName)
       .set('fileName', fileName);
     return this.http.put<any>(environment.baseUrl + '/modify', file ,{ params: params, headers: opt });
   }
   
 
-  deleteFile(fileName: string) {
+  deleteFile(author:string, fileName: string) {
     let opt: any = _.clone(options)
     let params = new HttpParams()
+      .set('userName', author)
       .set('fileName', fileName);
     return this.http.delete<any>(environment.baseUrl + '/delete', { params: params, headers: opt });
   }
@@ -88,7 +89,6 @@ export class FileService {
     let data:FileData={
       fileName: filename,
       author:"",
-      userID: "",
       created: "",
       data: file,
       cover: "",
@@ -104,7 +104,6 @@ export class FileService {
       return {
         fileName: "Empty",
         author:"Empty",
-        userID: "Empty",
         created: "2000-01-01",
         data: "Empty",
         cover: "Empty",

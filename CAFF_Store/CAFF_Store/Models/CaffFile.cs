@@ -9,7 +9,6 @@ namespace CAFF_Store.Models
 	{
 		public string FileName { get; set; }
 		public string Author { get; set; }
-		public string UserID { get; set; }
 		public string Created { get; set; }
 
 		public string Data { get; set; }

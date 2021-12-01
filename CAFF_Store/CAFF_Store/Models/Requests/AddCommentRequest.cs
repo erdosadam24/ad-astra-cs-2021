@@ -9,6 +9,6 @@ namespace CAFF_Store.Models.Requests
 	{
 		public string Body { get; set; }
 		public string FileName { get; set; }
-		public string FileOwnerUserId { get; set; }
+		public string FileOwnerUserName { get; set; }
 	}
 }

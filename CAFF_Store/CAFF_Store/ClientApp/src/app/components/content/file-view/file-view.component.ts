@@ -38,7 +38,7 @@ export class FileViewComponent implements OnInit {
   sort:string = "created"
   asc: string = "desc"
 
-  fileOwnerUserId: string
+  fileOwnerUserName: string
   fileName:string
 
   constructor(public authorizationService:AuthorizeService, 
@@ -55,7 +55,7 @@ export class FileViewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.fileOwnerUserId = this.routerParams.params["userID"]
+    this.fileOwnerUserName = this.routerParams.params["userName"]
     this.fileName = this.routerParams.params["fileName"]
     this.loadPreview()
   }
@@ -67,8 +67,8 @@ export class FileViewComponent implements OnInit {
     console.log("Current user: " + this.userService.getUserInformation().userID)
     console.log("File creator: " + this.fileData.userID)
     */
-    if(this.fileData != undefined){
-      this.canEdit = (this.userService.isAdmin() || this.userService.getUserInformation().userID == this.fileData.userID)
+    if (this.fileData != undefined) {
+      this.canEdit = (this.userService.isAdmin() || this.userService.getUserInformation().userName == this.fileData.author)
     }
   }
 
@@ -82,8 +82,8 @@ export class FileViewComponent implements OnInit {
     });
   }
 
-  deleteFile(){
-    this.fileService.deleteFile(this.fileName).subscribe((resp) => {
+  deleteFile() {
+    this.fileService.deleteFile(this.fileOwnerUserName, this.fileName).subscribe((resp) => {
       console.log("Result: " + JSON.stringify(resp))
       this.fileService.snackbarMessage("File Successfuly deleted!")
       this.router.navigate(['/search'], {queryParams: {page: 1, size: 9}});
@@ -109,7 +109,7 @@ export class FileViewComponent implements OnInit {
   }
 
   download(){
-    this.fileService.downloadFile(this.fileOwnerUserId, this.fileName).subscribe((resp:FileData) => {
+    this.fileService.downloadFile(this.fileOwnerUserName, this.fileName).subscribe((resp:FileData) => {
       //console.log("File: " + resp.data)
       var file = this.dataUrlToFile(resp.data,this.fileName)
       saveAs(file, this.fileName);
@@ -117,7 +117,7 @@ export class FileViewComponent implements OnInit {
   }
 
   loadPreview(){
-    this.fileService.getPreviewFile(this.fileOwnerUserId, this.fileName).subscribe((resp: FileData) => {
+    this.fileService.getPreviewFile(this.fileOwnerUserName, this.fileName).subscribe((resp: FileData) => {
       this.fileData = resp;
       this.list = resp.comments
       this.loadedList = this.list.slice(0,this.size)

@@ -38,37 +38,41 @@ namespace CAFF_Store.Controllers
 		public ActionResult uploadFile([FromBody] CaffFile caffFile)
 		{			
 			byte[] backToBytes = Convert.FromBase64String(caffFile.Data.Substring(37)); //"data:application/octet-stream;base64," az elején
-			var result = DatabaseService.UploadFileForUser(User.FindFirstValue(ClaimTypes.NameIdentifier), caffFile.FileName, backToBytes);
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var userName = dbContext.Users.FirstOrDefault(u => u.Id == userId).UserName;
+			var result = DatabaseService.UploadFileForUser(userId, caffFile.FileName, backToBytes);
 			if (result == null) return BadRequest("File parsing failed");
 			return new OkResult();
 		}
 
 		[Authorize]
 		[HttpPut("modify")]
-		public async Task<ActionResult> modifyFile([FromBody] CaffFile caffFile, [FromQuery] string userId, string fileName)
+		public async Task<ActionResult> modifyFile([FromBody] CaffFile caffFile, [FromQuery] string userName, string fileName)
 		{
 			var currentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			var currentUser = await userManager.FindByIdAsync(currentId);
-			var fileData = DatabaseService.DownloadFile(userId, fileName);
-			if ((currentId != userId) && !await userManager.IsInRoleAsync(currentUser, "admin")) {
+			var fileData = DatabaseService.DownloadFile(currentId, fileName);
+			if ((currentUser.UserName != userName) && !await userManager.IsInRoleAsync(currentUser, "admin")) {
 				return new UnauthorizedResult();
 			}
 
-			DatabaseService.DeleteFile(User.FindFirstValue(ClaimTypes.NameIdentifier), fileName);
-			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.UserID == userId && c.FileName == fileName).ToArray());
+			var user = await userManager.FindByNameAsync(userName);
+
+			DatabaseService.DeleteFile(user.Id, fileName);
+			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.Author == userName && c.FileName == fileName).ToArray());
 			dbContext.SaveChanges();
 
 			byte[] backToBytes = Convert.FromBase64String(caffFile.Data.Substring(37)); //"data:application/octet-stream;base64," az elején
-			var result = DatabaseService.UploadFileForUser(User.FindFirstValue(ClaimTypes.NameIdentifier), caffFile.FileName, backToBytes);
+			var result = DatabaseService.UploadFileForUser(user.Id, caffFile.FileName, backToBytes);
 			if (result == null) return BadRequest("File parsing failed");
 			return new OkResult();
 		}
 
 		[HttpGet("preview")]
-		public ActionResult<CaffFile> getPreview([FromQuery] string userId, string fileName)
+		public ActionResult<CaffFile> getPreview([FromQuery] string userName, string fileName)
 		{
-			var userName = dbContext.Users.FirstOrDefault(u => u.Id == userId)?.UserName;
-			if (userName == null) return BadRequest("No user found with this userID");
+			var userId = dbContext.Users.FirstOrDefault(u => u.UserName == userName)?.Id;
+			if (userId == null) return BadRequest("No user found with this userName");
 			var coverData = DatabaseService.DownloadFile(userId, fileName.Replace(".caff", ".bmp"));
 			if (coverData == null) return BadRequest("File not found");
 			var caffFile = new CaffFile
@@ -76,19 +80,18 @@ namespace CAFF_Store.Controllers
 				FileName = fileName,
 				Cover = Convert.ToBase64String(coverData),
 				Author = userName,
-				UserID = userId
 			};
 
-			caffFile.Comments = dbContext.Comments.Where(c => c.UserID == caffFile.UserID && c.FileName == caffFile.FileName).ToList();
+			caffFile.Comments = dbContext.Comments.Where(c => c.Author == caffFile.Author && c.FileName == caffFile.FileName).ToList();
 			return caffFile;
 		}
 
 		[Authorize]
 		[HttpGet("download")]
-		public ActionResult<CaffFile> downloadFile([FromQuery] string userId, string fileName)
+		public ActionResult<CaffFile> downloadFile([FromQuery] string userName, string fileName)
 		{
-			var userName = dbContext.Users.FirstOrDefault(u => u.Id == userId)?.UserName;
-			if (userName == null) return BadRequest("No user found with this userID");
+			var userId = dbContext.Users.FirstOrDefault(u => u.UserName == userName)?.Id;
+			if (userId == null) return BadRequest("No user found with this userName");
 			var fileData = DatabaseService.DownloadFile(userId, fileName);
 			if(fileData == null)
 			{
@@ -100,27 +103,29 @@ namespace CAFF_Store.Controllers
 				FileName = fileName,
 				Data = Convert.ToBase64String(fileData),
 				//Cover = Convert.ToBase64String(coverData),
-				Author = userName,
-				UserID = userId
+				Author = userName
 			};
 		}
 
-		// Csak saját fájlt lehet törölni
 		[Authorize]
 		[HttpDelete("delete")]
-		public async Task<ActionResult> deleteFile([FromQuery] string userId, string fileName)
+		public async Task<ActionResult> deleteFile([FromQuery] string userName, string fileName)
 		{
 			var currentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			var currentUser = await userManager.FindByIdAsync(currentId);
-			var fileData = DatabaseService.DownloadFile(userId, fileName);
-			if ((currentId != userId) && !await userManager.IsInRoleAsync(currentUser, "admin"))
+
+			var userId = dbContext.Users.FirstOrDefault(u => u.UserName == userName)?.Id;
+			if (userId == null) return BadRequest("No user found with this userName");
+
+			//var fileData = DatabaseService.DownloadFile(userId, fileName);
+			if ((currentUser.UserName != userName) && !await userManager.IsInRoleAsync(currentUser, "admin"))
 			{
 				return new UnauthorizedResult();
 			}
 
-			var result = DatabaseService.DeleteFile(User.FindFirstValue(ClaimTypes.NameIdentifier), fileName);
+			var result = DatabaseService.DeleteFile(userId, fileName);
 			if (!result) return BadRequest("file was not found");
-			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.UserID == userId && c.FileName == fileName).ToArray());
+			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.Author == userName && c.FileName == fileName).ToArray());
 			dbContext.SaveChanges();
 			return new OkResult();
 		}
@@ -129,10 +134,13 @@ namespace CAFF_Store.Controllers
 		[HttpPost("allfiles")]
 		public PagedCaffFiles getAllFiles([FromBody] GetAllFilesRequest request)
 		{
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var userName = dbContext.Users.FirstOrDefault(u => u.Id == userId).UserName;
 			var page = DatabaseService.GetAllFiles(request);
 			foreach(var file in page.Files)
 			{
-				file.Comments = dbContext.Comments.Where(c => c.UserID == file.UserID && c.FileName == file.FileName).ToList();
+				file.Author = userName;
+				file.Comments = dbContext.Comments.Where(c => c.Author == userName && c.FileName == file.FileName).ToList();
 			}
 			return page;
 		}
@@ -142,10 +150,13 @@ namespace CAFF_Store.Controllers
 		[HttpPost("userfiles")]
 		public PagedCaffFiles getUserFiles([FromBody] GetAllFilesRequest request)
 		{
-			var page = DatabaseService.GetUserFiles(User.FindFirstValue(ClaimTypes.NameIdentifier),request);
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var userName = dbContext.Users.FirstOrDefault(u => u.Id == userId).UserName;
+			var page = DatabaseService.GetUserFiles(userId,request);
 			foreach (var file in page.Files)
 			{
-				file.Comments = dbContext.Comments.Where(c => c.UserID == file.UserID && c.FileName == file.FileName).ToList();
+				file.Author = userName;
+				file.Comments = dbContext.Comments.Where(c => c.Author == userName && c.FileName == file.FileName).ToList();
 			}
 			return page;
 		}
@@ -159,7 +170,6 @@ namespace CAFF_Store.Controllers
 
 			dbContext.Comments.Add(new Comment
 			{
-				UserID = user.Id,
 				Author = user.UserName,
 				Body = request.Body,
 				FileName = request.FileName
@@ -189,7 +199,7 @@ namespace CAFF_Store.Controllers
 
 		[Authorize]
 		[HttpPost("deleteUser")]
-		public async Task<ActionResult> deleteUser([FromQuery] string UserId)
+		public async Task<ActionResult> deleteUser([FromQuery] string userName)
 		{
 			var currentUser = await userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
 			if(!await userManager.IsInRoleAsync(currentUser, "admin"))
@@ -197,25 +207,27 @@ namespace CAFF_Store.Controllers
 				return new UnauthorizedResult();
 			}
 
-			var result = DatabaseService.DeleteUserDirectory(UserId);
+			var user = await userManager.FindByNameAsync(userName);
+
+			var result = DatabaseService.DeleteUserDirectory(user.Id);
 			if (!result) return BadRequest("User folder was not found");
-			var deletedUser = await userManager.FindByIdAsync(UserId);
+			var deletedUser = await userManager.FindByIdAsync(user.Id);
 			await userManager.DeleteAsync(deletedUser);
-			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.UserID == UserId).ToArray());
+			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.Author == user.UserName).ToArray());
 			await dbContext.SaveChangesAsync();
 			return new OkResult();
 		}
 
 		[Authorize]
 		[HttpPost("grantAdmin")]
-		public async Task<ActionResult> grantAdmin([FromQuery] string userId)
+		public async Task<ActionResult> grantAdmin([FromQuery] string userName)
 		{
 			var currentUser = await userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
 			if (!await userManager.IsInRoleAsync(currentUser, "admin"))
 			{
 				return new UnauthorizedResult();
 			}
-			var selectedUser = await userManager.FindByIdAsync(userId);
+			var selectedUser = await userManager.FindByNameAsync(userName);
 			await userManager.AddToRoleAsync(selectedUser, "admin");
 			return new OkResult();
 		}
@@ -228,7 +240,6 @@ namespace CAFF_Store.Controllers
 			var roles = (await userManager.GetRolesAsync(user)).ToList();
 			return new UserInfoResponse
 			{
-				UserID = user.Id,
 				UserName = user.UserName,
 				Email = user.Email,
 				Roles = roles

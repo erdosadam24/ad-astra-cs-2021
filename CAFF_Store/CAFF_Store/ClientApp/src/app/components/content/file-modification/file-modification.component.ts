@@ -42,14 +42,13 @@ export class FileModificationComponent implements OnInit {
       let data:FileData={
         fileName: this.fileName,
         author:"",
-        userID: "",
         created: "",
         data: this.fileName,
         cover: "",
         comments: []
       }
 
-      this.fileService.modifyFile(data,this.caffFileData.userID,this.caffFileData.fileName).subscribe(resp => {
+      this.fileService.modifyFile(data,this.caffFileData.author,this.caffFileData.fileName).subscribe(resp => {
         this.fileService.snackbarMessage(JSON.stringify(resp))
       },
       error => {

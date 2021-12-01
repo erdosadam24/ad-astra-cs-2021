@@ -21,10 +21,10 @@ export class UserService {
   constructor(private router: Router,private routerParams: RouterParamService,private http: HttpClient,public snackBar: MatSnackBar,private sanitizer:DomSanitizer) {     
   }
 
-  grantAdmin(userId:string){
+  grantAdmin(userName:string){
     let opt: any = _.clone(options)
     let params = new HttpParams()
-      .set('userId', userId)
+      .set('userName', userName)
     return this.http.post<any>(environment.baseUrl + '/grantAdmin', undefined ,{ params: params, headers: opt });
   }
 
@@ -55,7 +55,6 @@ export class UserService {
 
   private getEmptyUserInfo(): UserInfo{
     return {
-      userID: "Empty",
       userName: "Empty",
       email: "Empty",
       roles:[]

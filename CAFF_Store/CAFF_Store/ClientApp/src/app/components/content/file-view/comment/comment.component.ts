@@ -39,7 +39,7 @@ export class CommentComponent implements OnInit {
 
   checkCanEdit(){
     if(this.comment != undefined){
-      this.canEdit = (this.userService.isAdmin() || this.userService.getUserInformation().userID == this.comment.userID)
+      this.canEdit = (this.userService.isAdmin() || this.userService.getUserInformation().userName == this.comment.author)
     }
   }
 
