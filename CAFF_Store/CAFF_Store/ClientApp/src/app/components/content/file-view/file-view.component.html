@@ -48,15 +48,15 @@
             <div *ngIf="loggedIn" class="file-links">
                 <div  class="file-link">
                     <span (click)="grantAdmin()">Grant Admin</span>
-                    <i class="fa fa-exclamation file-icons"></i>
+                    <i class="fa fa-user-plus file-icons"></i>
                 </div>
                 <div  class="file-link">
                     <span (click)="deleteFile()">Delete File</span>
-                    <i class="fa fa-exclamation file-icons"></i>
+                    <i class="fa fa-ban file-icons"></i>
                 </div>
                 <div  class="file-link">
                     <span (click)="modifyFile()">Modify File</span>
-                    <i class="fa fa-exclamation file-icons"></i>
+                    <i class="fa fa-upload file-icons"></i>
                 </div>
                 <div class="file-link">
                     <span (click)="replyTo()">Reply to</span>
@@ -75,7 +75,7 @@
 
         <div class="main-comments">
             <div *ngFor="let item of loadedList;" class="root-comment">
-                <app-comment [comment]="item"></app-comment>
+                <app-comment (deleted)="loadPreview()" [comment]="item"></app-comment>
             </div>
             <div *ngIf="loadedList.length != 0 && list.length != loadedList.length" class="load-more-comment">
                 <button class="btn btn-primary btn-block" (click)="loadMoreComments()">Load more comment (remaining:{{list.length - loadedList.length}})</button>

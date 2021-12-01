@@ -1,5 +1,5 @@
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -35,6 +35,13 @@ export class CommentService {
       }
 
     return this.http.get<any>(environment.baseUrl + '',opt)
+  }
+
+  removeComment(commentId:number){
+    let opt: any = _.clone(options)
+    let params = new HttpParams()
+      .set('commentId', commentId.toString());
+    return this.http.delete<any>(environment.baseUrl + '/removeComment', { params: params, headers: opt });
   }
 
   getEmptyCommentData():CommentData{

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -16,6 +16,8 @@ export class CommentComponent implements OnInit {
 
   @Input() comment:CommentData
 
+  @Output() deleted = new EventEmitter<string>();
+
   constructor(
     public authorizationService:AuthorizeService,
     public commentService:CommentService,
@@ -31,21 +33,18 @@ export class CommentComponent implements OnInit {
   }
 
   isAuthenticated(){
-    return true;
-    //this.authorizationService.isAuthenticated()
+    this.authorizationService.authenticated
   }
 
-
-
-
-  report(){
-    /*
-    this.dialog.open(ReportDialogComponent, {
-      width: '50rem',
-      height: '32rem',
-      data: {id:this.comment.id}
-    });
-    */
+  remove(){
+    this.commentService.removeComment(this.comment.commentId).subscribe((response)=>{
+      console.log("Response: " + JSON.stringify(response))
+      this.commentService.snackbarMessage("Comment Deleted!")
+      this.deleted.emit("Deleted")
+    },
+    error => {
+      this.commentService.snackbarMessage("Could not delete comment!")
+    })
   }
 
 }
