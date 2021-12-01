@@ -59,7 +59,7 @@ namespace CAFF_Store.Controllers
 			var user = await userManager.FindByNameAsync(userName);
 
 			DatabaseService.DeleteFile(user.Id, fileName);
-			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.Author == userName && c.FileName == fileName).ToArray());
+			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.UserId == user.Id && c.FileName == fileName).ToArray());
 			dbContext.SaveChanges();
 
 			byte[] backToBytes = Convert.FromBase64String(caffFile.Data.Substring(37)); //"data:application/octet-stream;base64," az elején
@@ -77,12 +77,13 @@ namespace CAFF_Store.Controllers
 			if (coverData == null) return BadRequest("File not found");
 			var caffFile = new CaffFile
 			{
+				UserId = userId,
 				FileName = fileName,
 				Cover = Convert.ToBase64String(coverData),
 				Author = userName,
 			};
 
-			caffFile.Comments = dbContext.Comments.Where(c => c.Author == caffFile.Author && c.FileName == caffFile.FileName).ToList();
+			caffFile.Comments = dbContext.Comments.Where(c => c.UserId == caffFile.UserId && c.FileName == caffFile.FileName).ToList();
 			return caffFile;
 		}
 
@@ -100,6 +101,7 @@ namespace CAFF_Store.Controllers
 			//var coverData = DatabaseService.DownloadFile(userId, fileName.Replace(".caff", ".bmp"));
 			return new CaffFile
 			{
+				UserId = userId,
 				FileName = fileName,
 				Data = Convert.ToBase64String(fileData),
 				//Cover = Convert.ToBase64String(coverData),
@@ -125,7 +127,7 @@ namespace CAFF_Store.Controllers
 
 			var result = DatabaseService.DeleteFile(userId, fileName);
 			if (!result) return BadRequest("file was not found");
-			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.Author == userName && c.FileName == fileName).ToArray());
+			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.UserId == userId && c.FileName == fileName).ToArray());
 			dbContext.SaveChanges();
 			return new OkResult();
 		}
@@ -140,7 +142,7 @@ namespace CAFF_Store.Controllers
 			foreach(var file in page.Files)
 			{
 				file.Author = userName;
-				file.Comments = dbContext.Comments.Where(c => c.Author == userName && c.FileName == file.FileName).ToList();
+				file.Comments = dbContext.Comments.Where(c => c.UserId == userId && c.FileName == file.FileName).ToList();
 			}
 			return page;
 		}
@@ -156,7 +158,7 @@ namespace CAFF_Store.Controllers
 			foreach (var file in page.Files)
 			{
 				file.Author = userName;
-				file.Comments = dbContext.Comments.Where(c => c.Author == userName && c.FileName == file.FileName).ToList();
+				file.Comments = dbContext.Comments.Where(c => c.UserId == userId && c.FileName == file.FileName).ToList();
 			}
 			return page;
 		}
@@ -170,6 +172,7 @@ namespace CAFF_Store.Controllers
 
 			dbContext.Comments.Add(new Comment
 			{
+				UserId = user.Id,
 				Author = user.UserName,
 				Body = request.Body,
 				FileName = request.FileName
@@ -213,7 +216,7 @@ namespace CAFF_Store.Controllers
 			if (!result) return BadRequest("User folder was not found");
 			var deletedUser = await userManager.FindByIdAsync(user.Id);
 			await userManager.DeleteAsync(deletedUser);
-			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.Author == user.UserName).ToArray());
+			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.UserId == user.Id).ToArray());
 			await dbContext.SaveChangesAsync();
 			return new OkResult();
 		}
