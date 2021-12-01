@@ -107,7 +107,8 @@ namespace CAFF_Store.Controllers
 		[HttpDelete("delete")]
 		public ActionResult deleteFile([FromQuery] string fileName)
 		{
-			var ressult = DatabaseService.DeleteFile(User.FindFirstValue(ClaimTypes.NameIdentifier), fileName);
+			var result = DatabaseService.DeleteFile(User.FindFirstValue(ClaimTypes.NameIdentifier), fileName);
+			if (!result) return BadRequest("file was not found");
 			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.UserID == User.FindFirstValue(ClaimTypes.NameIdentifier) && c.FileName == fileName).ToArray());
 			dbContext.SaveChanges();
 			return new OkResult();
