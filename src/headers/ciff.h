@@ -22,8 +22,8 @@ struct CiffContent {
 
 class Ciff {
  public:
-     Ciff() {}
-     ~Ciff() {}
+     Ciff() = default;
+     ~Ciff() = default;
      void saveAsImage(const char* path);
  private:
      friend class Caff;

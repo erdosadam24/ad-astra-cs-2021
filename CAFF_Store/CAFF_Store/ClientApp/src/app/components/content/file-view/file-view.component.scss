@@ -1,0 +1,106 @@
+.main-div{
+    display: flex;
+    justify-content: center;
+    background: url(../../../../assets/img/content-background.jpg) center fixed;
+    background-size: cover;
+    min-height: 95%;
+
+    .inner-content{
+        width: 50rem;
+        margin-top: 4rem;
+
+        .table {
+            width: 100%;
+            margin-bottom: 0rem;
+            color: #212529;
+
+            .no-border-top{
+                border-top: none;
+            }
+
+            .border-bottom{
+                border-top: 1pxsolid #dee2e6;
+            }
+        }
+    
+        .card{
+            margin-top: 3rem;
+
+            .card-header{
+                padding: 0.5rem 1.5rem;
+                .card-header-table-row{
+                    display: flex;
+                    align-items: center;
+                }
+                
+                .inline-items{
+                    display: inline;
+                    padding-right: .5rem;
+                }
+            }
+
+            .card-body{
+
+                .left-panel{
+                    word-break: break-all;
+                }
+                .inner-table-row{
+                    height: 4rem;
+                }
+            }
+
+            .file-links{
+                padding-bottom: 1rem;
+                display: flex;
+                justify-content: flex-end;
+
+                .file-link{
+                    display: inline;
+                    margin-right: 1rem;
+
+                    span{
+                        cursor:pointer;
+                        color: #007bff;
+                        text-decoration: none;
+                        background-color: transparent;
+                    }
+
+                    span:hover {
+                        color: #0056b3;
+                        text-decoration: underline;
+                    }
+                }
+
+                .file-icons{
+                    margin-left: 0.5rem;
+                }
+            }
+        }
+
+
+
+        .main-comments{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 2rem;
+
+            .root-comment{
+                width: 95%;
+            }
+
+            .load-more-comment{
+                display: flex;
+                justify-content: center;
+                button{
+                    margin: 0.5rem;
+                }
+            }
+        }
+    } 
+}
+
+
+
+

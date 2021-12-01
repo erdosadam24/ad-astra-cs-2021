@@ -7,7 +7,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include "Ciff.h"
+#include "ciff.h"
 
 struct CaffBlock {
     int id;
@@ -39,7 +39,7 @@ struct CaffAnimation {
 class Caff {
  public:
      explicit Caff(std::string caff_path);
-     ~Caff() {}
+     ~Caff() = default;
      void parseCaff();
      void saveAsImage(const char* path, int ciff_number = 0);
  private:

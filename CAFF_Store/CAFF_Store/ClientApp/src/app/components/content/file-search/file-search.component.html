@@ -1,0 +1,41 @@
+
+    <div class="main-container">
+        <div class="search-result">
+            <div class="intro">
+                <h1 class="text-center">Files:</h1>
+                <form [formGroup]="searchForm" (ngSubmit)="onSearch()" style="display: flex;justify-content: center;">
+                    <div id="search-container" >
+                        <input class="form-control form-element" type="search" formControlName="search" placeholder="Search by title..">
+                        <div class="btn btn-secondary form-element" type="submit" (click)="onSearch()">Search</div>
+                    </div>
+                </form>
+                <p class="text-center"></p>
+            </div>
+            <div *ngIf="list == undefined" style="width: 100%;text-align: center;">
+                No file found!
+            </div>
+            <div class="outer-articles">
+                <div class="row inner-articles">
+                    <div *ngFor="let item of this.list;let i=index;" class="col-sm-6 col-md-4 item">
+                        <app-file-card [file]="item"></app-file-card>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="outer-pagination">
+                <div class="inner-pagination">
+                    <nav *ngIf="collectionSize">
+                        <ngb-pagination 
+                        (pageChange)="loadPage($event)" 
+                        [(page)]="page" 
+                        [collectionSize]="collectionSize" 
+                        [maxSize]="8" 
+                        [rotate]="true" 
+                        [ellipses]="false" 
+                        [boundaryLinks]="true"></ngb-pagination>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
