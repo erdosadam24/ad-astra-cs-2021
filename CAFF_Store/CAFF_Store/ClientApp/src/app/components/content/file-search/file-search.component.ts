@@ -46,7 +46,7 @@ export class FileSearchComponent implements OnInit {
     })
 
     this.searchForm = new FormGroup({
-      search: new FormControl('',[Validators.required])
+      search: new FormControl('',[])
     })
 
   }
