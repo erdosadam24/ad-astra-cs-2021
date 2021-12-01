@@ -23,24 +23,23 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class FileViewComponent implements OnInit {
   showEditor = false;
-<<<<<<< HEAD
-  fileData: FileData;
-  icon: any = undefined;
-  loggedIn = false;
-  canEdit = false;
-  loggedInSubscription: Subscription | undefined;
+  fileData: FileData
+  icon: any = undefined
+  loggedIn: boolean = false
+  canEdit: boolean = false
+  loggedInSubscription: Subscription | undefined
 
-  list: Array<CommentData> = [];
-  loadedList: Array<CommentData> = [];
-  collectionSize = 0;
+  list: Array<CommentData> = []
+  loadedList: Array<CommentData> = []
+  collectionSize: number = 0
 
-  page = 0;
-  size = 5;
-  sort = 'created';
-  asc = 'desc';
+  page: number = 0
+  size: number = 5
+  sort: string = "created"
+  asc: string = "desc"
 
-  fileOwnerUserId: string;
-  fileName: string;
+  fileOwnerUserName: string
+  fileName: string
 
   constructor(public authorizationService: AuthorizeService,
     public userService: UserService,
@@ -50,49 +49,15 @@ export class FileViewComponent implements OnInit {
     private routerParams: RouterParamService,
     private router: Router,
     private readonly destroy: AutoDestroy) {
-=======
-  fileData: FileData
-  icon:any = undefined
-  loggedIn:boolean = false
-  canEdit:boolean = false
-  loggedInSubscription: Subscription | undefined
-
-  list: Array<CommentData> = []
-  loadedList: Array<CommentData> = []
-  collectionSize:number = 0
-
-  page:number = 0
-  size:number = 5
-  sort:string = "created"
-  asc: string = "desc"
-
-  fileOwnerUserName: string
-  fileName:string
-
-  constructor(public authorizationService:AuthorizeService, 
-              public userService:UserService, 
-              public commentService:CommentService, 
-              public fileService:FileService,
-              private readonly dialog: MatDialog,
-              private routerParams: RouterParamService,
-              private router: Router,
-              private readonly destroy:AutoDestroy  ) {
->>>>>>> ce048c5d849a2949af73d13798e1d29af7a64012
     this.authorizationService.isAuthenticated().pipe(takeUntil(destroy)).subscribe(o => {
       this.loggedIn = o;
     });
   }
 
   ngOnInit() {
-<<<<<<< HEAD
-    this.fileOwnerUserId = this.routerParams.params['userID'];
-    this.fileName = this.routerParams.params['fileName'];
-    this.loadPreview();
-=======
     this.fileOwnerUserName = this.routerParams.params["userName"]
     this.fileName = this.routerParams.params["fileName"]
     this.loadPreview()
->>>>>>> ce048c5d849a2949af73d13798e1d29af7a64012
   }
 
   checkCanEdit() {
@@ -102,13 +67,8 @@ export class FileViewComponent implements OnInit {
     console.log("Current user: " + this.userService.getUserInformation().userID)
     console.log("File creator: " + this.fileData.userID)
     */
-<<<<<<< HEAD
-    if (this.fileData !== undefined) {
-      this.canEdit = (this.userService.isAdmin() || this.userService.getUserInformation().userID === this.fileData.userID);
-=======
     if (this.fileData != undefined) {
       this.canEdit = (this.userService.isAdmin() || this.userService.getUserInformation().userName == this.fileData.author)
->>>>>>> ce048c5d849a2949af73d13798e1d29af7a64012
     }
   }
 
@@ -123,17 +83,10 @@ export class FileViewComponent implements OnInit {
   }
 
   deleteFile() {
-<<<<<<< HEAD
-    this.fileService.deleteFile(this.fileName).subscribe((resp) => {
-      console.log('Result: ' + JSON.stringify(resp));
-      this.fileService.snackbarMessage('File Successfuly deleted!');
-      this.router.navigate(['/search'], { queryParams: { page: 1, size: 9 } });
-=======
     this.fileService.deleteFile(this.fileOwnerUserName, this.fileName).subscribe((resp) => {
       console.log("Result: " + JSON.stringify(resp))
       this.fileService.snackbarMessage("File Successfuly deleted!")
-      this.router.navigate(['/search'], {queryParams: {page: 1, size: 9}});
->>>>>>> ce048c5d849a2949af73d13798e1d29af7a64012
+      this.router.navigate(['/search'], { queryParams: { page: 1, size: 9 } });
     },
       error => {
         this.fileService.snackbarMessage('Could not delete file!');
@@ -155,28 +108,16 @@ export class FileViewComponent implements OnInit {
     this.showEditor = !this.showEditor;
   }
 
-<<<<<<< HEAD
   download() {
-    this.fileService.downloadFile(this.fileOwnerUserId, this.fileName).subscribe((resp: FileData) => {
-      // console.log("File: " + resp.data)
-      const file = this.dataUrlToFile(resp.data, this.fileName);
-=======
-  download(){
-    this.fileService.downloadFile(this.fileOwnerUserName, this.fileName).subscribe((resp:FileData) => {
+    this.fileService.downloadFile(this.fileOwnerUserName, this.fileName).subscribe((resp: FileData) => {
       //console.log("File: " + resp.data)
-      var file = this.dataUrlToFile(resp.data,this.fileName)
->>>>>>> ce048c5d849a2949af73d13798e1d29af7a64012
+      var file = this.dataUrlToFile(resp.data, this.fileName)
       saveAs(file, this.fileName);
     });
   }
 
-<<<<<<< HEAD
   loadPreview() {
-    this.fileService.getPreviewFile(this.fileOwnerUserId, this.fileName).subscribe((resp: FileData) => {
-=======
-  loadPreview(){
     this.fileService.getPreviewFile(this.fileOwnerUserName, this.fileName).subscribe((resp: FileData) => {
->>>>>>> ce048c5d849a2949af73d13798e1d29af7a64012
       this.fileData = resp;
       this.list = resp.comments;
       this.loadedList = this.list.slice(0, this.size);

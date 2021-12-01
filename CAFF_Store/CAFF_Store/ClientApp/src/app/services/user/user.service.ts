@@ -26,19 +26,11 @@ export class UserService {
     private sanitizer: DomSanitizer) {
   }
 
-<<<<<<< HEAD
-  grantAdmin(userId: string) {
-    const opt: any = _.clone(options);
-    const params = new HttpParams()
-      .set('userId', userId);
-    return this.http.post<any>(environment.baseUrl + '/grantAdmin', undefined, { params: params, headers: opt });
-=======
-  grantAdmin(userName:string){
+  grantAdmin(userName: string) {
     let opt: any = _.clone(options)
     let params = new HttpParams()
       .set('userName', userName)
-    return this.http.post<any>(environment.baseUrl + '/grantAdmin', undefined ,{ params: params, headers: opt });
->>>>>>> ce048c5d849a2949af73d13798e1d29af7a64012
+    return this.http.post<any>(environment.baseUrl + '/grantAdmin', undefined, { params: params, headers: opt });
   }
 
   loadUserInformation() {
@@ -68,17 +60,9 @@ export class UserService {
 
   private getEmptyUserInfo(): UserInfo {
     return {
-<<<<<<< HEAD
-      userID: 'Empty',
-      userName: 'Empty',
-      email: 'Empty',
-      roles: []
-    };
-=======
       userName: "Empty",
       email: "Empty",
-      roles:[]
+      roles: []
     }
->>>>>>> ce048c5d849a2949af73d13798e1d29af7a64012
   }
 }

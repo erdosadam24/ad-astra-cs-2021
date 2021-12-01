@@ -52,22 +52,12 @@ export class CommentService {
   getEmptyCommentData(): CommentData {
     return {
       commentId: -1,
-<<<<<<< HEAD
-      filename: 'Empty',
-      body: 'Empty',
-      author: 'Empty',
-      userID: 'Empty',
-      created: '2000-01-01',
-      updated: '2000-01-01'
-    };
-=======
       filename: "Empty",
       body: "Empty",
       author: "Empty",
       created: "2000-01-01",
       updated: "2000-01-01"
     }
->>>>>>> ce048c5d849a2949af73d13798e1d29af7a64012
   }
 
   snackbarMessage(message: string) {
