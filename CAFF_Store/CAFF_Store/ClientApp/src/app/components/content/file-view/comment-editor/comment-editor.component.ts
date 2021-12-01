@@ -60,9 +60,9 @@ export class CommentEditorComponent implements OnInit {
       FileName: this.caffFile.fileName,
       FileOwnerUserName: this.caffFile.author,
     }
-    this.commentService.saveComment(comment).subscribe((resp:any) => {
+    this.commentService.saveComment(comment).subscribe((resp: any) => {
       this.commentService.snackbarMessage(JSON.stringify(resp))
-      this.close.emit({reload:true,body:resp})
+      this.close.emit({ reload: true, body: resp })
     },
       error => {
         console.log(error);

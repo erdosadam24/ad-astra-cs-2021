@@ -26,11 +26,11 @@ export class UserService {
     private sanitizer: DomSanitizer) {
   }
 
-  grantAdmin(userName:string){
+  grantAdmin(userName: string) {
     let opt: any = _.clone(options)
     let params = new HttpParams()
       .set('userName', userName)
-    return this.http.post<any>(environment.baseUrl + '/grantAdmin', undefined ,{ params: params, headers: opt });
+    return this.http.post<any>(environment.baseUrl + '/grantAdmin', undefined, { params: params, headers: opt });
   }
 
   loadUserInformation() {
@@ -62,7 +62,7 @@ export class UserService {
     return {
       userName: "Empty",
       email: "Empty",
-      roles:[]
+      roles: []
     }
   }
 }

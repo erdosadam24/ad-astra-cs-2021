@@ -1,8 +1,8 @@
 import { CommentData } from './comment-data';
 
-export interface FileData{
+export interface FileData {
     fileName: string,
-    author:string,
+    author: string,
     created: string,
     data: string,
     cover: string,

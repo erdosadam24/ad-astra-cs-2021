@@ -1,6 +1,6 @@
-export interface CommentData{
+export interface CommentData {
     commentId: number,
-	  filename: string,
+    filename: string,
     body: string,
     author: string,
     created: string,

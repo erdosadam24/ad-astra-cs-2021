@@ -61,7 +61,7 @@ export class FileService {
     return this.http.get<any>(environment.baseUrl + '/download', { params: params, headers: opt });
   }
 
-  modifyFile(file:FileData,userName: string, fileName: string) {
+  modifyFile(file: FileData, userName: string, fileName: string) {
     let opt: any = _.clone(options)
     let params = new HttpParams()
       .set('userName', userName)
@@ -70,7 +70,7 @@ export class FileService {
   }
 
 
-  deleteFile(author:string, fileName: string) {
+  deleteFile(author: string, fileName: string) {
     let opt: any = _.clone(options)
     let params = new HttpParams()
       .set('userName', author)
@@ -93,7 +93,7 @@ export class FileService {
     const opt: any = _.clone(uploadCaffOptions);
     const data: FileData = {
       fileName: filename,
-      author:"",
+      author: "",
       created: "",
       data: file,
       cover: '',
@@ -103,17 +103,17 @@ export class FileService {
     return this.http.post<any>(environment.baseUrl + '/upload', data, opt);
   }
 
-  
 
-  getEmptyFileData():FileData{
-      return {
-        fileName: "Empty",
-        author:"Empty",
-        created: "2000-01-01",
-        data: "Empty",
-        cover: "Empty",
-        comments: []
-      }
+
+  getEmptyFileData(): FileData {
+    return {
+      fileName: "Empty",
+      author: "Empty",
+      created: "2000-01-01",
+      data: "Empty",
+      cover: "Empty",
+      comments: []
+    }
   }
 
   snackbarMessage(message: string) {
