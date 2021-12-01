@@ -42,7 +42,24 @@ namespace CAFF_Store.Controllers
 			return new OkResult();
 		}
 
-		//TODO: Modify file
+		[Authorize]
+		[HttpPut("modify")]
+		public async Task<ActionResult> modifyFile([FromBody] CaffFile caffFile, [FromQuery] string userId, string fileName)
+		{
+			var currentUser = await userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+			var fileData = DatabaseService.DownloadFile(userId, fileName);
+			if ((ClaimTypes.NameIdentifier != currentUser.Id) && !await userManager.IsInRoleAsync(currentUser, "admin")) {
+				return new UnauthorizedResult();
+			}
+
+			DatabaseService.DeleteFile(User.FindFirstValue(ClaimTypes.NameIdentifier), fileName);
+			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.UserID == User.FindFirstValue(ClaimTypes.NameIdentifier) && c.FileName == fileName).ToArray());
+			dbContext.SaveChanges();
+
+			byte[] backToBytes = Convert.FromBase64String(caffFile.Data.Substring(37)); //"data:application/octet-stream;base64," az elején
+			DatabaseService.UploadFileForUser(User.FindFirstValue(ClaimTypes.NameIdentifier), caffFile.FileName, backToBytes);
+			return new OkResult();
+		}
 
 		[HttpGet("preview")]
 		public CaffFile getPreview([FromQuery] string userId, string fileName)

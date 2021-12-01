@@ -47,6 +47,10 @@
             </div>
             <div *ngIf="loggedIn" class="file-links">
                 <div  class="file-link">
+                    <span (click)="grantAdmin()">Grant Admin</span>
+                    <i class="fa fa-exclamation file-icons"></i>
+                </div>
+                <div  class="file-link">
                     <span (click)="deleteFile()">Delete File</span>
                     <i class="fa fa-exclamation file-icons"></i>
                 </div>

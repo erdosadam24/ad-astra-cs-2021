@@ -10,6 +10,7 @@ import { FileModificationComponent } from '../file-modification/file-modificatio
 import { Reload } from './comment-editor/comment-editor.component';
 import { saveAs } from 'file-saver';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-file-view',
@@ -39,7 +40,8 @@ export class FileViewComponent implements OnInit {
               public commentService:CommentService, 
               public fileService:FileService,
               private readonly dialog: MatDialog,
-              private routerParams: RouterParamService  ) {
+              private routerParams: RouterParamService,
+              private router: Router  ) {
 
     this.loggedInSubscription = this.authorizationService.isAuthenticated().subscribe((o:boolean) => {
       this.loggedIn = o
@@ -52,10 +54,21 @@ export class FileViewComponent implements OnInit {
     this.loadPreview()
   }
 
+  grantAdmin(){
+    this.fileService.grantAdmin(this.fileData.author).subscribe((resp) => {
+      console.log("Result: " + JSON.stringify(resp))
+      this.fileService.snackbarMessage("Admin role granted!")
+    },
+    error => {
+      this.fileService.snackbarMessage("Could not grant Admin role!")
+    });
+  }
+
   deleteFile(){
     this.fileService.deleteFile(this.fileName).subscribe((resp) => {
       console.log("Result: " + JSON.stringify(resp))
       this.fileService.snackbarMessage("File Successfuly deleted!")
+      this.router.navigate(['/search'], {queryParams: {page: 1, size: 9}});
     },
     error => {
       this.fileService.snackbarMessage("Could not delete file!")
@@ -67,7 +80,7 @@ export class FileViewComponent implements OnInit {
       width: '30rem',
       height: '20rem',
       data:{
-        id: this.fileData.fileName
+        file: this.fileData
       }
     });
   }

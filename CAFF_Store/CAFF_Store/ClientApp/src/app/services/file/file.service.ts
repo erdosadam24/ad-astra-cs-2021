@@ -56,11 +56,20 @@ export class FileService {
     return this.http.get<any>(environment.baseUrl + '/download', { params: params, headers: opt });
   }
 
+  modifyFile(file:FileData,userId: string, fileName: string) {
+    let opt: any = _.clone(options)
+    let params = new HttpParams()
+      .set('userId', userId)
+      .set('fileName', fileName);
+    return this.http.put<any>(environment.baseUrl + '/modify', file ,{ params: params, headers: opt });
+  }
+  
+
   deleteFile(fileName: string) {
     let opt: any = _.clone(options)
     let params = new HttpParams()
       .set('fileName', fileName);
-    return this.http.get<any>(environment.baseUrl + '/delete', { params: params, headers: opt });
+    return this.http.delete<any>(environment.baseUrl + '/delete', { params: params, headers: opt });
   }
   
   getMyFilesPage(){
@@ -89,20 +98,12 @@ export class FileService {
     return this.http.post<any>(environment.baseUrl + '/upload',data,opt)
   }
 
-  downloadCaffFile(filename:string){
-    let opt:any = _.clone(uploadCaffOptions)
-    opt["params"] = {
-      fileName: filename
-    }
-    return this.http.get<any>(environment.baseUrl + '/download',opt)
-  }
 
-  deleteCaffFile(filename:string){
-    let opt:any = _.clone(uploadCaffOptions)
-    opt["params"] = {
-      fileName: filename
-    }
-    return this.http.delete<any>(environment.baseUrl + '/delete',opt)
+  grantAdmin(userId:string){
+    let opt: any = _.clone(options)
+    let params = new HttpParams()
+      .set('userId', userId)
+    return this.http.post<any>(environment.baseUrl + '/grantAdmin', undefined ,{ params: params, headers: opt });
   }
   
 
