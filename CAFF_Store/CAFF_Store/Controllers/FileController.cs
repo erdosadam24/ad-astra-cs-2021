@@ -46,14 +46,15 @@ namespace CAFF_Store.Controllers
 		[HttpPut("modify")]
 		public async Task<ActionResult> modifyFile([FromBody] CaffFile caffFile, [FromQuery] string userId, string fileName)
 		{
-			var currentUser = await userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+			var currentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var currentUser = await userManager.FindByIdAsync(currentId);
 			var fileData = DatabaseService.DownloadFile(userId, fileName);
-			if ((ClaimTypes.NameIdentifier != currentUser.Id) && !await userManager.IsInRoleAsync(currentUser, "admin")) {
+			if ((currentId != userId) && !await userManager.IsInRoleAsync(currentUser, "admin")) {
 				return new UnauthorizedResult();
 			}
 
 			DatabaseService.DeleteFile(User.FindFirstValue(ClaimTypes.NameIdentifier), fileName);
-			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.UserID == User.FindFirstValue(ClaimTypes.NameIdentifier) && c.FileName == fileName).ToArray());
+			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.UserID == userId && c.FileName == fileName).ToArray());
 			dbContext.SaveChanges();
 
 			byte[] backToBytes = Convert.FromBase64String(caffFile.Data.Substring(37)); //"data:application/octet-stream;base64," az elején
@@ -105,11 +106,19 @@ namespace CAFF_Store.Controllers
 		// Csak saját fájlt lehet törölni
 		[Authorize]
 		[HttpDelete("delete")]
-		public ActionResult deleteFile([FromQuery] string fileName)
+		public async Task<ActionResult> deleteFile([FromQuery] string userId, string fileName)
 		{
+			var currentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var currentUser = await userManager.FindByIdAsync(currentId);
+			var fileData = DatabaseService.DownloadFile(userId, fileName);
+			if ((currentId != userId) && !await userManager.IsInRoleAsync(currentUser, "admin"))
+			{
+				return new UnauthorizedResult();
+			}
+
 			var result = DatabaseService.DeleteFile(User.FindFirstValue(ClaimTypes.NameIdentifier), fileName);
 			if (!result) return BadRequest("file was not found");
-			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.UserID == User.FindFirstValue(ClaimTypes.NameIdentifier) && c.FileName == fileName).ToArray());
+			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.UserID == userId && c.FileName == fileName).ToArray());
 			dbContext.SaveChanges();
 			return new OkResult();
 		}
@@ -190,6 +199,7 @@ namespace CAFF_Store.Controllers
 			await dbContext.SaveChangesAsync();
 			return new OkResult();
 		}
+
 		[Authorize]
 		[HttpPost("grantAdmin")]
 		public async Task<ActionResult> grantAdmin([FromQuery] string userId)
@@ -218,6 +228,5 @@ namespace CAFF_Store.Controllers
 				Roles = roles
 			};
 		}
-
 	}
 }
