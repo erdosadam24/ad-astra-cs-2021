@@ -11,8 +11,8 @@ int main(int argc, char* argv[]) {
             << "you want to save an image from it.";
         return 1;
     }
-    Caff CaffObj(argv[1]);
-    CaffObj.parseCaff();
+    Caff CaffObj ;
+    CaffObj.parseCaff(argv[1]);
 
     const char* path = argv[1];
     std::string one = path;

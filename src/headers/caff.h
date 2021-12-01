@@ -38,9 +38,9 @@ struct CaffAnimation {
 
 class Caff {
  public:
-     explicit Caff(std::string caff_path);
+     Caff() = default;
      ~Caff() = default;
-     void parseCaff();
+     void parseCaff(std::string caff_path);
      void saveAsImage(const char* path, int ciff_number = 0);
  private:
      std::string caff_path;
