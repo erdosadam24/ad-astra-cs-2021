@@ -11,6 +11,9 @@
 *.sln.docstates
 .vscode/
 
+# CAFF Files
+CAFF_Store/CAFF_STORE/caff_files/
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
