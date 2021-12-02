@@ -136,12 +136,10 @@ namespace CAFF_Store.Controllers
 		[HttpPost("allfiles")]
 		public PagedCaffFiles getAllFiles([FromBody] GetAllFilesRequest request)
 		{
-			//var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			//var userName = dbContext.Users.FirstOrDefault(u => u.Id == userId).UserName;
 			var page = DatabaseService.GetAllFiles(request);
 			foreach(var file in page.Files)
 			{
-				file.Author = file.Author;
+				file.Author = dbContext.Users.FirstOrDefault(u => u.Id == file.UserId).UserName;
 				file.Comments = dbContext.Comments.Where(c => c.UserId == file.UserId && c.FileName == file.FileName).ToList();
 			}
 			return page;

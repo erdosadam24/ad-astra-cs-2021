@@ -124,6 +124,7 @@ namespace CAFF_Store.Services
 					byte[] fileData = File.ReadAllBytes(file.FullName);		
 					result.Add(new CaffFile
 					{
+						UserId = userID,
 						FileName = fileName,
 						Cover = Convert.ToBase64String(fileData)
 					});
@@ -157,6 +158,7 @@ namespace CAFF_Store.Services
 				byte[] fileData = File.ReadAllBytes(file.FullName);
 				result.Add(new CaffFile
 				{
+					UserId = userID,
 					FileName = fileName,
 					Data = Convert.ToBase64String(fileData)
 				});
