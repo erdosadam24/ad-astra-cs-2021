@@ -40,10 +40,10 @@ void Caff::parseCaff(std::string caff_path) {
     std::ifstream is;
     is.exceptions(std::ifstream::failbit | std::ifstream::badbit);
     try {
-        is.open(caff_path, std::ios::binary);
+        is.open(caff_path, std::ios::in | std::ios::binary);
     }
     catch (std::ifstream::failure e) {
-        std::cerr << "Exception during opening the file.\n";
+        std::cerr << "Exception during opening the file. " << e << "\n";
     }
     if (is.is_open()) {
         is.seekg(0, is.end);
