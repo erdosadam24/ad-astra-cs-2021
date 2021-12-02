@@ -59,7 +59,7 @@ export class FileService {
     const data: FileData = {
       fileName: filename,
       author: "",
-      created: "",
+      created: "2000-01-01",
       data: file,
       cover: '',
       comments: []
