@@ -36,7 +36,7 @@ export class FileUploadComponent implements OnInit {
 
   onSubmit() {
     if (this.fileUploadForm.valid && this.caffFile !== undefined) {
-      this.fileService.uploadCaffFile(this.fileName, this.caffFile).subscribe((resposne: any) => {
+      this.fileService.uploadFile(this.fileName, this.caffFile).subscribe((resposne: any) => {
         // console.log("Result: " + JSON.stringify(resposne))
         this.dialogRef.close();
       },

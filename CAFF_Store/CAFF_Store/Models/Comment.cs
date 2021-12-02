@@ -14,8 +14,8 @@ namespace CAFF_Store.Models
 		public string Author { get; set; }
 		[JsonIgnore]
 		public string UserId { get; set; }
-		public string Created { get; set; }
+		public DateTime Created { get; set; }
 
-		public string Updated { get; set; }
+		public DateTime Updated { get; set; }
 	}
 }

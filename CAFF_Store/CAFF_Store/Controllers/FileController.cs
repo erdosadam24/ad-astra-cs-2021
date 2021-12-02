@@ -81,6 +81,7 @@ namespace CAFF_Store.Controllers
 				FileName = fileName,
 				Cover = Convert.ToBase64String(coverData),
 				Author = userName,
+				Created = DatabaseService.getFileCreatedDate(userId, fileName)
 			};
 
 			caffFile.Comments = dbContext.Comments.Where(c => c.UserId == caffFile.UserId && c.FileName == caffFile.FileName).ToList();
@@ -140,6 +141,7 @@ namespace CAFF_Store.Controllers
 			foreach(var file in page.Files)
 			{
 				file.Author = dbContext.Users.FirstOrDefault(u => u.Id == file.UserId).UserName;
+				file.Created = DatabaseService.getFileCreatedDate(file.UserId, file.FileName);
 				file.Comments = dbContext.Comments.Where(c => c.UserId == file.UserId && c.FileName == file.FileName).ToList();
 			}
 			return page;
@@ -156,6 +158,7 @@ namespace CAFF_Store.Controllers
 			foreach (var file in page.Files)
 			{
 				file.Author = userName;
+				file.Created = DatabaseService.getFileCreatedDate(file.UserId, file.FileName);
 				file.Comments = dbContext.Comments.Where(c => c.UserId == userId && c.FileName == file.FileName).ToList();
 			}
 			return page;
@@ -173,7 +176,8 @@ namespace CAFF_Store.Controllers
 				UserId = user.Id,
 				Author = user.UserName,
 				Body = request.Body,
-				FileName = request.FileName
+				FileName = request.FileName,
+				Created = DateTime.Now
 			});
 			
 			await dbContext.SaveChangesAsync();

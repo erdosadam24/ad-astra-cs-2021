@@ -124,7 +124,6 @@ namespace CAFF_Store.Services
 					byte[] fileData = File.ReadAllBytes(file.FullName);		
 					result.Add(new CaffFile
 					{
-						UserId = userID,
 						FileName = fileName,
 						Cover = Convert.ToBase64String(fileData)
 					});
@@ -158,7 +157,6 @@ namespace CAFF_Store.Services
 				byte[] fileData = File.ReadAllBytes(file.FullName);
 				result.Add(new CaffFile
 				{
-					UserId = userID,
 					FileName = fileName,
 					Data = Convert.ToBase64String(fileData)
 				});
@@ -170,6 +168,20 @@ namespace CAFF_Store.Services
 			page.TotalSize = totalElements;
 
 			return page;
+		}
+
+		public static DateTime getFileCreatedDate(string userID, string fileName)
+		{
+			string path = Path.Combine(GetUserFolderPath(userID), fileName);
+			try
+			{
+				DateTime created = File.GetCreationTime(path);
+				return created;
+			}
+			catch (Exception e)
+			{
+				return DateTime.Parse("2000/01/01");
+			}
 		}
 	}
 

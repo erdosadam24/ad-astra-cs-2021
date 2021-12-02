@@ -31,7 +31,7 @@ export class CommentEditorComponent implements OnInit {
 
   constructor(private commentService: CommentService) {
     this.newComment = new FormGroup({
-      comment: new FormControl('', [Validators.required, Validators.minLength(10)])
+      comment: new FormControl('', [])
     });
 
   }
@@ -65,6 +65,7 @@ export class CommentEditorComponent implements OnInit {
       this.close.emit({ reload: true, body: resp })
     },
       error => {
+        this.commentService.snackbarMessage("Comment not saved!")
         console.log(error);
       });
   }
