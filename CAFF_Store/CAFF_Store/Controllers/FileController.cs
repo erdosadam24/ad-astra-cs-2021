@@ -99,13 +99,12 @@ namespace CAFF_Store.Controllers
 			{
 				return BadRequest("File was not found");
 			}
-			//var coverData = DatabaseService.DownloadFile(userId, fileName.Replace(".caff", ".bmp"));
 			return new CaffFile
 			{
 				UserId = userId,
 				FileName = fileName,
 				Data = Convert.ToBase64String(fileData),
-				//Cover = Convert.ToBase64String(coverData),
+				Created = DatabaseService.getFileCreatedDate(userId, fileName),
 				Author = userName
 			};
 		}
@@ -120,7 +119,6 @@ namespace CAFF_Store.Controllers
 			var userId = dbContext.Users.FirstOrDefault(u => u.UserName == userName)?.Id;
 			if (userId == null) return BadRequest("No user found with this userName");
 
-			//var fileData = DatabaseService.DownloadFile(userId, fileName);
 			if ((currentUser.UserName != userName) && !await userManager.IsInRoleAsync(currentUser, "admin"))
 			{
 				return new UnauthorizedResult();
