@@ -11,14 +11,21 @@ int main(int argc, char* argv[]) {
             << "you want to save an image from it.";
         return 1;
     }
-    Caff CaffObj(argv[1]);
-    CaffObj.parseCaff();
 
-    const char* path = argv[1];
-    std::string one = path;
-    one.erase(one.size() - 5);
-    one.append(".bmp");
+    try {
+        Caff CaffObj(argv[1]);
+        CaffObj.parseCaff();
 
-    CaffObj.saveAsImage(one.c_str(), 1);
-    return 0;
+        const char* path = argv[1];
+        std::string one = path;
+        one.erase(one.size() - 5);
+        one.append(".bmp");
+
+        CaffObj.saveAsImage(one.c_str(), 1);
+
+        return 0;
+    }
+    catch (...) {
+        return -1;
+    }
 }
