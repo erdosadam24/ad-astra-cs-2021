@@ -22,9 +22,9 @@
                     <td style="width: 90%" [innerHTML]="sanitizer.bypassSecurityTrustHtml(comment.body)"></td>
                 </tr>
                 <tr>
-                    <td>
+                    <td  *ngIf="canEdit">
                         <div class="comment-links">
-                            <div class="comment-link" *ngIf="canEdit">
+                            <div class="comment-link">
                                 <span (click)="remove()">Delete Comment</span>
                                 <i class="fa fa-ban comment-icons"></i>
                             </div>  
