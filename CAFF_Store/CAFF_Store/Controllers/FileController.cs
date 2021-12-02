@@ -59,7 +59,7 @@ namespace CAFF_Store.Controllers
 			var user = await userManager.FindByNameAsync(userName);
 
 			DatabaseService.DeleteFile(user.Id, fileName);
-			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.UserId == user.Id && c.FileName == fileName).ToArray());
+			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.FileOwnerUserId == user.Id && c.FileName == fileName).ToArray());
 			dbContext.SaveChanges();
 
 			byte[] backToBytes = Convert.FromBase64String(caffFile.Data.Substring(37)); //"data:application/octet-stream;base64," az elején
@@ -84,7 +84,7 @@ namespace CAFF_Store.Controllers
 				Created = DatabaseService.getFileCreatedDate(userId, fileName)
 			};
 
-			caffFile.Comments = dbContext.Comments.Where(c => c.UserId == caffFile.UserId && c.FileName == caffFile.FileName).ToList();
+			caffFile.Comments = dbContext.Comments.Where(c => c.FileOwnerUserId == caffFile.UserId && c.FileName == caffFile.FileName).ToList();
 			return caffFile;
 		}
 
@@ -126,7 +126,7 @@ namespace CAFF_Store.Controllers
 
 			var result = DatabaseService.DeleteFile(userId, fileName);
 			if (!result) return BadRequest("file was not found");
-			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.UserId == userId && c.FileName == fileName).ToArray());
+			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.FileOwnerUserId == userId && c.FileName == fileName).ToArray());
 			dbContext.SaveChanges();
 			return new OkResult();
 		}
@@ -140,7 +140,7 @@ namespace CAFF_Store.Controllers
 			{
 				file.Author = dbContext.Users.FirstOrDefault(u => u.Id == file.UserId).UserName;
 				file.Created = DatabaseService.getFileCreatedDate(file.UserId, file.FileName);
-				file.Comments = dbContext.Comments.Where(c => c.UserId == file.UserId && c.FileName == file.FileName).ToList();
+				file.Comments = dbContext.Comments.Where(c => c.FileOwnerUserId == file.UserId && c.FileName == file.FileName).ToList();
 			}
 			return page;
 		}
@@ -157,7 +157,7 @@ namespace CAFF_Store.Controllers
 			{
 				file.Author = userName;
 				file.Created = DatabaseService.getFileCreatedDate(file.UserId, file.FileName);
-				file.Comments = dbContext.Comments.Where(c => c.UserId == userId && c.FileName == file.FileName).ToList();
+				file.Comments = dbContext.Comments.Where(c => c.FileOwnerUserId == file.UserId && c.FileName == file.FileName).ToList();
 			}
 			return page;
 		}
@@ -168,6 +168,7 @@ namespace CAFF_Store.Controllers
 		public async Task<ActionResult> addComment([FromBody] AddCommentRequest request)
 		{
 			var user = await userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+			var owner = await userManager.FindByNameAsync(request.FileOwnerUserName);
 
 			dbContext.Comments.Add(new Comment
 			{
@@ -175,6 +176,7 @@ namespace CAFF_Store.Controllers
 				Author = user.UserName,
 				Body = request.Body,
 				FileName = request.FileName,
+				FileOwnerUserId = owner.Id,
 				Created = DateTime.Now
 			});
 			
@@ -187,7 +189,8 @@ namespace CAFF_Store.Controllers
 		public async Task<ActionResult> removeComment([FromQuery] int commentID)
 		{
 			var currentUser = await userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
-			if (!await userManager.IsInRoleAsync(currentUser, "admin"))
+			var comment = dbContext.Comments.FirstOrDefault(c => c.CommentId == commentID);
+			if (!await userManager.IsInRoleAsync(currentUser, "admin") && comment.UserId != currentUser.Id)
 			{
 				return new UnauthorizedResult();
 			}

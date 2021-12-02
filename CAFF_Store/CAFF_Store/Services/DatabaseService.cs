@@ -143,6 +143,10 @@ namespace CAFF_Store.Services
 		{
 			var result = new List<CaffFile>();
 			var userDir = Path.Combine("caff_files", userID);
+			if (!Directory.Exists(userDir))
+			{
+				Directory.CreateDirectory(userDir);
+			}
 			var bmpFiles = Directory.GetFiles(userDir)
 					.Where(fn => fn.EndsWith(".bmp") && fn.ToUpper().Contains(request.NameFilter.ToUpper()))
 					.Select(fn => new FileInfo(fn))
