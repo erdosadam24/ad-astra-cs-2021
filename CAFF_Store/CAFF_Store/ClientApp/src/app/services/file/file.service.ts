@@ -89,21 +89,6 @@ export class FileService {
     return this.http.get<any>(environment.baseUrl + '/allfiles', opt);
   }
 
-  uploadCaffFile(filename: string, file: string) {
-    const opt: any = _.clone(uploadCaffOptions);
-    const data: FileData = {
-      fileName: filename,
-      author: "",
-      created: "",
-      data: file,
-      cover: '',
-      comments: []
-    };
-
-    return this.http.post<any>(environment.baseUrl + '/upload', data, opt);
-  }
-
-
 
   getEmptyFileData(): FileData {
     return {

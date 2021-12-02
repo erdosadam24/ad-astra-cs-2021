@@ -81,10 +81,12 @@ export class FileSearchComponent implements OnInit {
 
   getFiles(query: string) {
     this.fileService.getFileList(query).subscribe((resp: any) => {
+      //console.log("Response: " + JSON.stringify(resp))
       // this.page = Number.parseInt(resp.pageable.pageNumber) + 1
       // this.size = Number.parseInt(resp.pageable.pageSize)
       this.collectionSize = Number.parseInt(resp.totalSize);
       this.list = resp.files;
+
     },
       err => {
         console.log('Error: ' + err.message);
