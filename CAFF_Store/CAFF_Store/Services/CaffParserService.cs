@@ -11,19 +11,21 @@ namespace CAFF_Store.Services
 	{
 		public static bool createBmpForCaffFile(string caffPath)
 		{
-			try
-			{
-				var proc = Process.Start(@"regenerated_parser.exe", caffPath);
-				proc.WaitForExit();
+			ProcessStartInfo processStartInfo = new ProcessStartInfo(@"regenerated_parser.exe", caffPath);
+			processStartInfo.RedirectStandardError = true;
+            Process proc = new Process
+            {
+				StartInfo = processStartInfo
+            };
+            proc.Start();
+			proc.WaitForExit();
+			if (proc.ExitCode == 0)
+            {
 				return true;
-
-			}catch(Exception e)
-			{
+			} else
+            {
 				return false;
-			}
-			
-			
+            }
 		}
-		
 	}
 }

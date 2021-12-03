@@ -28,7 +28,7 @@ export class MyFilesComponent implements OnInit {
               public snackBar: MatSnackBar,
               public authorizationService: AuthorizeService,
               private readonly destroy: AutoDestroy) {
-    this.initCollection();
+    //this.initCollection();
 
     this.routerParams.onParamChange().pipe(takeUntil(destroy)).subscribe(o => {
       this.getFiles();

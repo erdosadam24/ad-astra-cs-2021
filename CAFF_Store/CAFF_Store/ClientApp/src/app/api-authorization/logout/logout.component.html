@@ -1,1 +1,2 @@
-<app-loading-page></app-loading-page>
+<app-loading-page *ngIf="(authorizeService.authenticated)"></app-loading-page>
+<app-logged-out *ngIf="!(authorizeService.authenticated)"></app-logged-out>

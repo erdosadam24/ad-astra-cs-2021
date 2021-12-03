@@ -30,15 +30,33 @@ namespace CAFF_Store.Services
 
 		public static string UploadFileForUser(string userID, string fileName, byte[] data)
 		{
+			if (!fileName.EndsWith(".caff"))
+				return null;
 			string userFolder = GetUserFolderPath(userID);
 			if (!Directory.Exists(userFolder))
             {
 				Directory.CreateDirectory(userFolder);
             }
 			string path = Path.Combine(userFolder,fileName);
+			if (File.Exists(path))
+            {
+				int i = 1;
+				string newPath = path.Substring(0, path.LastIndexOf(".caff")) + $"({i}).caff";
+				while (File.Exists(newPath))
+                {
+					newPath = path.Substring(0, path.LastIndexOf(".caff")) + $"({i}).caff";
+					i++;
+				}
+				path = newPath;
+            }
 			File.WriteAllBytes(path, data);
 			var result = CaffParserService.createBmpForCaffFile(path);
-			if (!result) return null;
+			if (!result)
+			{
+				if (File.Exists(path))
+					File.Delete(path);
+				return null;
+			}
 			return path;
 		}
 
@@ -109,14 +127,14 @@ namespace CAFF_Store.Services
 				string userID = Path.GetFileName(userDir);
 				
 				var bmpFiles = Directory.GetFiles(userDir)
-					.Where(fn => fn.EndsWith(".bmp") && fn.ToUpper().Contains(request.NameFilter.ToUpper()))
+					.Where(fn => fn.EndsWith(".bmp") && fn.Substring(fn.LastIndexOf("\\")).ToUpper().Contains(request.NameFilter.ToUpper()))
 					.Select(fn => new FileInfo(fn))
 					.OrderBy(f =>f.CreationTime)
 					.Skip((request.PageNumber-1)*request.PageSize)
 					.Take(request.PageSize)
 					.ToList();
 				totalElements += Directory.GetFiles(userDir)
-					.Where(fn => fn.EndsWith(".bmp") && fn.ToUpper().Contains(request.NameFilter.ToUpper())).Count();
+					.Where(fn => fn.EndsWith(".bmp") && fn.Substring(fn.LastIndexOf("\\")).ToUpper().Contains(request.NameFilter.ToUpper())).Count();
 
 				foreach (var file in bmpFiles)
 				{
@@ -124,6 +142,7 @@ namespace CAFF_Store.Services
 					byte[] fileData = File.ReadAllBytes(file.FullName);		
 					result.Add(new CaffFile
 					{
+						UserId = userID,
 						FileName = fileName,
 						Cover = Convert.ToBase64String(fileData)
 					});
@@ -142,21 +161,26 @@ namespace CAFF_Store.Services
 		{
 			var result = new List<CaffFile>();
 			var userDir = Path.Combine("caff_files", userID);
+			if (!Directory.Exists(userDir))
+			{
+				Directory.CreateDirectory(userDir);
+			}
 			var bmpFiles = Directory.GetFiles(userDir)
-					.Where(fn => fn.EndsWith(".bmp") && fn.ToUpper().Contains(request.NameFilter.ToUpper()))
+					.Where(fn => fn.EndsWith(".bmp") && fn.Substring(fn.LastIndexOf("\\")).ToUpper().Contains(request.NameFilter.ToUpper()))
 					.Select(fn => new FileInfo(fn))
 					.OrderBy(f => f.CreationTime)
 					.Skip((request.PageNumber - 1) * request.PageSize)
 					.Take(request.PageSize)
 					.ToList();
 			var totalElements = Directory.GetFiles(userDir)
-					.Where(fn => fn.EndsWith(".bmp") && fn.ToUpper().Contains(request.NameFilter.ToUpper())).Count();
+					.Where(fn => fn.EndsWith(".bmp") && fn.Substring(fn.LastIndexOf("\\")).ToUpper().Contains(request.NameFilter.ToUpper())).Count();
 			foreach (var file in bmpFiles)
 			{
 				var fileName = Path.GetFileName(file.Name.Replace(".bmp", ".caff"));
 				byte[] fileData = File.ReadAllBytes(file.FullName);
 				result.Add(new CaffFile
 				{
+					UserId = userID,
 					FileName = fileName,
 					Data = Convert.ToBase64String(fileData)
 				});
@@ -168,6 +192,20 @@ namespace CAFF_Store.Services
 			page.TotalSize = totalElements;
 
 			return page;
+		}
+
+		public static DateTime getFileCreatedDate(string userID, string fileName)
+		{
+			string path = Path.Combine(GetUserFolderPath(userID), fileName);
+			try
+			{
+				DateTime created = File.GetCreationTime(path);
+				return created;
+			}
+			catch (Exception e)
+			{
+				return DateTime.Parse("2000/01/01");
+			}
 		}
 	}
 

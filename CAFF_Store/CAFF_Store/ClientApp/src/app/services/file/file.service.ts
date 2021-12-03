@@ -53,6 +53,21 @@ export class FileService {
     return this.http.get<any>(environment.baseUrl + '/preview', { params: params, headers: opt });
   }
 
+
+  uploadFile(filename: string, file: string) {
+    const opt: any = _.clone(uploadCaffOptions);
+    const data: FileData = {
+      fileName: filename,
+      author: "",
+      created: "2000-01-01",
+      data: file,
+      cover: '',
+      comments: []
+    };
+
+    return this.http.post<any>(environment.baseUrl + '/upload', data, opt);
+  }
+
   downloadFile(userName: string, fileName: string) {
     let opt: any = _.clone(options)
     let params = new HttpParams()
@@ -89,19 +104,6 @@ export class FileService {
     return this.http.get<any>(environment.baseUrl + '/allfiles', opt);
   }
 
-  uploadCaffFile(filename: string, file: string) {
-    const opt: any = _.clone(uploadCaffOptions);
-    const data: FileData = {
-      fileName: filename,
-      author: "",
-      created: "",
-      data: file,
-      cover: '',
-      comments: []
-    };
-
-    return this.http.post<any>(environment.baseUrl + '/upload', data, opt);
-  }
 
 
 

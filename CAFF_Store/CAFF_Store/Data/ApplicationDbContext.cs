@@ -36,7 +36,7 @@ namespace CAFF_Store.Data
 				NormalizedUserName = "ADMIN@EMAIL.COM",
 				Email = "admin@email.com",
 				NormalizedEmail = "ADMIN@EMAIL.COM",
-				EmailConfirmed = false,
+				EmailConfirmed = true,
 				PasswordHash = "AQAAAAEAACcQAAAAEO0w0uCrnzqnHAow/7wEpXbjFse51LaYsKSXyuH1N3A4waCxLpSSpnxTfK2OAJkGig==",
 				SecurityStamp = "EO2N5S75T7KKJP4BQJ2FR3MDMCNLUJRZ",
 				ConcurrencyStamp = "0e0a85bd-82cb-4d75-853e-42bb308c4d9b",

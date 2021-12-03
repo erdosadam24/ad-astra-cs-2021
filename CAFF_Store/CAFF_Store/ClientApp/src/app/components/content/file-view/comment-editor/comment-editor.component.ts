@@ -31,7 +31,7 @@ export class CommentEditorComponent implements OnInit {
 
   constructor(private commentService: CommentService) {
     this.newComment = new FormGroup({
-      comment: new FormControl('', [Validators.required, Validators.minLength(10)])
+      comment: new FormControl('', [])
     });
 
   }
@@ -61,10 +61,11 @@ export class CommentEditorComponent implements OnInit {
       FileOwnerUserName: this.caffFile.author,
     }
     this.commentService.saveComment(comment).subscribe((resp: any) => {
-      this.commentService.snackbarMessage(JSON.stringify(resp))
+      this.commentService.snackbarMessage("Comment added!")
       this.close.emit({ reload: true, body: resp })
     },
       error => {
+        this.commentService.snackbarMessage("Comment not saved!")
         console.log(error);
       });
   }

@@ -6,6 +6,26 @@
 #include <iostream>
 #include <stdexcept>
 
+Caff::Caff(std::string caff_path) {
+    const char* file_end = ".caff";
+    const char * path = caff_path.c_str();
+    size_t path_len = strlen(path);
+    size_t file_end_len = strlen(file_end);
+    if (file_end_len > path_len) {
+        throw std::invalid_argument("CAFF path too short.");
+    }
+    int caff = strncmp(path + path_len - file_end_len, file_end, file_end_len);
+    if (caff != 0) {
+        throw std::invalid_argument("Caff path must end with .caff.");
+    }
+    is.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    try {
+        is.open(caff_path, std::ios::binary);
+    }
+    catch (std::ifstream::failure e) {
+        std::cerr << "Exception during opening the file.\n";
+    }
+}
 
 uint64_t Caff::convert8Byte(const char* arr) {
     uint64_t number =
@@ -25,26 +45,7 @@ uint16_t Caff::convert2Byte(const char* arr) {
     return number;
 }
 
-void Caff::parseCaff(std::string caff_path) {
-    const char* file_end = ".caff";
-    const char * path = caff_path.c_str();
-    size_t path_len = strlen(path);
-    size_t file_end_len = strlen(file_end);
-    if (file_end_len > path_len) {
-        throw std::invalid_argument("CAFF path too short.");
-    }
-    int caff = strncmp(path + path_len - file_end_len, file_end, file_end_len);
-    if (caff != 0) {
-        throw std::invalid_argument("Caff path must end with .caff.");
-    }
-    std::ifstream is;
-    is.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-    try {
-        is.open(caff_path, std::ios::in | std::ios::binary);
-    }
-    catch (std::ifstream::failure e) {
-        std::cerr << "Exception during opening the file. " << e << "\n";
-    }
+void Caff::parseCaff() {
     if (is.is_open()) {
         is.seekg(0, is.end);
         std::streamoff length = is.tellg();
@@ -81,7 +82,6 @@ void Caff::parseCaff(std::string caff_path) {
             }
         }
         std::cout << "File parsed successfully.\n";
-        is.close();
     } else {
         throw std::runtime_error("Cannot parse file because it is not open.");
     }
@@ -131,7 +131,7 @@ void Caff::parseCredits(int block_number) {
     }
     caff_credit.year = convert2Byte(credit_year);
     free(credit_year);
-    if (!(1000 <= caff_credit.year && caff_credit.year <= 2021)) {
+    if (!(1000 <= caff_credit.year <= 2021)) {
         throw std::invalid_argument(
             "Invalid CAFF file. Created year is invalid.");
     }
