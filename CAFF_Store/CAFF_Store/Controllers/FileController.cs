@@ -36,8 +36,15 @@ namespace CAFF_Store.Controllers
 		[Authorize]
 		[HttpPost("upload")]
 		public ActionResult uploadFile([FromBody] CaffFile caffFile)
-		{			
-			byte[] backToBytes = Convert.FromBase64String(caffFile.Data.Substring(37)); //"data:application/octet-stream;base64," az elején
+		{
+			byte[] backToBytes = Array.Empty<byte>();
+			try
+            {
+				backToBytes = Convert.FromBase64String(caffFile.Data.Substring(37)); //"data:application/octet-stream;base64," az elején
+			} catch
+            {
+				return BadRequest("File parsing failed");
+            }			
 			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			var userName = dbContext.Users.FirstOrDefault(u => u.Id == userId).UserName;
 			var result = DatabaseService.UploadFileForUser(userId, caffFile.FileName, backToBytes);
@@ -62,7 +69,15 @@ namespace CAFF_Store.Controllers
 			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.FileOwnerUserId == user.Id && c.FileName == fileName).ToArray());
 			dbContext.SaveChanges();
 
-			byte[] backToBytes = Convert.FromBase64String(caffFile.Data.Substring(37)); //"data:application/octet-stream;base64," az elején
+			byte[] backToBytes = Array.Empty<byte>();
+			try
+			{
+				backToBytes = Convert.FromBase64String(caffFile.Data.Substring(37)); //"data:application/octet-stream;base64," az elején
+			}
+			catch
+			{
+				return BadRequest("File parsing failed");
+			}
 			var result = DatabaseService.UploadFileForUser(user.Id, caffFile.FileName, backToBytes);
 			if (result == null) return BadRequest("File parsing failed");
 			return new OkResult();

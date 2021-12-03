@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { ApplicationPaths } from './api-authorization.constants';
 import { HttpClientModule } from '@angular/common/http';
 import { LoadingPageComponent } from '../components/loading-page/loading-page.component';
+import { LoggedOutComponent } from '../components/logged-out/logged-out.component';
 
 @NgModule({
   imports: [
@@ -25,9 +26,9 @@ import { LoadingPageComponent } from '../components/loading-page/loading-page.co
       ]
     )
   ],
-  declarations: [LoginMenuComponent, LoginComponent, LogoutComponent, LoadingPageComponent,
+  declarations: [LoginMenuComponent, LoginComponent, LogoutComponent, LoadingPageComponent, LoggedOutComponent,
   ],
-  exports: [LoginMenuComponent, LoginComponent, LogoutComponent, LoadingPageComponent,
+  exports: [LoginMenuComponent, LoginComponent, LogoutComponent, LoadingPageComponent, LoggedOutComponent,
   ]
 })
 export class ApiAuthorizationModule { }

@@ -21,7 +21,7 @@
                     <tr *ngFor="let it of list">
                         <td>{{it.fileName}}</td>
                         <td  class="file-link">
-                            <span style="margin-right: 1rem;" routerLink="/fileview" [queryParams]="{ userID: it.userID, fileName: it.fileName}" style="cursor: pointer;">Go To</span>
+                            <span style="margin-right: 1rem;" routerLink="/fileview" [queryParams]="{ userName: it.author, fileName: it.fileName}" style="cursor: pointer;">Go To</span>
                             <i class="fa fa-long-arrow-right file-icons"></i>
                         </td>
 
