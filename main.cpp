@@ -7,8 +7,7 @@
 int main(int argc, char* argv[]) {
     if (argc != 2) {
         std::cerr << "Not enough arguments. Add the path of the CAFF "
-            << "you want to parse and then add the path where "
-            << "you want to save an image from it.";
+            << "you want to parse.";
         return 1;
     }
 

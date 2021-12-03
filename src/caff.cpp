@@ -121,7 +121,7 @@ void Caff::parseHeader(int block_number) {
 }
 
 void Caff::parseCredits(int block_number) {
-    if(block_number < 0 || block_number >= caff_blocks.size()) {
+    if (block_number < 0 || block_number >= caff_blocks.size()) {
         throw std::invalid_argument(
             "Invalid block number");
     }
@@ -193,7 +193,11 @@ void Caff::parseCredits(int block_number) {
         credit_creator_len[i] = caff_blocks[block_number].data[i + 6];
     }
     caff_credit.creator_len = convert8Byte(credit_creator_len);
-    std::cout << "Creator_len: " << caff_credit.creator_len << '\n';
+    std::cout << "Creator length: " << caff_credit.creator_len << '\n';
+    if (caff_blocks[block_number].length < caff_credit.creator_len) {
+        throw std::invalid_argument(
+            "Invalid CAFF file. Creater length too long.");
+    }
     for (int i = 0; i < caff_credit.creator_len; ++i) {
         caff_credit.creator.push_back(caff_blocks[block_number].data[i + 14]);
     }
@@ -281,6 +285,12 @@ void Caff::parseCiffHeader(int block_number) {
 void Caff::parseCiffContent(int block_number) {
     caff_animation.ciff_data.ciff_content.pixels.clear();
     uint64_t i = caff_animation.ciff_data.ciff_header.header_size + 8;
+    if (caff_blocks[block_number].length <
+        caff_animation.ciff_data.ciff_header.content_size +
+        caff_animation.ciff_data.ciff_header.header_size + 8) {
+        throw std::invalid_argument(
+            "Invalid CAFF file. Pixels too long.");
+    }
     while (i < caff_animation.ciff_data.ciff_header.content_size +
         caff_animation.ciff_data.ciff_header.header_size + 8) {
         caff_animation.ciff_data.ciff_content.pixels.push_back(
