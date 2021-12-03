@@ -270,6 +270,11 @@ void Caff::parseCiffHeader(int block_number) {
     }
     std::cout << "caption: " << caff_animation.ciff_data.ciff_header.caption;
     caff_animation.ciff_data.ciff_header.tags.clear();
+    if (caff_blocks[block_number].length <
+        caff_animation.ciff_data.ciff_header.header_size + 8) {
+        throw std::invalid_argument(
+            "Invalid CAFF file. Invalid tags.");
+    }
     while (i < caff_animation.ciff_data.ciff_header.header_size + 8) {
         if (caff_blocks[block_number].data[i] == '\0') {
             caff_animation.ciff_data.ciff_header.tags.push_back('#');
