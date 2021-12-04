@@ -340,6 +340,7 @@ void Caff::parseAnimation(int block_number) {
     }
     caff_animation.duration = convert8Byte(animation_duration);
     std::cout << "duration: " << caff_animation.duration << "\n";
+    delete[] animation_duration;
     parseCiffHeader(block_number);
     parseCiffContent(block_number);
     ciffs.push_back(caff_animation.ciff_data);
