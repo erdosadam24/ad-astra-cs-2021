@@ -30,7 +30,7 @@ namespace CAFF_Store
         {
 			services.AddLogging(loggingBuilder =>
 			{
-				loggingBuilder.AddFile("test.log", append: true);
+				loggingBuilder.AddFile("endpoint_calls.log", append: true);
 			});
 			services.AddSwaggerDocument();
             services.AddDbContext<ApplicationDbContext>(options =>
