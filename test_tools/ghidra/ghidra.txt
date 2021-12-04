@@ -1,0 +1,3 @@
+Demangle Symbol> Unable to demangle symbol: _ZSt12__miter_baseIPcEDTcl12__miter_basecldtfp_4baseEEESt13move_iteratorIT_E. Message: Unexpected problem parsing decltype (__miter_base(({parm#1}.base)())) std::__miter_base<char*>(std::move_iterator<char*>) from mangled string: _ZSt12__miter_baseIPcEDTcl12__miter_basecldtfp_4baseEEESt13move_iteratorIT_E
+Demangle Symbol> Unable to demangle symbol: _ZSt12__miter_baseIP9CaffBlockEDTcl12__miter_basecldtfp_4baseEEESt13move_iteratorIT_E. Message: Unexpected problem parsing decltype (__miter_base(({parm#1}.base)())) std::__miter_base<CaffBlock*>(std::move_iterator<CaffBlock*>) from mangled string: _ZSt12__miter_baseIP9CaffBlockEDTcl12__miter_basecldtfp_4baseEEESt13move_iteratorIT_E
+
