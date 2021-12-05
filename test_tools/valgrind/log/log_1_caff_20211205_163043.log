@@ -1,0 +1,202 @@
+==00:00:00:00.000 1940== Memcheck, a memory error detector
+==00:00:00:00.000 1940== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==00:00:00:00.000 1940== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==00:00:00:00.000 1940== Command: ./main caff_files/1.caff
+==00:00:00:00.000 1940== Parent PID: 1926
+==00:00:00:00.000 1940== 
+--00:00:00:00.000 1940-- 
+--00:00:00:00.000 1940-- Valgrind options:
+--00:00:00:00.000 1940--    -v
+--00:00:00:00.000 1940--    --stats=yes
+--00:00:00:00.000 1940--    --leak-check=yes
+--00:00:00:00.000 1940--    --time-stamp=yes
+--00:00:00:00.000 1940--    --log-file=test_tools/valgrind/log/log_1_caff_20211205_163043.log
+--00:00:00:00.000 1940-- Contents of /proc/version:
+--00:00:00:00.000 1940--   Linux version 4.15.0-163-generic (buildd@lcy01-amd64-021) (gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04)) #171-Ubuntu SMP Fri Nov 5 11:55:11 UTC 2021
+--00:00:00:00.000 1940-- 
+--00:00:00:00.000 1940-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3-avx-avx2
+--00:00:00:00.000 1940-- Page sizes: currently 4096, max supported 4096
+--00:00:00:00.000 1940-- Valgrind library directory: /usr/lib/valgrind
+--00:00:00:00.001 1940-- TT/TC: cache: ignoring --avg-transtab-entry-size=0, using tool provided default 640
+--00:00:00:00.001 1940-- TT/TC: cache: 32 sectors of 27,597,024 bytes each = 883,104,768 total TC
+--00:00:00:00.001 1940-- TT/TC: table: 32 tables[42588] of C 4,769,856 + H 1,362,816 bytes each = 196,245,504 total TT
+--00:00:00:00.001 1940-- TT/TC: table: 42588 tt entries each = 1,362,816 total tt entries
+--00:00:00:00.001 1940-- TT/TC: table: 32 htt[65521] of 131,042 bytes each = 4,193,344 total HTT (htt[65521] 65% max occup)
+--00:00:00:00.001 1940-- Reading syms from /home/crysys/Desktop/ad-astra-cs-2021/main
+--00:00:00:00.017 1940-- Reading syms from /lib/x86_64-linux-gnu/ld-2.27.so
+--00:00:00:00.017 1940--   Considering /lib/x86_64-linux-gnu/ld-2.27.so ..
+--00:00:00:00.021 1940--   .. CRC mismatch (computed 0ef8daab wanted 65bccefe)
+--00:00:00:00.024 1940--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/ld-2.27.so ..
+--00:00:00:00.052 1940--   .. CRC is valid
+--00:00:00:00.140 1940-- Reading syms from /usr/lib/valgrind/memcheck-amd64-linux
+--00:00:00:00.140 1940--   Considering /usr/lib/valgrind/memcheck-amd64-linux ..
+--00:00:00:00.165 1940--   .. CRC mismatch (computed 41ddb025 wanted 9972f546)
+--00:00:00:00.166 1940--    object doesn't have a symbol table
+--00:00:00:00.166 1940--    object doesn't have a dynamic symbol table
+--00:00:00:00.227 1940-- Scheduler: using generic scheduler lock implementation.
+--00:00:00:00.232 1940-- Reading suppressions file: /usr/lib/valgrind/default.supp
+==00:00:00:00.238 1940== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-1940-by-crysys-on-???
+==00:00:00:00.238 1940== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-1940-by-crysys-on-???
+==00:00:00:00.238 1940== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-1940-by-crysys-on-???
+==00:00:00:00.238 1940== 
+==00:00:00:00.238 1940== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==00:00:00:00.238 1940== don't want to do, unless you know exactly what you're doing,
+==00:00:00:00.238 1940== or are doing some strange experiment):
+==00:00:00:00.238 1940==   /usr/lib/valgrind/../../bin/vgdb --pid=1940 ...command...
+==00:00:00:00.238 1940== 
+==00:00:00:00.238 1940== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==00:00:00:00.238 1940==   /path/to/gdb ./main
+==00:00:00:00.238 1940== and then give GDB the following command
+==00:00:00:00.238 1940==   target remote | /usr/lib/valgrind/../../bin/vgdb --pid=1940
+==00:00:00:00.238 1940== --pid is optional if only one valgrind process is running
+==00:00:00:00.238 1940== 
+--00:00:00:00.239 1940-- transtab: allocate sector 0
+--00:00:00:00.277 1940-- REDIR: 0x4020d20 (ld-linux-x86-64.so.2:strlen) redirected to 0x580608c1 (???)
+--00:00:00:00.341 1940-- REDIR: 0x4020b00 (ld-linux-x86-64.so.2:index) redirected to 0x580608db (???)
+--00:00:00:00.401 1940-- Reading syms from /usr/lib/valgrind/vgpreload_core-amd64-linux.so
+--00:00:00:00.401 1940--   Considering /usr/lib/valgrind/vgpreload_core-amd64-linux.so ..
+--00:00:00:00.401 1940--   .. CRC mismatch (computed 50df1b30 wanted 4800a4cf)
+--00:00:00:00.401 1940--    object doesn't have a symbol table
+--00:00:00:00.419 1940-- Reading syms from /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so
+--00:00:00:00.420 1940--   Considering /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so ..
+--00:00:00:00.421 1940--   .. CRC mismatch (computed f893b962 wanted 95ee359e)
+--00:00:00:00.421 1940--    object doesn't have a symbol table
+==00:00:00:00.425 1940== WARNING: new redirection conflicts with existing -- ignoring it
+--00:00:00:00.426 1940--     old: 0x04020d20 (strlen              ) R-> (0000.0) 0x580608c1 ???
+--00:00:00:00.426 1940--     new: 0x04020d20 (strlen              ) R-> (2007.0) 0x04c34db0 strlen
+--00:00:00:00.444 1940-- REDIR: 0x401d540 (ld-linux-x86-64.so.2:strcmp) redirected to 0x4c35ee0 (strcmp)
+--00:00:00:00.450 1940-- REDIR: 0x4021260 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4c394f0 (mempcpy)
+--00:00:00:00.480 1940-- Reading syms from /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25
+--00:00:00:00.481 1940--    object doesn't have a symbol table
+--00:00:00:00.646 1940-- Reading syms from /lib/x86_64-linux-gnu/libgcc_s.so.1
+--00:00:00:00.647 1940--    object doesn't have a symbol table
+--00:00:00:00.653 1940-- Reading syms from /lib/x86_64-linux-gnu/libc-2.27.so
+--00:00:00:00.655 1940--   Considering /lib/x86_64-linux-gnu/libc-2.27.so ..
+--00:00:00:00.674 1940--   .. CRC mismatch (computed cb654923 wanted 8713c55a)
+--00:00:00:00.675 1940--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libc-2.27.so ..
+--00:00:00:00.866 1940--   .. CRC is valid
+--00:00:00:02.498 1940-- Reading syms from /lib/x86_64-linux-gnu/libm-2.27.so
+--00:00:00:02.499 1940--   Considering /lib/x86_64-linux-gnu/libm-2.27.so ..
+--00:00:00:02.516 1940--   .. CRC mismatch (computed 8017c758 wanted 0183ab3a)
+--00:00:00:02.516 1940--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libm-2.27.so ..
+--00:00:00:02.565 1940--   .. CRC is valid
+--00:00:00:03.010 1940-- REDIR: 0x547db70 (libc.so.6:memmove) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.013 1940-- REDIR: 0x547ce80 (libc.so.6:strncpy) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.014 1940-- REDIR: 0x547de50 (libc.so.6:strcasecmp) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.015 1940-- REDIR: 0x547c8d0 (libc.so.6:strcat) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.016 1940-- REDIR: 0x547ceb0 (libc.so.6:rindex) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.020 1940-- REDIR: 0x547f5a0 (libc.so.6:rawmemchr) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.021 1940-- REDIR: 0x547dce0 (libc.so.6:mempcpy) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.023 1940-- REDIR: 0x547db10 (libc.so.6:bcmp) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.024 1940-- REDIR: 0x547ce40 (libc.so.6:strncmp) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.026 1940-- REDIR: 0x547c940 (libc.so.6:strcmp) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.027 1940-- REDIR: 0x547dc40 (libc.so.6:memset) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.028 1940-- REDIR: 0x549aed0 (libc.so.6:wcschr) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.029 1940-- REDIR: 0x547cde0 (libc.so.6:strnlen) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.030 1940-- REDIR: 0x547c9b0 (libc.so.6:strcspn) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.031 1940-- REDIR: 0x547dea0 (libc.so.6:strncasecmp) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.033 1940-- REDIR: 0x547c980 (libc.so.6:strcpy) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.034 1940-- REDIR: 0x547dfe0 (libc.so.6:memcpy@@GLIBC_2.14) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.036 1940-- REDIR: 0x547cee0 (libc.so.6:strpbrk) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.037 1940-- REDIR: 0x547c900 (libc.so.6:index) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.038 1940-- REDIR: 0x547cdb0 (libc.so.6:strlen) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.039 1940-- REDIR: 0x54874a0 (libc.so.6:memrchr) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.040 1940-- REDIR: 0x547def0 (libc.so.6:strcasecmp_l) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.042 1940-- REDIR: 0x547dae0 (libc.so.6:memchr) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.043 1940-- REDIR: 0x549bc90 (libc.so.6:wcslen) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.044 1940-- REDIR: 0x547d190 (libc.so.6:strspn) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.045 1940-- REDIR: 0x547de20 (libc.so.6:stpncpy) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.046 1940-- REDIR: 0x547ddf0 (libc.so.6:stpcpy) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.047 1940-- REDIR: 0x547f5d0 (libc.so.6:strchrnul) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.048 1940-- REDIR: 0x547df40 (libc.so.6:strncasecmp_l) redirected to 0x4a2c6e0 (_vgnU_ifunc_wrapper)
+--00:00:00:03.168 1940-- REDIR: 0x556d300 (libc.so.6:__strrchr_avx2) redirected to 0x4c34730 (rindex)
+--00:00:00:03.228 1940-- REDIR: 0x5476140 (libc.so.6:malloc) redirected to 0x4c31aa0 (malloc)
+--00:00:00:03.302 1940-- REDIR: 0x556d4d0 (libc.so.6:__strlen_avx2) redirected to 0x4c34cf0 (strlen)
+--00:00:00:03.304 1940-- REDIR: 0x5569ae0 (libc.so.6:__memcmp_avx2_movbe) redirected to 0x4c37e00 (bcmp)
+--00:00:00:03.390 1940-- REDIR: 0x5488c50 (libc.so.6:__strcmp_sse2_unaligned) redirected to 0x4c35da0 (strcmp)
+--00:00:00:03.429 1940-- REDIR: 0x4ed1280 (libstdc++.so.6:operator new(unsigned long)) redirected to 0x4c32110 (operator new(unsigned long))
+--00:00:00:03.431 1940-- REDIR: 0x556da10 (libc.so.6:__memcpy_avx_unaligned_erms) redirected to 0x4c386e0 (memmove)
+--00:00:00:03.460 1940-- REDIR: 0x5564450 (libc.so.6:__strncmp_sse42) redirected to 0x4c35570 (__strncmp_sse42)
+--00:00:00:03.480 1940-- REDIR: 0x547d6c0 (libc.so.6:__GI_strstr) redirected to 0x4c39760 (__strstr_sse2)
+--00:00:00:03.484 1940-- REDIR: 0x4ed1330 (libstdc++.so.6:operator new[](unsigned long)) redirected to 0x4c32830 (operator new[](unsigned long))
+--00:00:00:03.488 1940-- REDIR: 0x4ecf390 (libstdc++.so.6:operator delete(void*)) redirected to 0x4c331d0 (operator delete(void*))
+--00:00:00:03.558 1940-- REDIR: 0x556d9f0 (libc.so.6:__mempcpy_avx_unaligned_erms) redirected to 0x4c39130 (mempcpy)
+--00:00:00:03.575 1940-- REDIR: 0x5476a30 (libc.so.6:free) redirected to 0x4c32cd0 (free)
+--00:00:00:03.651 1940-- REDIR: 0x4ecf3c0 (libstdc++.so.6:operator delete[](void*)) redirected to 0x4c336d0 (operator delete[](void*))
+--00:00:00:03.700 1940-- REDIR: 0x556d110 (libc.so.6:__strchrnul_avx2) redirected to 0x4c39020 (strchrnul)
+==00:00:00:38.285 1940== 
+==00:00:00:38.285 1940== HEAP SUMMARY:
+==00:00:00:38.285 1940==     in use at exit: 4,002,239 bytes in 7 blocks
+==00:00:00:38.285 1940==   total heap usage: 93 allocs, 86 frees, 18,485,990 bytes allocated
+==00:00:00:38.285 1940== 
+==00:00:00:38.285 1940== Searching for pointers to 7 not-freed blocks
+==00:00:00:38.287 1940== Checked 110,872 bytes
+==00:00:00:38.287 1940== 
+==00:00:00:38.392 1940== 5 bytes in 1 blocks are definitely lost in loss record 1 of 3
+==00:00:00:38.392 1940==    at 0x4C3289F: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==00:00:00:38.392 1940==    by 0x10BAAE: Caff::parseHeader(int) (in /home/crysys/Desktop/ad-astra-cs-2021/main)
+==00:00:00:38.392 1940==    by 0x10B958: Caff::parseCaff() (in /home/crysys/Desktop/ad-astra-cs-2021/main)
+==00:00:00:38.392 1940==    by 0x10AA92: main (in /home/crysys/Desktop/ad-astra-cs-2021/main)
+==00:00:00:38.392 1940== 
+==00:00:00:38.392 1940== 10 bytes in 2 blocks are definitely lost in loss record 2 of 3
+==00:00:00:38.392 1940==    at 0x4C3289F: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==00:00:00:38.392 1940==    by 0x10C9A2: Caff::parseCiffHeader(int) (in /home/crysys/Desktop/ad-astra-cs-2021/main)
+==00:00:00:38.392 1940==    by 0x10D54E: Caff::parseAnimation(int) (in /home/crysys/Desktop/ad-astra-cs-2021/main)
+==00:00:00:38.392 1940==    by 0x10B9BE: Caff::parseCaff() (in /home/crysys/Desktop/ad-astra-cs-2021/main)
+==00:00:00:38.392 1940==    by 0x10AA92: main (in /home/crysys/Desktop/ad-astra-cs-2021/main)
+==00:00:00:38.392 1940== 
+==00:00:00:38.392 1940== 4,002,224 bytes in 4 blocks are definitely lost in loss record 3 of 3
+==00:00:00:38.392 1940==    at 0x4C3289F: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==00:00:00:38.392 1940==    by 0x10B8CC: Caff::parseCaff() (in /home/crysys/Desktop/ad-astra-cs-2021/main)
+==00:00:00:38.392 1940==    by 0x10AA92: main (in /home/crysys/Desktop/ad-astra-cs-2021/main)
+==00:00:00:38.392 1940== 
+==00:00:00:38.392 1940== LEAK SUMMARY:
+==00:00:00:38.392 1940==    definitely lost: 4,002,239 bytes in 7 blocks
+==00:00:00:38.392 1940==    indirectly lost: 0 bytes in 0 blocks
+==00:00:00:38.392 1940==      possibly lost: 0 bytes in 0 blocks
+==00:00:00:38.392 1940==    still reachable: 0 bytes in 0 blocks
+==00:00:00:38.392 1940==         suppressed: 0 bytes in 0 blocks
+==00:00:00:38.392 1940== 
+--00:00:00:38.392 1940--  memcheck: freelist: vol 14483751 length 86
+--00:00:00:38.392 1940--  memcheck: sanity checks: 1001 cheap, 29 expensive
+--00:00:00:38.392 1940--  memcheck: auxmaps: 0 auxmap entries (0k, 0M) in use
+--00:00:00:38.392 1940--  memcheck: auxmaps_L1: 0 searches, 0 cmps, ratio 0:10
+--00:00:00:38.392 1940--  memcheck: auxmaps_L2: 0 searches, 0 nodes
+--00:00:00:38.392 1940--  memcheck: SMs: n_issued      = 242 (3872k, 3M)
+--00:00:00:38.392 1940--  memcheck: SMs: n_deissued    = 203 (3248k, 3M)
+--00:00:00:38.392 1940--  memcheck: SMs: max_noaccess  = 2097151 (33554416k, 32767M)
+--00:00:00:38.392 1940--  memcheck: SMs: max_undefined = 31 (496k, 0M)
+--00:00:00:38.392 1940--  memcheck: SMs: max_defined   = 331 (5296k, 5M)
+--00:00:00:38.392 1940--  memcheck: SMs: max_non_DSM   = 160 (2560k, 2M)
+--00:00:00:38.392 1940--  memcheck: max sec V bit nodes:    0 (0k, 0M)
+--00:00:00:38.392 1940--  memcheck: set_sec_vbits8 calls: 0 (new: 0, updates: 0)
+--00:00:00:38.392 1940--  memcheck: max shadow mem size:   18992k, 18M
+==00:00:00:38.392 1940== ERROR SUMMARY: 3 errors from 3 contexts (suppressed: 0 from 0)
+==00:00:00:38.392 1940== ERROR SUMMARY: 3 errors from 3 contexts (suppressed: 0 from 0)
+--00:00:00:38.417 1940-- 
+--00:00:00:38.417 1940-- ------ Valgrind's internal memory use stats follow ------
+--00:00:00:38.420 1940-- ------   106,078,208 bytes have already been mmap-ed ANONYMOUS.
+--00:00:00:38.420 1940-- core    :     8,388,608/    8,388,608 max/curr mmap'd, 0/0 unsplit/split sb unmmap'd,      3,940,024/    3,809,992 max/curr,       25615/  30422248 totalloc-blocks/bytes,       25630 searches 8 rzB
+--00:00:00:38.420 1940-- dinfo   :    20,832,256/   12,853,248 max/curr mmap'd, 1/7 unsplit/split sb unmmap'd,     19,165,632/    7,244,176 max/curr,      513480/  81661376 totalloc-blocks/bytes,      513528 searches 8 rzB
+--00:00:00:38.420 1940-- client  :    20,971,520/   20,971,520 max/curr mmap'd, 0/0 unsplit/split sb unmmap'd,     18,486,448/   18,486,448 max/curr,          93/  18486448 totalloc-blocks/bytes,          91 searches 24 rzB
+--00:00:00:38.420 1940-- demangle:        65,536/       65,536 max/curr mmap'd, 0/0 unsplit/split sb unmmap'd,          1,904/          384 max/curr,         101/     13168 totalloc-blocks/bytes,         100 searches 8 rzB
+--00:00:00:38.420 1940-- ttaux   :       221,184/      221,184 max/curr mmap'd, 0/1 unsplit/split sb unmmap'd,        164,336/      110,176 max/curr,         497/    300816 totalloc-blocks/bytes,         497 searches 8 rzB
+--00:00:00:38.420 1940-- 
+--00:00:00:38.420 1940-- translate:            fast SP updates identified: 5,421 (91.9%)
+--00:00:00:38.420 1940-- translate:   generic_known SP updates identified: 281 (4.8%)
+--00:00:00:38.420 1940-- translate: generic_unknown SP updates identified: 199 (3.4%)
+--00:00:00:38.420 1940-- translate: PX: SPonly 0,  UnwRegs 4,599,  AllRegs 0,  AllRegsAllInsns 0
+--00:00:00:38.420 1940--     tt/tc: 9,875 tt lookups requiring 10,280 probes
+--00:00:00:38.420 1940--     tt/tc: 6,371 fast-cache updates, 4 flushes
+--00:00:00:38.420 1940--  transtab: new        4,570 (116,706 -> 1,781,682; ratio 15.3) [0 scs] avg tce size 389
+--00:00:00:38.420 1940--  transtab: dumped     0 (0 -> ??) (sectors recycled 0)
+--00:00:00:38.420 1940--  transtab: discarded  10 (330 -> ??)
+--00:00:00:38.420 1940-- scheduler: 100,195,786 event checks.
+--00:00:00:38.420 1940-- scheduler: 74,730,062 indir transfers, 1,714 misses (1 in 43599)
+--00:00:00:38.420 1940-- scheduler: 1,001/6,875 major/minor sched events.
+--00:00:00:38.420 1940--    sanity: 1002 cheap, 29 expensive checks.
+--00:00:00:38.420 1940--    exectx: 769 lists, 70 contexts (avg 0.09 per list) (avg 11.39 IP per context)
+--00:00:00:38.421 1940--    exectx: 181 searches, 118 full compares (651 per 1000)
+--00:00:00:38.421 1940--    exectx: 0 cmp2, 0 cmp4, 12 cmpAll
+--00:00:00:38.421 1940--  errormgr: 3 supplist searches, 243 comparisons during search
+--00:00:00:38.421 1940--  errormgr: 0 errlist searches, 0 comparisons during search
