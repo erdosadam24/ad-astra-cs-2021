@@ -26,9 +26,9 @@ namespace CAFF_Store.Controllers
 		private readonly ApplicationDbContext dbContext;
 		private readonly UserManager<ApplicationUser> userManager;
 		private readonly RoleManager<IdentityRole> roleManager;
-		private readonly ILogger logger;
+		private readonly ILogger<FileController> logger;
 
-		public FileController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ILogger logger)
+		public FileController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ILogger<FileController> logger)
 		{
 			this.dbContext = dbContext;
 			this.userManager = userManager;
@@ -71,10 +71,6 @@ namespace CAFF_Store.Controllers
 
 			var user = await userManager.FindByNameAsync(userName);
 
-			DatabaseService.DeleteFile(user.Id, fileName);
-			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.FileOwnerUserId == user.Id && c.FileName == fileName).ToArray());
-			dbContext.SaveChanges();
-
 			byte[] backToBytes = Array.Empty<byte>();
 			try
 			{
@@ -91,6 +87,11 @@ namespace CAFF_Store.Controllers
 				logger.LogError($"User: {currentId} called modify on {userName}'s {fileName} file. File parsing failed.");
 				return BadRequest("File parsing failed");
 			}
+
+			DatabaseService.DeleteFile(user.Id, fileName);
+			dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.FileOwnerUserId == user.Id && c.FileName == fileName).ToArray());
+			dbContext.SaveChanges();
+
 			logger.LogInformation($"Authorized User: {currentId} modified {userName}'s {fileName} file.");
 			return new OkResult();
 		}

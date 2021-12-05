@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace CAFF_Store.Services
 	{
 		public static bool createBmpForCaffFile(string caffPath)
 		{
-			ProcessStartInfo processStartInfo = new ProcessStartInfo(@"regenerated_parser.exe", caffPath);
+			ProcessStartInfo processStartInfo = new ProcessStartInfo(@"parser.exe", caffPath);
 			processStartInfo.RedirectStandardError = true;
             Process proc = new Process
             {
@@ -24,6 +25,8 @@ namespace CAFF_Store.Services
 				return true;
 			} else
             {
+				StreamReader reader = proc.StandardError;
+				Console.WriteLine(reader.ReadLine());
 				return false;
             }
 		}

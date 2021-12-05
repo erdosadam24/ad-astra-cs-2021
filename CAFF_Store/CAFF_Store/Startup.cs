@@ -59,17 +59,6 @@ namespace CAFF_Store
             {
                 options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
             });
-
-            /*//CSAK TESZTELÉSRE 
-            services.Configure<IdentityOptions>(options =>
-            {
-                options.Password.RequireDigit = false;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 1;
-                options.Password.RequiredUniqueChars = 1;
-            });*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -126,13 +115,6 @@ namespace CAFF_Store
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
-
-            /*
-            app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapControllers();
-			});
-            */
 		}
     }
 }
